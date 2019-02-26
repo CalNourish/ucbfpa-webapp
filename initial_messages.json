@@ -1,0 +1,124 @@
+{
+	"fcmTokens" : {
+    "cAD6STfQ7eA:APA91bEopaw6ch8neflzqJnBSRBk8p247EK9TtRFo6qIRoA-mTxXYanoEa1HJ9z8vwS1lRVILjVk75r7DPeOrA3xI-ihee2cJs4wA1CX7Z__0UgiXnirDOqemkQmtUEcld7Vy_jcB2XF" : "elc6oEYUAFgzqBegtRREiQ9Fmz93",
+    "fc4V-mW8lGk:APA91bFAf3TdL6VGrr1OuFRv9xwC_Hc1dY6KulOGFkhgnrV3b9c9AWjUk1lFoSDBaH87mNftUpcgQwpNMJZX-Xc_oSfvP_0JIIt025ABiZ2Q3VnYWdYqgquZ8eqcPhuVo-aGM6_piB3b" : "elc6oEYUAFgzqBegtRREiQ9Fmz93",
+    "hello" : "world"
+  },
+  "messages" : {
+    "-Kz2ib4H77rj0LYewF7dP" : {
+      "text" : "Hello",
+      "name" : "anonymous"
+    },
+    "-K2ib5JHRbbL0NrzztUfO" : {
+      "text" : "How are you",
+      "name" : "anonymous"
+    },
+    "-K2ib62mjHh34CzAUbide" : {
+      "text" : "I am fine",
+      "name" : "anonymous"
+    }
+  },
+    "foodRecovery" : {
+    "-K2bb4H77rj0LzYewF7dP" : {
+      "lat" : "33.0",
+      "long" : "128.0",
+      "location_disc" : "Dwinelle Hall",
+      "name" : "Jarrod Schnapper",
+      "pickupStart" : "UTC time here",
+      "pickupEnd" : "UTC time here",
+      "phoneNumber" : "514058342"
+    },
+    "-K2bzb4H77rj0LYewF7dQ" : {
+      "lat" : "33.0",
+      "long" : "128.0",
+      "location_disc" : "Dwinelle Hall",
+      "name" : "Jarrod Schnapper",
+      "pickupStart" : "UTC time here",
+      "pickupEnd" : "UTC time here",
+      "phoneNumber" : "514058342"
+    },
+    "-K2bzb4H77rj0LYewF7dX" : {
+      "lat" : "33.0",
+      "long" : "128.0",
+      "location_disc" : "Dwinelle Hall",
+      "name" : "Jarrod Schnapper",
+      "pickupStart" : "UTC time here",
+      "pickupEnd" : "UTC time here",
+      "phoneNumber" : "514058342"
+    }
+  },
+   "inventory" : {
+    "-K2zbb4H77rj0LYwF7dP" : {
+      "itemID" : "1",
+      "barcode" : "3490W80E95334I",
+      "lastScanned" : "UTC time here",
+			"itemName": "apple",
+			"url": "apple.jpg",
+      "count" : "23",
+      "lastUpdated" : "UTC time here"
+    },
+		"-A2zbb4H77rj0LYwF7zP" : {
+			"itemID" : "2",
+			"barcode" : "3490W80E95334I",
+			"lastScanned" : "UTC time here",
+			"itemName": "banana",
+			"url": "banana.jpg",
+			"count" : "2",
+			"lastUpdated" : "UTC time here"
+		},
+		"-Q2zbb4H77rj0LYwF7dP" : {
+			"itemID" : "1",
+			"barcode" : "3490W80E95334I",
+			"lastScanned" : "UTC time here",
+			"itemName": "carrot",
+			"url": "carrot.jpg",
+			"count" : "23423",
+			"lastUpdated" : "UTC time here"
+		}
+  },
+     "favorites" : {
+    "-K2bzb4H77rj0LYwF7dP" : {
+      "itemID" : "1",
+      "timeLiked" : "UTC time here"
+    }
+  },
+    "images" : {
+    "-K2bb4zH77rj0LYwF7dP" : {
+      "itemID" : "1",
+      "url" : "rip.jpg"
+    }
+  },
+      "categories" : {
+    "-K2bb4H77rj0LzYwF7dP" : {
+      "categoryID" : "1",
+      "text" : "Sauces",
+      "url" : "sauces.jpg"
+    }
+  },
+      "transactions" : {
+    "-K2bb4H7z7rj0LYwF7dP" : {
+      "transactionID" : "1",
+      "transactionStart" : "UTC time here",
+      "numItemsScanned" : "3",
+      "items": "1, 2, 3",
+  	  "studentStatus": "undergrad",
+  	  "studentID": "3033045443"
+    }
+  },
+     "itemLog" : {
+    "-K2bb4H77rj0LzYwF7dP" : {
+      "transactionID" : "1",
+      "barcodeID" : "2480937249",
+      "timeScanned" : "UTC time here",
+  	  "studentID": "3033045443"
+    }
+  },
+       "feedback" : {
+    "-K2bb4H77rj0LaYwF7dP" : {
+      "feedbackID" : "1",
+      "feedbackType" : "???",
+      "feedbackText" : "Please more X",
+  	  "time": "UTC time here"
+    }
+  }
+}

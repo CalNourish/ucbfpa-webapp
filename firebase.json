@@ -1,0 +1,12 @@
+{
+  // If you went through the "Storage Security Rules" step.
+  "hosting": {
+    "public": "./public",
+    "ignore": [
+      "firebase.json",
+      "database-rules.json",
+      "storage.rules",
+      "functions"
+    ]
+  }
+}
