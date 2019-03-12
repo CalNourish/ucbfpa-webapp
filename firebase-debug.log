@@ -1,0 +1,25 @@
+[debug] [2019-03-12T21:48:15.091Z] ----------------------------------------------------------------------
+[debug] [2019-03-12T21:48:15.095Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Kevin\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve --only hosting
+[debug] [2019-03-12T21:48:15.095Z] CLI Version:   6.4.0
+[debug] [2019-03-12T21:48:15.095Z] Platform:      win32
+[debug] [2019-03-12T21:48:15.095Z] Node Version:  v10.15.0
+[debug] [2019-03-12T21:48:15.097Z] Time:          Tue Mar 12 2019 14:48:15 GMT-0700 (Pacific Daylight Time)
+[debug] [2019-03-12T21:48:15.097Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-03-12T21:48:15.111Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-03-12T21:48:15.113Z] > authorizing via signed-in user
+[debug] [2019-03-12T21:48:15.113Z] [iam] checking project testcalnourish for permissions ["firebase.projects.get"]
+[debug] [2019-03-12T21:48:15.116Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/testcalnourish:testIamPermissions  
+
+[debug] [2019-03-12T21:48:15.380Z] <<< HTTP RESPONSE 200
+[debug] [2019-03-12T21:48:15.389Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/testcalnourish  
+ 
+[debug] [2019-03-12T21:48:15.641Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\Kevin\desktop\FoodPantry\ucbfpa-webapp'...
+[info] 
+[debug] [2019-03-12T21:48:15.649Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/1036906621215/clients/_:getWebAppConfig  
+ 
+[debug] [2019-03-12T21:48:15.835Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: ./public
+[info] +  hosting: Local server: http://localhost:5000
