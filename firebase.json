@@ -4,6 +4,7 @@
     "public": "./public",
     "ignore": [
       "firebase.json",
+      "firebase-debug.log",
       "database-rules.json",
       "storage.rules",
       "functions"
