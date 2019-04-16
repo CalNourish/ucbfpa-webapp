@@ -234,6 +234,7 @@ function onAddItemFormSubmit(e) {
   if (checkSignedInWithMessage()) {
     saveItem("3", "2", "3", "4", "5");
   }
+  document.getElementById("add-item-form").reset();
 }
 
 // Triggered when the add new item form is submitted.

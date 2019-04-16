@@ -132,9 +132,13 @@
           <h4>Please enter the amount, then scan the item (defaults to 1 if no amount entered).</h4>
           <form id="checkout-item-form">
             <div class="form-group">
-            <label for="checkout" class="control-label col-xs-4">Barcodes</label>
             <div class="col-xs-8">
-              <textarea id="checkout" name="checkout" cols="20" rows="5" class="form-control"></textarea>
+              <label for="amount">Amount</label>
+              <input id="amount" name="amount" cols="5" rows="5" class="form-control"></input>
+            </div>
+            <div class="col-xs-8">
+            <label for="barcode" class="col-xs-4">Barcode</label>
+              <input type="string" id="barcode" name="barcode" cols="20" rows="5" class="form-control"></input>
             </div>
           </div>
 
