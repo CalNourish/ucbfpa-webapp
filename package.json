@@ -1,0 +1,23 @@
+{
+  "name": "ucbfpa-webapp",
+  "version": "1.0.0",
+  "description": "This folder contains the starting code for the [Firebase: Build a Real Time Web Chat App Codelab](https://codelabs.developers.google.com/codelabs/firebase-web/).",
+  "main": "index.js",
+  "dependencies": {
+    "node": "^11.12.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CalNourish/ucbfpa-webapp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CalNourish/ucbfpa-webapp/issues"
+  },
+  "homepage": "https://github.com/CalNourish/ucbfpa-webapp#readme"
+}
