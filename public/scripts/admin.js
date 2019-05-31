@@ -17,15 +17,14 @@ let convertTime = time => {
     if (time === 'Closed' || time === 'closed') {
         return 'Closed'
     }
-    console.log(time)
     let [start, end] = time.split('-')
     return splitAndConvertTime(start) + ' - ' + splitAndConvertTime(end)
 } 
 
 let splitAndConvertTime = time => {
     let [hr, mn] = time.split(':');
-    let hour = ((hr + 11) % 12 + 1);
-    let period = hr >= 12 ? 'pm' : 'am'
+    let hour = (((parseInt(hr) + 11) % 12) + 1);
+    let period = parseInt(hr) >= 12 ? 'PM' : 'AM'
     return `${hour}:${mn} ${period}`
 }
 
