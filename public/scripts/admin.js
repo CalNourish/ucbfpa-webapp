@@ -15,10 +15,11 @@ const DAYS_TIMES = {
 
 let convertTime = time => {
     if (time === 'Closed' || time === 'closed') {
-        return 'Closed'
+        return ['Closed', null]
     }
     let [start, end] = time.split('-')
-    return splitAndConvertTime(start) + ' - ' + splitAndConvertTime(end)
+
+    return [splitAndConvertTime(start), splitAndConvertTime(end)]
 } 
 
 let splitAndConvertTime = time => {
@@ -41,10 +42,16 @@ function adminPageSetup() {
             if (key in value) {
                 DAYS_TIMES[key] = value[key]["24hours"];
                 let time = convertTime(value[key]["24hours"])
-                document.getElementById(key).innerText = time;
+                // slice off the '-'
+                document.getElementById(key.slice(1)).children[2].innerText= time[0]
+                document.getElementById(key.slice(1)).children[3].innerText = time[1]
             }
         }
     });
+
+
+    let day = new Date().getDay()
+    document.getElementById("pantry-hours").children[day].children[0].innerText = "TODAY"
 }
 
 

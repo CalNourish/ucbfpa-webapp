@@ -199,3 +199,14 @@ main, #messages-card {
   top: -1px;
   margin-right: 5px;
 }
+
+/*********************/
+/*********************/
+/* ADMIN PAGE STYLES */
+/*********************/
+/*********************/
+
+.pantry-open, .pantry-closed{
+  font-size: 16px;
+}
+

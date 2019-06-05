@@ -75,7 +75,7 @@
                   </li>
 
                   <li class="nav-item active">
-                      <a href="/food-recovery" class="nav-link">
+                      <a href="/admin" class="nav-link">
                         <i class="material-icons">business_center</i> Admin
                       </a>
                   </li>
@@ -97,30 +97,90 @@
       </div>
   </nav>
   <!--        end primary navbar -->
-
-  <div class="container">
-    <div class="row">
-      <div id="-sunday"></div>
-    </div>
-    <div class="row">
-      <div id="-monday"></div>
-    </div>
-    <div class="row">
-      <div id="-tuesday"></div>
-    </div>
-    <div class="row">
-      <div id="-wednesday"></div>
-    </div>
-    <div class="row">
-      <div id="-thursday"></div>
-    </div>
-    <div class="row">
-      <div id="-friday"></div>
-    </div>
-    <div class="row">
-      <div id="-saturday"></div>
-    </div>
+  <div class="container w-50">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"><!--Date/Today Indicator--></th>
+          <th scope="col"><!--Day of the Week--></th> 
+          <th scope="col"><!--Open--></th> 
+          <th scope="col"><!--Close--></th> 
+        </tr>
+      </thead>
+      <tbody id="pantry-hours">
+        <tr id="sunday">
+          <td></td>
+          <td>Sunday</td>
+          <td class="pantry-open"></td>
+          <td class="pantry-closed"></td>       
+        </tr>
+        <tr id="monday">
+          <td></td>
+          <td>Monday</td>
+          <td class="pantry-open"></td>
+          <td class="pantry-closed"></td>       
+        </tr>
+        <tr id="tuesday">
+          <td></td>
+          <td>Tuesday</td>
+          <td class="pantry-open"></td>
+          <td class="pantry-closed"></td>       
+        </tr>
+        <tr id="wednesday">
+          <td></td>
+          <td>Wednesday</td>
+          <td class="pantry-open"></td>
+          <td class="pantry-closed"></td>       
+        </tr>
+        <tr id="thursday">
+          <td></td>
+          <td>Thursday</td>
+          <td class="pantry-open"></td>
+          <td class="pantry-closed"></td>       
+        </tr>
+        <tr id="friday">
+          <td></td>
+          <td>Friday</td>
+          <td class="pantry-open"></td>
+          <td class="pantry-closed"></td>       
+        </tr>
+        <tr id="saturday">
+          <td></td>
+          <td>Saturday</td>
+          <td class="pantry-open"></td>
+          <td class="pantry-closed"></td>       
+        </tr>
+      </tbody>
+    </table>
   </div>
+    <!-- <div class="row">
+      <div class="pantry-hours">Sunday</div>
+      <div id="-sunday" class="pantry-hours"></div>
+    </div>
+    <div class="row">  
+      <div class="pantry-hours">Monday</div>
+      <div id="-monday" class="pantry-hours"></div>
+    </div>
+    <div class="row">
+      <div class="pantry-hours">Tuesday</div>
+      <div id="-tuesday" class="pantry-hours"></div>
+    </div>
+    <div class="row">
+      <div class="pantry-hours">Wednesday</div>
+      <div id="-wednesday" class="pantry-hours"></div>
+    </div>
+    <div class="row">
+      <div class="pantry-hours">Thursday</div>
+      <div id="-thursday" class="pantry-hours"></div>
+    </div>
+    <div class="row">
+      <div class="pantry-hours">Friday</div>
+      <div id="-friday" class="pantry-hours"></div>
+    </div>
+    <div class="row">
+      <div class="pantry-hours">Saturday</div>
+      <div id="-saturday" class="pantry-hours"></div>
+    </div> -->
 
 
 
