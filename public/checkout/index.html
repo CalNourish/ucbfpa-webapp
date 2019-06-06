@@ -55,34 +55,44 @@
 <body>
 
     <!--        primary navbar  -->
-    <nav class="navbar navbar-expand-lg bg-info">
+    <nav class="navbar navbar-expand-lg bg-info" role="navigation">
         <div class="container">
             <div class="navbar-translate">
                 <a class="navbar-brand" href="/">UC Berkeley Food Pantry</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                        <span class="navbar-toggler-icon"></span>
+                        <span class="navbar-toggler-icon"></span>
+                </button>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
-                  <li class="nav-item">
-                      <a href="/inventory" class="nav-link">
-                          <i class="material-icons">view_headline</i> Inventory
-                      </a>
-                  </li>
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">
+                            <i class="material-icons">home</i>UCBFP
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/inventory" class="nav-link">
+                            <i class="material-icons">view_headline</i> Inventory
+                        </a>
+                    </li>
 
-                  <li class="nav-item active">
-                      <a href="/checkout" class="nav-link">
-                          <i class="material-icons">shopping_cart</i> Checkout
-                      </a>
-                  </li>
+                    <li class="nav-item active">
+                        <a href="/checkout" class="nav-link">
+                            <i class="material-icons">shopping_cart</i> Checkout
+                        </a>
+                    </li>
 
-                  <li class="nav-item">
-                      <a href="/food-recovery" class="nav-link">
-                          <i class="material-icons">explore</i> Food Recovery
-                      </a>
-                  </li>
+                    <li class="nav-item">
+                        <a href="/food-recovery" class="nav-link">
+                            <i class="material-icons">explore</i> Food Recovery
+                        </a>
+                    </li>
 
                     <li class="dropdown nav-item">
                         <a class="dropdown-toggle nav-link" data-toggle="dropdown">
-                            <i class="material-icons">account_circle</i>
+                            <i class="material-icons">account_circle</i>Account
                             <span hidden id="user-pic"></span>
                             <span hidden id="user-name"></span>
                         </a>
@@ -95,7 +105,7 @@
                 </ul>
             </div>
         </div>
-    </nav>
+  </nav>
     <!--        end primary navbar -->
 
     <div class="container">
