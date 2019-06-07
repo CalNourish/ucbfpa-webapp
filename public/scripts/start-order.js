@@ -2,13 +2,19 @@
 
 var formElement = document.getElementById('start-order-form');
 var encryptedStudentIdElement = document.getElementById('encryptedStudentId');
-var studentStatusElement = document.getElementById('studentStatus');
+var studentStatusElements = document.getElementsByName('studentStatus');
 
 function saveOrder(event) {
     event.preventDefault();
 
     var encryptedStudentId = encryptedStudentIdElement.value;
-    var studentStatus = studentStatusElement.value;
+
+    for (var i = 0, length = studentStatusElements.length; i < length; i++) {
+        if (studentStatusElements[i].checked) {
+            var studentStatus = studentStatusElements[i].value;
+            break;
+        }
+    }
 
     // TODO: Null checks.
   
