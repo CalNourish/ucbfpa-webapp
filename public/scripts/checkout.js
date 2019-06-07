@@ -1,7 +1,7 @@
 var form = document.getElementById('checkout-item-form');
 
 function goToStartOrder() {
-  window.location.href = "/checkout";
+  window.location.href = "/start-order";
 }
 
 function checkoutItem(barcodeScanned, amount) {
