@@ -1,5 +1,8 @@
 var form = document.getElementById('checkout-item-form');
 
+function goToStartOrder() {
+  window.location.href = "/checkout";
+}
 
 function checkoutItem(barcodeScanned, amount) {
   var barcode = barcodeScanned.value;
