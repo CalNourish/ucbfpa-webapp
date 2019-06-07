@@ -142,16 +142,16 @@
           <h4>Please enter the amount, then scan the item (defaults to 1 if no amount entered).</h4>
           <form id="checkout-item-form">
             <div class="form-group">
-            <div class="col-xs-8">
-              <label for="amount">Amount</label>
-              <input id="amount" name="amount" cols="5" rows="5" class="form-control"></input>
+              <div class="col-xs-8">
+                <label for="amount">Amount</label>
+                <input id="amount" name="amount" cols="5" rows="5" class="form-control"></input>
+              </div>
+              <div class="col-xs-8">
+                <label for="barcode" class="col-xs-4">Barcode</label>
+                <input type="string" id="barcode" name="barcode" cols="20" rows="5" class="form-control"></input>
+              </div>
             </div>
-            <div class="col-xs-8">
-            <label for="barcode" class="col-xs-4">Barcode</label>
-              <input type="string" id="barcode" name="barcode" cols="20" rows="5" class="form-control"></input>
-            </div>
-          </div>
-          <button id="backToCheckout" type="button" value="finished" onclick="goToStartOrder()" class="btn btn-primary">Finished</button>
+            <button id="backToCheckout" type="button" value="finished" onclick="goToStartOrder()" class="btn btn-primary">Finished</button>
           </form>
         </div>
 
