@@ -1,6 +1,6 @@
 'use strict';
 
-// var form = document.getElementById('start-order-form');
+var form = document.getElementById('start-order-form');
 
 function saveOrder() {
     var encryptedStudentId = document.getElementById('encryptedStudentId').value;
