@@ -4,6 +4,10 @@ var formElement = document.getElementById('start-order-form');
 var encryptedStudentIdElement = document.getElementById('encryptedStudentId');
 var studentStatusElements = document.getElementsByName('studentStatus');
 
+function goToCheckout() {
+    window.location.href = "/checkout";
+}
+
 function saveOrder(event) {
     event.preventDefault();
 
@@ -23,14 +27,19 @@ function saveOrder(event) {
         student_status: studentStatus
     };
 
-    return firebase
+    firebase
         .database()
         .ref('/transaction2')
         .update(order)
+        .then(function() {
+            goToCheckout();
+        })
         .catch(function(error) {
             console.error('Error saving order to /transaction2', error);
+            
+            // DELETE BEFORE DEPLOYING.
+            goToCheckout();
         });
 }
-
 
 formElement.addEventListener('submit', saveOrder);
