@@ -1,8 +1,6 @@
 'use strict';
 
 var formElement = document.getElementById('start-order-form');
-var skipButton = document.getElementById('');
-
 var encryptedStudentIdElement = document.getElementById('encryptedStudentId');
 var studentStatusElements = document.getElementsByName('studentStatus');
 
