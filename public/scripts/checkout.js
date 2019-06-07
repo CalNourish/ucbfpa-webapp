@@ -1,3 +1,5 @@
+'use strict';
+
 var form = document.getElementById('checkout-item-form');
 
 function goToStartOrder() {
