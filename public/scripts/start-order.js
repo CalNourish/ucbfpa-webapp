@@ -1,10 +1,14 @@
 'use strict';
 
-var form = document.getElementById('start-order-form');
+var formElement = document.getElementById('start-order-form');
+var encryptedStudentIdElement = document.getElementById('encryptedStudentId');
+var studentStatusElement = document.getElementById('studentStatus');
 
-function saveOrder() {
-    var encryptedStudentId = document.getElementById('encryptedStudentId').value;
-    var studentStatus = document.getElementById('studentStatus').value;
+function saveOrder(event) {
+    event.preventDefault();
+
+    var encryptedStudentId = encryptedStudentIdElement.value;
+    var studentStatus = studentStatusElement.value;
 
     // TODO: Null checks.
   
@@ -21,3 +25,6 @@ function saveOrder() {
             console.error('Error saving order to /transaction2', error);
         });
 }
+
+
+formElement.addEventListener('submit', saveOrder);
