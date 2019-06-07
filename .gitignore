@@ -1,7 +1,7 @@
 firebase-debug.log
 package-lock.json
 node_modules/
-
+.DS_Store
 
 # Logs
 logs
