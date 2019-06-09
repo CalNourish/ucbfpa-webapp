@@ -33,7 +33,7 @@ form.addEventListener('keypress', function(e){
     var scannedItem = document.createElement("li");
     scannedItem.textContent = barcodeScanned;
     var groceryItem = document.createElement("li");
-    groceryItem.textContent = barcodeScanned.value + ", " + amount.value;
+    groceryItem.textContent = barcodeScanned.value + ", Amount: " + amount.value;
     groceryList.appendChild(groceryItem);
 
     barcodeScanned.value = "";
