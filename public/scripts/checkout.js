@@ -31,7 +31,7 @@ form.addEventListener('keypress', function(e){
 
     // This is adding to the list using the barcode scanner.
     var itemID = barcodeToID(barcodeScanned.value);
-    scannedItem = getItemByID(itemID);
+    var scannedItem = getItemByID(itemID);
 
     var groceryItem = document.createElement("li");
     groceryItem.textContent = scannedItem + ", Amount: " + amount.value;
