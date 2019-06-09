@@ -22,6 +22,9 @@ form.addEventListener('keypress', function(e){
     console.log('You pressed a "enter" key in somewhere');
     var barcodeScanned = document.getElementById('barcode');
     var amount = document.getElementById('amount');
+    if (!amount.value) {
+      amount.value = "1"
+    }
     console.log(barcodeScanned)
     console.log(amount)
     checkoutItem(barcodeScanned, amount);
