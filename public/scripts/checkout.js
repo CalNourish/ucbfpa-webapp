@@ -3,16 +3,6 @@
 var form = document.getElementById('checkout-item-form');
 var groceryList = document.querySelector('ol');
 
-
-// This is displaying the static list currently shown.
-var toppings = ["Tomato", "Cheese", "Pepperoni", "Olives", "Jalapenos", "Pineapple", "Ham"];
-for (var i = 0; i < toppings.length; i++) {
-  var topping = toppings[i];
-  var listItem = document.createElement("li");
-  listItem.textContent = topping;
-  groceryList.appendChild(listItem);
-}
-
 function goToStartOrder() {
   window.location.href = "/start-order";
 }
@@ -39,7 +29,9 @@ form.addEventListener('keypress', function(e){
     // This is adding to the list using the barcode scanner.
     var scannedItem = document.createElement("li");
     scannedItem.textContent = barcodeScanned;
-    groceryList.appendChild(barcodeScanned);
+    var groceryItem = document.createElement("li");
+    groceryItem.textContent = barcodeScanned.value;
+    groceryList.appendChild(groceryItem);
 
     barcodeScanned.value = "";
     amount.value = "";
