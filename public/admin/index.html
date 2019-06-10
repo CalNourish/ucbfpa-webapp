@@ -49,6 +49,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
   <link rel="stylesheet" href="../styles/material-kit.css?v=2.0.3">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker@1.11.15/jquery.timepicker.min.css">
   <link rel="stylesheet" href="../styles/main.css">
 
 </head>
@@ -101,52 +102,46 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col"><!--Date/Today Indicator--></th>
           <th scope="col"><!--Day of the Week--></th> 
           <th scope="col"><!--Open--></th> 
           <th scope="col"><!--Close--></th> 
         </tr>
       </thead>
       <tbody id="pantry-hours">
-        <tr id="sunday">
-          <td></td>
-          <td>Sunday</td>
+        <tr id="d-plus-0">
+          <td class="day"></td>
           <td class="pantry-open"></td>
           <td class="pantry-closed"></td>       
         </tr>
-        <tr id="monday">
-          <td></td>
-          <td>Monday</td>
+        <tr id="d-plus-1">
+          <td class="day"></td>
+          <td class="pantry-open">
+              <div id="basicExample">    
+          </td>
+          <td class="pantry-closed"></td>       
+        </tr>
+        <tr id="d-plus-2">
+          <td class="day"></td>
           <td class="pantry-open"></td>
           <td class="pantry-closed"></td>       
         </tr>
-        <tr id="tuesday">
-          <td></td>
-          <td>Tuesday</td>
+        <tr id="d-plus-3">
+          <td class="day"></td>
           <td class="pantry-open"></td>
           <td class="pantry-closed"></td>       
         </tr>
-        <tr id="wednesday">
-          <td></td>
-          <td>Wednesday</td>
+        <tr id="d-plus-4">
+          <td class="day"></td>
           <td class="pantry-open"></td>
           <td class="pantry-closed"></td>       
         </tr>
-        <tr id="thursday">
-          <td></td>
-          <td>Thursday</td>
+        <tr id="d-plus-5">
+          <td class="day"></td>
           <td class="pantry-open"></td>
           <td class="pantry-closed"></td>       
         </tr>
-        <tr id="friday">
-          <td></td>
-          <td>Friday</td>
-          <td class="pantry-open"></td>
-          <td class="pantry-closed"></td>       
-        </tr>
-        <tr id="saturday">
-          <td></td>
-          <td>Saturday</td>
+        <tr id="d-plus-6">
+          <td class="day"></td>
           <td class="pantry-open"></td>
           <td class="pantry-closed"></td>       
         </tr>
@@ -207,5 +202,7 @@
 <!-- Page related scripts -->
 <script src="../scripts/admin.js"></script>
 
+<!-- Timepicker CDN -->
+<script src="https://cdn.jsdelivr.net/npm/timepicker@1.11.15/jquery.timepicker.min.js"></script>
 </body>
 </html>

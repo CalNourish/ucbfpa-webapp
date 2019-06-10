@@ -43,8 +43,8 @@ function adminPageSetup() {
                 DAYS_TIMES[key] = value[key]["24hours"];
                 let time = convertTime(value[key]["24hours"])
                 // slice off the '-'
-                document.getElementById(key.slice(1)).children[2].innerText= time[0]
-                document.getElementById(key.slice(1)).children[3].innerText = time[1]
+                // document.getElementById(key.slice(1)).children[2].innerText= time[0]
+                // document.getElementById(key.slice(1)).children[3].innerText = time[1]
             }
         }
     });
@@ -53,6 +53,10 @@ function adminPageSetup() {
     let day = new Date().getDay()
     document.getElementById("pantry-hours").children[day].children[0].innerText = "TODAY"
 }
+
+// Timepicker
+$('#basicExample').timepicker();
+
 
 
 window.onload = adminPageSetup

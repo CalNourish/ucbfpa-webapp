@@ -206,7 +206,7 @@ main, #messages-card {
 /*********************/
 /*********************/
 
-.pantry-open, .pantry-closed{
-  font-size: 16px;
+#pantry-hours td {
+  font-size: 16px !important;
 }
 
