@@ -12,30 +12,87 @@ function checkoutItem(barcodeScanned, amount) {
   var amt = amount.value;
   var amount = amt ? amt : 1;
 
-  decrementItem(barcode, amount);
+  return new Promise(function(resolve, reject) {
+    var firebaseReturn = decrementItem(barcode, amount);
+  
+    if (firebaseReturn) {
+      resolve(firebaseReturn);
+    }
+    else {
+      reject(Error("It broke"));
+    }
+  });
 }
 
-form.addEventListener('keypress', function(e){
+function getItemIdByBarcode(barcode) {
+  return new Promise(function(resolve, reject) {
+    var itemId = firebase
+      .database()
+      .ref('/barcodes/')
+      .once('value')
+      .then(function(barcodesTable) {
+        return barcodesTable.val()[barcode];
+      });
+  
+    if (itemId) {
+      resolve(itemId);
+    }
+    else {
+      reject(Error("Something broke here."));
+    }
+  });
+}
+
+function getItemNameByItemId(itemId) {
+  return new Promise(function(resolve, reject) {
+    var itemName = firebase
+      .database()
+      .ref('/inventory/' + itemId)
+      .once('value')
+      .then(function(inventoryTable) {
+        return inventoryTable.val().itemName;
+      });
+  
+    if (itemName) {
+      resolve(itemName);
+    }
+    else {
+      reject(Error("Something broke here."));
+    }
+  });
+}
+
+form.addEventListener('keypress', function(e) {
+  e.preventDefault();
   if (e.keyCode == 13) {
-    e.preventDefault();
-    // barcodeScanned.value += ' ';
-    console.log('You pressed a "enter" key in somewhere');
     var barcodeScanned = document.getElementById('barcode');
     var amount = document.getElementById('amount');
+
     if (!amount.value) {
-      amount.value = "1"
+      amount.value = "1";
     }
-    console.log(barcodeScanned)
-    console.log(amount)
-    checkoutItem(barcodeScanned, amount);
 
-    // This is adding to the list using the barcode scanner.
-    var itemID = barcodeToID(barcodeScanned.value);
-    var scannedItem = getItemByID(itemID);
-
-    var groceryItem = document.createElement("li");
-    groceryItem.textContent = scannedItem + ", Amount: " + amount.value;
-    groceryList.appendChild(groceryItem);
+    checkoutItem(barcodeScanned, amount)
+      .then(function(result) {
+        console.log(result);
+      }, function(err) {
+        console.log(err);
+      });
+    
+    getItemIdByBarcode(barcodeScanned.value)
+      .then(function(itemId) {
+        console.log("itemid hello: " + itemId);
+        getItemNameByItemId(itemId)
+          .then(function(itemName) {
+            var groceryItem = document.createElement("li");
+            groceryItem.textContent = itemName + ", Amount: " + amount.value;
+            groceryList.appendChild(groceryItem);
+          }, function(err) {
+            console.log(err);
+          });
+      }, function(err) {
+        console.log(err);
+      });
 
     barcodeScanned.value = "";
     amount.value = "";
