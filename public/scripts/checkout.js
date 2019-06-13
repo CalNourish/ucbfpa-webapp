@@ -62,6 +62,17 @@ function getItemNameByItemId(itemId) {
   });
 }
 
+function getAmount() {
+  var amount = document.getElementById('amount');
+  if (!amount.value) {
+    return "1";
+  }
+  else {
+    return amount.value;
+  }
+}
+
+
 form.addEventListener('keypress', function(e) {
   e.preventDefault();
   if (e.keyCode == 13) {
