@@ -74,8 +74,8 @@ function getAmount() {
 
 
 form.addEventListener('keypress', function(e) {
-  e.preventDefault();
   if (e.keyCode == 13) {
+  	e.preventDefault();
     var barcodeScanned = document.getElementById('barcode');
     var amount = document.getElementById('amount');
     if (!amount.value) {
