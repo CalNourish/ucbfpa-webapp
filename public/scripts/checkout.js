@@ -67,7 +67,6 @@ form.addEventListener('keypress', function(e) {
   if (e.keyCode == 13) {
     var barcodeScanned = document.getElementById('barcode');
     var amount = document.getElementById('amount');
-
     if (!amount.value) {
       amount.value = "1";
     }
@@ -82,9 +81,15 @@ form.addEventListener('keypress', function(e) {
     getItemIdByBarcode(barcodeScanned.value)
       .then(function(itemId) {
         console.log("itemid hello: " + itemId);
+        console.log(amount.value);
+
         getItemNameByItemId(itemId)
           .then(function(itemName) {
             var groceryItem = document.createElement("li");
+            // var amount = document.getElementById('amount');
+            // if (!amount.value) {
+            //   amount.value = "1";
+            // }
             groceryItem.textContent = itemName + ", Amount: " + amount.value;
             groceryList.appendChild(groceryItem);
           }, function(err) {
@@ -93,7 +98,7 @@ form.addEventListener('keypress', function(e) {
       }, function(err) {
         console.log(err);
       });
-
+    
     barcodeScanned.value = "";
     amount.value = "";
   }
