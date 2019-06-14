@@ -30,7 +30,7 @@ function saveOrder(event) {
     firebase
         .database()
         .ref('/transaction2')
-        .update(order)
+        .push(order)
         .then(function() {
             goToCheckout();
         })
