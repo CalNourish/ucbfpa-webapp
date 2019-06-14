@@ -36,9 +36,6 @@ function saveOrder(event) {
         })
         .catch(function(error) {
             console.error('Error saving order to /transaction2', error);
-            
-            // DELETE BEFORE DEPLOYING.
-            goToCheckout();
         });
 }
 
