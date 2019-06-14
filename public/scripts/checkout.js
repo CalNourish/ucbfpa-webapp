@@ -97,10 +97,10 @@ form.addEventListener('keypress', function(e) {
         getItemNameByItemId(itemId)
           .then(function(itemName) {
             var groceryItem = document.createElement("li");
-            // var amount = document.getElementById('amount');
-            // if (!amount.value) {
-            //   amount.value = "1";
-            // }
+            var amount = document.getElementById('amount');
+            if (!amount.value) {
+              amount.value = "1";
+            }
             groceryItem.textContent = itemName + ", Amount: " + amount.value;
             groceryList.appendChild(groceryItem);
           }, function(err) {
