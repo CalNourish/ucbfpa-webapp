@@ -103,6 +103,8 @@ form.addEventListener('keypress', function(e) {
             }
             groceryItem.textContent = itemName + ", Amount: " + amount.value;
             groceryList.appendChild(groceryItem);
+            barcodeScanned.value = "";
+            amount.value = "";
           }, function(err) {
             console.log(err);
           });
@@ -110,7 +112,6 @@ form.addEventListener('keypress', function(e) {
         console.log(err);
       });
     
-    barcodeScanned.value = "";
-    amount.value = "";
+
   }
 });
