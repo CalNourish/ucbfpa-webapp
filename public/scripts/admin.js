@@ -1,5 +1,5 @@
 'use strict';
-
+$(document).ready(function() {
 const REF = firebase.database().ref('/info/')
 
 // Format of days in the database.... it is this way for some reason........
@@ -38,28 +38,46 @@ let info = async () => {
 
 function adminPageSetup() {
     info().then(value => {
+        const closedOption = document.createElement("option");
+        closedOption.text = "Closed"
+        closedOption.value = "Closed"
         for (let key in DAYS_TIMES) {
             if (key in value) {
                 DAYS_TIMES[key] = value[key]["24hours"];
                 let time = convertTime(value[key]["24hours"])
                 // slice off the '-'
-                // document.getElementById(key.slice(1)).children[2].innerText= time[0]
-                // document.getElementById(key.slice(1)).children[3].innerText = time[1]
+                let open = document.getElementById(key.slice(1)).children[1].children[0];
+                let closed = document.getElementById(key.slice(1)).children[2].children[0];
+                if (open) {
+                    open.value = time[0]
+                }
+
+                if (closed) {
+                    closed.value = time[1]
+                }
+
+                open.children[0].appendChild(closedOption);
+                closed.children[0].appendChild(closedOption);
             }
         }
     });
-
-
-    let day = new Date().getDay()
-    document.getElementById("pantry-hours").children[day].children[0].innerText = "TODAY"
 }
 
-// Timepicker
-$('#basicExample').timepicker();
 
+$('.timepicker').timepicker({
+    timeFormat: 'h:mm p',
+    interval: 15,
+    defaultTime: '11',
+    startTime: '10:00',
+    dynamic: false,
+    dropdown: true,
+    scrollbar: true
+});
 
 
 window.onload = adminPageSetup
+
+});
 
 
 
