@@ -4,6 +4,7 @@ node_modules/
 */.DS_Store
 .DS_Store
 .firebase/
+functions/api_key.txt
 
 # Logs
 logs
