@@ -38,9 +38,6 @@ let info = async () => {
 
 function adminPageSetup() {
     info().then(value => {
-        const closedOption = document.createElement("option");
-        closedOption.text = "Closed"
-        closedOption.value = "Closed"
         for (let key in DAYS_TIMES) {
             if (key in value) {
                 DAYS_TIMES[key] = value[key]["24hours"];
@@ -55,9 +52,6 @@ function adminPageSetup() {
                 if (closed) {
                     closed.value = time[1]
                 }
-
-                open.children[0].appendChild(closedOption);
-                closed.children[0].appendChild(closedOption);
             }
         }
     });
@@ -65,14 +59,32 @@ function adminPageSetup() {
 
 
 $('.timepicker').timepicker({
-    timeFormat: 'h:mm p',
-    interval: 15,
-    defaultTime: '11',
-    startTime: '10:00',
-    dynamic: false,
-    dropdown: true,
-    scrollbar: true
+    'noneOption': [
+        {'label': 'Closed',
+        'value': 'Closed'
+        }
+    ],
+    'lang': {
+        am: ' AM',
+        pm: ' PM'
+    },
+    'timeFormat': 'h:i A',
+    'scrollDefault': 'now',
+    'forceRoundTime': true,
+    'step': 15
 });
+
+$('.timepicker').on('timeFormatError', function() {
+
+})
+
+
+
+
+
+
+
+
 
 
 window.onload = adminPageSetup

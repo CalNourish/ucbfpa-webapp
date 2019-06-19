@@ -233,7 +233,11 @@ td.day {
   background-color: transparent;
 }
 
-.timepicker option {
-  background-color: red;
+.timepicker .ui-menu-item {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+
+.timepicker .ui-menu-item .ui-state-hover {
+  background-color: rgba(9,50,90, 0.1);
 }
 
