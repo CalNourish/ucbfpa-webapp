@@ -23,7 +23,9 @@ function sendNotification(event) {
     var notifTitle = notifTitleElement.value;
     var notifText = notifTextElement.value;
     var today = new Date();
-    var timestamp = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var timestamp = date + time;
 
     // TODO: Null checks.
   
