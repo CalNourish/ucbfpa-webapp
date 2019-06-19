@@ -6,15 +6,47 @@ var formElement = document.getElementById('send-notification-form');
 var notifTitleElement = document.getElementById('notifTitle');
 var notifTextElement = document.getElementById('notifText');
 
+// function sendNotification(event) {
+//     event.preventDefault();
+
+//     var notifTitle = notifTitleElement.value;
+//     var notifText = notifTextElement.value;
+
+//     console.log(notifTitle);
+//     console.log(notifText);
+// }
+
 function sendNotification(event) {
     event.preventDefault();
 
+    // var encryptedStudentId = encryptedStudentIdElement.value;
     var notifTitle = notifTitleElement.value;
     var notifText = notifTextElement.value;
+    var today = new Date();
+    var timestamp = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
-    console.log(notifTitle);
-    console.log(notifText);
+    // TODO: Null checks.
+  
+    var notification = {
+        text: notifText,
+        timestamp: timestamp,
+        title: notifTitle
+    };
+
+    firebase
+        .database()
+        .ref('/notification')
+        .push(notification)
+        // .then(function() {
+        //     goToCheckout();
+        // })
+        .catch(function(error) {
+            console.error('Error saving order to /notification', error);
+        });
 }
+
+
+
 
 function configureNotifications() {
   Notification.requestPermission().then((permission) => {
