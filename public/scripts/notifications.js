@@ -38,12 +38,47 @@ function sendNotification(event) {
         });
 }
 
+function sendTokenToServer(generatedToken) {
+  event.preventDefault();
+
+  var token = generatedToken; 
+
+  var notificationToken = {
+      token: token,
+  };
+
+  firebase
+      .database()
+      .ref('/notificationToken')
+      .push(notificationToken)
+      // .then(function() {
+      //     // goToCheckout();
+      //     notifTitleElement.value = '';
+      //     notifTextElement.value = '';
+      // })
+      .catch(function(error) {
+          console.error('Error saving token to /notificationToken', error);
+      });
+}
+
 
 
 
 function configureNotifications() {
   Notification.requestPermission().then((permission) => {
     if (permission === 'granted') {
+      const messaging = firebase.messaging();
+      messaging.usePublicVapidKey("BOtZcASfobhUcw5aNkd2URdFSeWWlN-mdeYDT5rCsH2ONC5SZ2RcsQhF4gCx7QFjfk1cOHu54Yuymb_W5Mvce_E");
+      messaging.getToken().then((currentToken) => {
+        if (currentToken) {
+          sendTokenToServer(currentToken);
+          console.log(currentToken);
+        } else {
+          console.log('No Instance ID token available. Request permission to generate one.');
+        }
+      }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+    });
       console.log('Notification permission granted.');
     } else {
       console.log('Unable to get permission to notify.');
