@@ -25,15 +25,27 @@ exports.sendNotification = functions
   .database
   .ref('/notification/{notification}')
   .onWrite(async (change, context) => {
-    var notification = context.params.notification;
-    console.log('Notification: ');
-    console.log(notification);
 
-    // admin.messaging().send(notification, 'foodPantry')
-    //   .then(function(response) {
-    //     console.log('Successfully subscribed to topic:', response);
-    //   })
-    //   .catch(function(error) {
-    //     console.log('Error subscribing to topic:', error);
-    //   });
+    const notification = change.after.val();
+
+    var message = {
+      notification: {
+        title: notification.title,
+        body: notification.text
+      },
+      topic: 'foodPantry'
+    };
+
+    console.log('Message: ');
+    console.log(message);
+
+    // Send a message to devices subscribed to the provided topic.
+    admin.messaging().send(message)
+      .then((response) => {
+        // Response is a message ID string.
+        console.log('Successfully sent message:', response);
+      })
+      .catch((error) => {
+        console.log('Error sending message:', error);
+      });
   });
