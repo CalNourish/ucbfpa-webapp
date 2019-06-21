@@ -6,26 +6,34 @@ const request = require('request');
 
 admin.initializeApp();
 
-exports.subscribeToFoodPantry = functions.database.ref('/notificationToken/{notificationTokenUid}')
-    .onWrite(async (change, context) => {
+exports.subscribeToFoodPantry = functions
+  .database
+  .ref('/notificationToken/{notificationToken}')
+  .onWrite(async (change, context) => {
+    const notificationToken = context.params.notificationToken;
 
-      const notificationTokenUid = context.params.notificationTokenUid;
+    admin.messaging().subscribeToTopic(notificationToken, 'foodPantry')
+      .then(function(response) {
+        console.log('Successfully subscribed to topic:', response);
+      })
+      .catch(function(error) {
+        console.log('Error subscribing to topic:', error);
+      });
+  });
 
-      request
-        .post(
-	      'https://iid.googleapis.com/iid/v1/' + notificationTokenUid + '/rel/topics/foodPantry',
-	      {
-	      	json: {},
-	      	'auth': {
-              'bearer': '<API-KEY>'
-            }
-	      },
-	      function (error, response, body) {
-	        if (!error && response.statusCode == 200) {
-	          console.log(body);
-	        } else {
-	          console.log(error);
-	        }
-	      }
-	    );
-    });
+exports.sendNotification = functions
+  .database
+  .ref('/notification/{notification}')
+  .onWrite(async (change, context) => {
+    var notification = context.params.notification;
+    console.log('Notification: ');
+    console.log(notification);
+
+    // admin.messaging().send(notification, 'foodPantry')
+    //   .then(function(response) {
+    //     console.log('Successfully subscribed to topic:', response);
+    //   })
+    //   .catch(function(error) {
+    //     console.log('Error subscribing to topic:', error);
+    //   });
+  });
