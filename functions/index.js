@@ -36,9 +36,6 @@ exports.sendNotification = functions
       topic: 'foodPantry'
     };
 
-    console.log('Message: ');
-    console.log(message);
-
     // Send a message to devices subscribed to the provided topic.
     admin.messaging().send(message)
       .then((response) => {
