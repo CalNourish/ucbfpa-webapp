@@ -17,7 +17,7 @@ exports.subscribeToFoodPantry = functions.database.ref('/notificationToken/{noti
 	      {
 	      	json: {},
 	      	'auth': {
-              'key': '<API_KEY>'
+              'bearer': '<API-KEY>'
             }
 	      },
 	      function (error, response, body) {
