@@ -65,6 +65,13 @@ function configureNotifications() {
         } else {
           console.log('No Instance ID token available. Request permission to generate one.');
         }
+        // Handle incoming messages. Called when:
+        // - a message is received while the app has focus
+        // - the user clicks on an app notification created by a service worker
+        //   `messaging.setBackgroundMessageHandler` handler.
+        messaging.onMessage((payload) => {
+          console.log('Message received. ', payload);
+        });
       }).catch((err) => {
         console.log('An error occurred while retrieving token. ', err);
     });
