@@ -15,7 +15,6 @@ exports.subscribeToFoodPantry = functions
     admin.messaging().subscribeToTopic(notificationToken, 'foodPantry')
       .then(function(response) {
         console.log('Successfully subscribed to topic:', response);
-        console.log(response.results[0].error);
       })
       .catch(function(error) {
         console.log('Error subscribing to topic:', error);
