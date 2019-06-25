@@ -78,18 +78,13 @@
                         </a>
                     </li>
 
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a href="/start-order" class="nav-link">
                             <i class="material-icons">shopping_cart</i> Checkout
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                      <a href="/admin" class="nav-link">
-                        <i class="material-icons">business_center</i> Admin
-                      </a>
-                    </li>
-                    <li>
+                    <li class="nav-item active">
                         <a href="/notifications" class="nav-link">
                             <i class="material-icons">explore</i> Send Notification
                         </a>
@@ -115,43 +110,31 @@
 
     <div class="container">
       <div class="row">
-
-
-
         <div class="col-sm">
-          <h3>Start Order</h3>
-          <h4>Scan the pantry user's ID card and select their student status.</h4>
-          <form id="start-order-form">
+          <h3>New Notification</h3>
+          <h4>Type your notification title and text in the form below, then press "Send".</h4>
+          <form id="send-notification-form">
             <div class="form-group">
               <div class="col-xs-8">
-                <label for="sid" class="col-xs-4">SID</label>
-                <input type="string" id="encryptedStudentId" name="encryptedStudentId" cols="20" rows="5" class="form-control"></input>
+                <label for="notifTitle" class="col-xs-4">Notification Title</label>
+                <input type="string" id="notifTitle" name="notifTitle" cols="20" rows="5" class="form-control"></input>
               </div>
               <br><br>
               <div class="col-xs-8">
-                <label for="status" class="col-xs-4">Student Status</label>
-                <input type="radio" name="studentStatus" value="ug" class="form-control">Undergraduate</input>
-                <input type="radio" name="studentStatus" value="g" class="form-control">Graduate</input>
-                <input type="radio" name="studentStatus" value="other" class="form-control">Other</input>
+                <label for="notifText" class="col-xs-4">Notification Text</label>
+                <input type="string" id="notifText" name="notifText" cols="20" rows="5" class="form-control"></input>
               </div>
             </div>
-            <button id="userInfoSubmit" type="submit" class="btn btn-primary">Submit</button>
-            <button id="userInfoSkip" type="button" value="skip" onclick="goToCheckout()" class="btn btn-primary">Skip</button>
-
+            <button id="notifSend" type="submit" class="btn btn-primary">Send</button>
           </form>
         </div>
 
- 
-
-
-  <div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
-    <div class="mdl-snackbar__text"></div>
-    <button class="mdl-snackbar__action" type="button"></button>
-  </div>
+        <div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
+          <div class="mdl-snackbar__text"></div>
+          <button class="mdl-snackbar__action" type="button"></button>
+        </div>
       </div>
     </div>
-
-
 
 <!-- Import and configure the Firebase SDK -->
 <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
@@ -171,9 +154,7 @@
 <!-- Material Kit Core initialisations of plugins and Bootstrap Material Design Library -->
 <script src="../scripts/material-kit.js?v=2.0.3"></script>
 <script src="../scripts/main.js"></script>
-<script src="../scripts/inventory.js"></script>
-<script src="../scripts/checkout.js"></script>
-<script src="../scripts/start-order.js"></script>
+<script src="../scripts/notifications.js"></script>
 
 </body>
 </html>

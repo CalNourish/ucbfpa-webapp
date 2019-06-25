@@ -1,6 +1,7 @@
 {
   "projects": {
     "temp": "testcalnourish",
-    "local": "testcalnourish"
+    "local": "testcalnourish",
+    "default": "testcalnourish"
   }
 }

@@ -30,15 +30,12 @@ function saveOrder(event) {
     firebase
         .database()
         .ref('/transaction2')
-        .update(order)
+        .push(order)
         .then(function() {
             goToCheckout();
         })
         .catch(function(error) {
             console.error('Error saving order to /transaction2', error);
-            
-            // DELETE BEFORE DEPLOYING.
-            goToCheckout();
         });
 }
 

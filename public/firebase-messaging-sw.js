@@ -1,8 +1,15 @@
-// The web app needs a Service Worker that will receive and display web notifications,
-// like for Food Recovery. Don't move or delete this file.
+// Give the service worker access to Firebase Messaging.
+// Note that you can only use Firebase Messaging here, other Firebase libraries
+// are not available in the service worker.
+importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
 
-importScripts('/__/firebase/5.5.7/firebase-app.js');
-importScripts('/__/firebase/5.5.7/firebase-messaging.js');
-importScripts('/__/firebase/init.js');
+// Initialize the Firebase app in the service worker by passing in the
+// messagingSenderId.
+firebase.initializeApp({
+  'messagingSenderId': '1036906621215'
+});
 
-firebase.messaging();
+// Retrieve an instance of Firebase Messaging so that it can handle background
+// messages.
+const messaging = firebase.messaging();
