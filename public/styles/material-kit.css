@@ -11214,7 +11214,7 @@ textarea {
     -webkit-transform-origin: 100% 0;
             transform-origin: 100% 0; }
   .navbar .navbar-nav .nav-item.active .nav-link, .navbar .navbar-nav .nav-item.active .nav-link:hover, .navbar .navbar-nav .nav-item.active .nav-link:focus {
-    color: #C4820E;
+    color: inherit;
     background-color: rgba(255, 255, 255, 0.1); }
   .navbar .btn,
   .navbar .navbar-nav .nav-item .btn {

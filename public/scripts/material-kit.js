@@ -45,6 +45,7 @@ $(document).ready(function() {
         if(materialKit.misc.navbar_menu_visible == 1) {
           $('html').removeClass('nav-open');
           materialKit.misc.navbar_menu_visible = 0;
+          $(".active").css("color", "inherit")
           $('#bodyClick').remove();
           setTimeout(function(){
             $toggle.removeClass('toggled');
@@ -155,12 +156,14 @@ $(document).on('click', '.navbar-toggler', function() {
         $('html').removeClass('nav-open');
         materialKit.misc.navbar_menu_visible = 0;
         $('#bodyClick').remove();
+        $(".active").css("color", "inherit")
         setTimeout(function() {
-            $toggle.removeClass('toggled');
+            $toggle.removeClass('toggled');        
         }, 550);
 
         $('html').removeClass('nav-open-absolute');
     } else {
+        $(".active").css("color", "#C4820E")
         setTimeout(function() {
             $toggle.addClass('toggled');
         }, 580);
@@ -175,6 +178,7 @@ $(document).on('click', '.navbar-toggler', function() {
             }
             materialKit.misc.navbar_menu_visible = 0;
             $('#bodyClick').remove();
+            $(".active").css("color", "inherit")
             setTimeout(function() {
                 $toggle.removeClass('toggled');
             }, 550);
@@ -186,6 +190,7 @@ $(document).on('click', '.navbar-toggler', function() {
 
         $('html').addClass('nav-open');
         materialKit.misc.navbar_menu_visible = 1;
+        $(".active").css("color", "#C4820E")
     }
 });
 
