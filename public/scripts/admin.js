@@ -1,6 +1,12 @@
 'use strict';
 $(document).ready(function() {
-const REF = firebase.database().ref('/info/')
+
+let defaultHoursForm = document.getElementById("default-hours-form")
+// REAL DATA
+// const REF = firebase.database().ref('/info/')
+
+// TEST DATA
+const REF = firebase.database().ref('/testInfo/')
 
 // Format of days in the database.... it is this way for some reason........
 const DAYS_TIMES = {
@@ -14,12 +20,11 @@ const DAYS_TIMES = {
 }
 
 let convertTime = time => {
-    if (time === 'Closed' || time === 'closed') {
-        return ['Closed', null]
+    if (time != 'Closed' ) {
+        let [start, end] = time.split('-')
+        return [splitAndConvertTime(start), splitAndConvertTime(end)]
     }
-    let [start, end] = time.split('-')
-
-    return [splitAndConvertTime(start), splitAndConvertTime(end)]
+    return ['Closed', null]
 } 
 
 let splitAndConvertTime = time => {
@@ -45,12 +50,17 @@ function adminPageSetup() {
                 // slice off the '-'
                 let open = document.getElementById(key.slice(1)).children[1].children[0];
                 let closed = document.getElementById(key.slice(1)).children[2].children[0];
-                if (open) {
-                    open.value = time[0]
-                }
-
-                if (closed) {
-                    closed.value = time[1]
+                if (time[0] == "Closed") {
+                    $('#' + key.slice(1)).find(".pantry-open").find(".timepicker").val(time[0])
+                    $('#' + key.slice(1)).find(".pantry-closed").find(".timepicker").val()
+                } else {
+                    if (open) {
+                        $('#' + key.slice(1)).find(".pantry-open").find(".timepicker").val(time[0])
+                    }
+    
+                    if (closed) {
+                        $('#' + key.slice(1)).find(".pantry-closed").find(".timepicker").val(time[1])
+                    }
                 }
             }
         }
@@ -61,31 +71,80 @@ function adminPageSetup() {
 $('.timepicker').timepicker({
     'noneOption': [
         {'label': 'Closed',
-        'value': 'Closed'
+         'value': 'Closed'
         }
     ],
     'lang': {
         am: ' AM',
         pm: ' PM'
     },
-    'timeFormat': 'h:i A',
+    'timeFormat': 'g:i A',
     'scrollDefault': 'now',
     'forceRoundTime': true,
     'step': 15
 });
 
-$('.timepicker').on('timeFormatError', function() {
+const convertTime12to24 = (time12h) => {
+    const [time, modifier] = time12h.split(' ');
+  
+    let [hours, minutes] = time.split(':');
+  
+    if (hours === '12') {
+      hours = '00';
+    }
+  
+    if (modifier === 'PM') {
+      hours = parseInt(hours) + 12;
+    }
+  
+    return `${hours}:${minutes}`;
+  }
 
-})
 
 
+function changeDefaultHours(e) {
+    for (let key in DAYS_TIMES) {
+            DAYS_TIMES[key] = {}
+            let open12 = $('#' + key.slice(1)).find(".pantry-open").find(".timepicker").val()
+            let close12 = $('#' + key.slice(1)).find(".pantry-closed").find(".timepicker").val()
+            let open24 = '';
+            let close24 = '';
+            if (open12 == "Closed" || open12 == '') {
+                open24 = "Closed"
+            } else {
+                open24 = convertTime12to24(open12)
+            }
+            if (close12 == "Closed" || close12 == '') {
+                console.log("in here" + close12)
+                close24 = "Closed"
+            } else {
+                close24 = convertTime12to24(close12)
+            }
+
+            if (open24 == "Closed" || close24 == "Closed") {
+                DAYS_TIMES[key]['24hours'] = "Closed"
+            } else {
+                DAYS_TIMES[key]['24hours'] = open24 + " - " + close24
+            }
+            
+        }
 
 
+    REF.update(DAYS_TIMES)
+    .then(function() {
+        console.log(DAYS_TIMES)
+    })
+    .catch(function(error) {
+        console.error('Error updating hours', error);
+    
+    });
+}
 
+// $(".timepicker").on('change', function() {
+//     console.log($(this).val())
+// })
 
-
-
-
+defaultHoursForm.addEventListener('submit', changeDefaultHours);    
 
 window.onload = adminPageSetup
 

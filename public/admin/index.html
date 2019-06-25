@@ -108,9 +108,9 @@
       </div>
 </nav>
   <!--        end primary navbar -->
-  <div class="container w-50">
+  <div class="container">
     <h2>Change Default Hours</h2>
-    <form>
+    <form id="default-hours-form">
       <table id="pantry-hours-table" class="table">
         <thead>
           <tr>
@@ -187,7 +187,7 @@
           </tr>
         </tbody>
       </table>
-      <button type="submit" class="btn btn-primary change-default-hours" disabled>
+      <button type="submit" on="submitHours" class="btn btn-primary change-default-hours">
         submit
       </button>
     </form>
