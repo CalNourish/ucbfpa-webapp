@@ -15,7 +15,7 @@
  */
 
 html, body {
-  font-family: 'Roboto', 'Helvetica', sans-serif;
+  font-family: 'Roboto', 'Helvetica', sans-serif
 }
 main, #messages-card {
   height: 100%;
@@ -199,3 +199,45 @@ main, #messages-card {
   top: -1px;
   margin-right: 5px;
 }
+
+/*********************/
+/*********************/
+/* ADMIN PAGE STYLES */
+/*********************/
+/*********************/
+
+#pantry-hours td {
+  font-size: 16px !important;
+  text-align: center;
+}
+
+#pantry-hours-table {
+ min-width: 300px;
+ max-width: 500px;
+}
+
+td.day {
+  font-weight: bold;
+  text-align: right !important;
+}
+
+.pantry-open:hover, .pantry-closed:hover {
+  border-radius: 4px;
+  background-color: rgba(9,50,90, 0.1);
+  cursor: pointer;
+}
+
+.timepicker {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+  border:none;
+  background-color: transparent;
+}
+
+.timepicker .ui-menu-item {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+
+.timepicker .ui-menu-item .ui-state-hover {
+  background-color: rgba(9,50,90, 0.1);
+}
+

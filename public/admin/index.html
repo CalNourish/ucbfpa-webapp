@@ -49,6 +49,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
   <link rel="stylesheet" href="../styles/material-kit.css?v=2.0.3">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker@1.11.15/jquery.timepicker.css">
   <link rel="stylesheet" href="../styles/main.css">
 
 </head>
@@ -79,12 +80,17 @@
                   </li>
 
                   <li class="nav-item">
-                      <a href="/start-order" class="nav-link">
+                      <a href="/start-order" class="nav-link"s>
                           <i class="material-icons">shopping_cart</i> Checkout
                       </a>
                   </li>
 
                   <li class="nav-item active">
+                      <a href="/admin" class="nav-link">
+                        <i class="material-icons">business_center</i> Admin
+                      </a>
+                  </li>
+                  <li>
                       <a href="/notifications" class="nav-link">
                           <i class="material-icons">explore</i> Send Notification
                       </a>
@@ -107,38 +113,118 @@
       </div>
 </nav>
   <!--        end primary navbar -->
-
   <div class="container">
-    <div class="row">
-
-      <div class="col-sm">
-            <div id="messages">
-              <span id="message-filler"></span>
-            </div>
-            <form id="message-form" action="#">
-              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="message">
-                <label class="mdl-textfield__label" for="message">Message...</label>
-              </div>
-              <button id="submit" disabled type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                Send
-              </button>
-            </form>
-            <form id="image-form" action="#">
-              <input id="mediaCapture" type="file" accept="image/*" capture="camera">
-              <button id="submitImage" title="Add an image" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--amber-400 mdl-color-text--white">
-                <i class="material-icons">image</i>
-              </button>
-            </form>
-
-        <div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
-          <div class="mdl-snackbar__text"></div>
-          <button class="mdl-snackbar__action" type="button"></button>
-        </div>
-      </div>
-
-    </div>
+    <h2>Change Default Hours</h2>
+    <form id="default-hours-form">
+      <table id="pantry-hours-table" class="table">
+        <thead>
+          <tr>
+            <th scope="col"><!--Day of the Week--></th> 
+            <th scope="col"><!--Open--></th> 
+            <th scope="col"><!--Close--></th> 
+          </tr>
+        </thead>
+        <tbody id="pantry-hours">
+          <tr id="sunday">
+            <td class="day">    
+              Sunday
+            </td>
+            <td class="pantry-open">
+                <input type="text" class="timepicker" name="sunday-open"/>
+            </td>
+            <td class="pantry-closed">
+              <input type="text" class="timepicker" name="sunday-close"/>
+            </td>       
+          </tr>
+          <tr id="monday">
+            <td class="day">Monday</td>
+            <td class="pantry-open">
+              <input type="text" class="timepicker" name="monday-open"/>
+            </td>
+            <td class="pantry-closed">
+              <input type="text" class="timepicker" name="monday-close"/>
+            </td>       
+          </tr>
+          <tr id="tuesday">
+            <td class="day">Tuesday</td>
+            <td class="pantry-open">
+              <input type="text" class="timepicker" name="tuesday-open"/>
+            </td>
+            <td class="pantry-closed">
+              <input type="text" class="timepicker" name="tuesday-close"/>
+            </td>       
+          </tr>
+          <tr id="wednesday">
+            <td class="day">Wednesday</td>
+            <td class="pantry-open">
+              <input type="text" class="timepicker" name="wednesday-open"/>
+            </td>
+            <td class="pantry-closed">
+              <input type="text" class="timepicker" name="wednesday-close"/>
+            </td>       
+          </tr>
+          <tr id="thursday">
+            <td class="day">Thursday</td>
+            <td class="pantry-open">
+              <input type="text" class="timepicker" name="thursday-open"/>
+            </td>
+            <td class="pantry-closed">
+              <input type="text" class="timepicker" name="thursday-close"/>
+            </td>       
+          </tr>
+          <tr id="friday">
+            <td class="day">Friday</td>
+            <td class="pantry-open">
+              <input type="text" class="timepicker" name="firday-open"/>
+            </td>
+            <td class="pantry-closed">
+              <input type="text" class="timepicker" name="friday-close"/>
+            </td>       
+          </tr>
+          <tr id="saturday">
+            <td class="day">Saturday</td>
+            <td class="pantry-open">
+              <input type="text" class="timepicker" name="saturday-open"/>
+            </td>
+            <td class="pantry-closed">
+              <input type="text" class="timepicker" name="saturday-close"/>
+            </td>       
+          </tr>
+        </tbody>
+      </table>
+      <button type="submit" on="submitHours" class="btn btn-primary change-default-hours">
+        submit
+      </button>
+    </form>
   </div>
+    <!-- <div class="row">
+      <div class="pantry-hours">Sunday</div>
+      <div id="-sunday" class="pantry-hours"></div>
+    </div>
+    <div class="row">  
+      <div class="pantry-hours">Monday</div>
+      <div id="-monday" class="pantry-hours"></div>
+    </div>
+    <div class="row">
+      <div class="pantry-hours">Tuesday</div>
+      <div id="-tuesday" class="pantry-hours"></div>
+    </div>
+    <div class="row">
+      <div class="pantry-hours">Wednesday</div>
+      <div id="-wednesday" class="pantry-hours"></div>
+    </div>
+    <div class="row">
+      <div class="pantry-hours">Thursday</div>
+      <div id="-thursday" class="pantry-hours"></div>
+    </div>
+    <div class="row">
+      <div class="pantry-hours">Friday</div>
+      <div id="-friday" class="pantry-hours"></div>
+    </div>
+    <div class="row">
+      <div class="pantry-hours">Saturday</div>
+      <div id="-saturday" class="pantry-hours"></div>
+    </div> -->
 
 
 
@@ -163,5 +249,10 @@
 <script src="../scripts/messages.js"></script>
 <script src="../scripts/start-order.js"></script>
 
+<!-- Page related scripts -->
+<script src="../scripts/admin.js"></script>
+
+<!-- Timepicker CDN -->
+<script src="https://cdn.jsdelivr.net/npm/timepicker@1.11.15/jquery.timepicker.js"></script>
 </body>
 </html>
