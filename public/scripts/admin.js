@@ -3,10 +3,10 @@ $(document).ready(function() {
 
 let defaultHoursForm = document.getElementById("default-hours-form")
 // REAL DATA
-// const REF = firebase.database().ref('/info/')
+const REF = firebase.database().ref('/info/')
 
-// TEST DATA
-const REF = firebase.database().ref('/testInfo/')
+// TEST DATA - test the hours functionality 
+// const REF = firebase.database().ref('/testInfo/')
 
 // Format of days in the database.... it is this way for some reason........
 const DAYS_TIMES = {
