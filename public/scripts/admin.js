@@ -132,7 +132,6 @@ function changeDefaultHours(e) {
 
     REF.update(DAYS_TIMES)
     .then(function() {
-        console.log(DAYS_TIMES)
     })
     .catch(function(error) {
         console.error('Error updating hours', error);
