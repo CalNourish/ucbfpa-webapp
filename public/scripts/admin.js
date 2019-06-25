@@ -75,8 +75,8 @@ $('.timepicker').timepicker({
         }
     ],
     'lang': {
-        am: ' AM',
-        pm: ' PM'
+        am: 'AM',
+        pm: 'PM'
     },
     'timeFormat': 'g:i A',
     'scrollDefault': 'now',
@@ -104,7 +104,10 @@ const convertTime12to24 = (time12h) => {
 
 function changeDefaultHours(e) {
     for (let key in DAYS_TIMES) {
-            DAYS_TIMES[key] = {}
+            DAYS_TIMES[key] = {
+                '24hours': '',
+                '12hours': ''
+            }
             let open12 = $('#' + key.slice(1)).find(".pantry-open").find(".timepicker").val()
             let close12 = $('#' + key.slice(1)).find(".pantry-closed").find(".timepicker").val()
             let open24 = '';
@@ -123,8 +126,10 @@ function changeDefaultHours(e) {
 
             if (open24 == "Closed" || close24 == "Closed") {
                 DAYS_TIMES[key]['24hours'] = "Closed"
+                DAYS_TIMES[key]['12hours'] = "Closed"
             } else {
                 DAYS_TIMES[key]['24hours'] = open24 + " - " + close24
+                DAYS_TIMES[key]['12hours'] = open12 + " - " + close12
             }
             
         }
