@@ -76,23 +76,26 @@ function authStateObserver(user) {
 
     // Show sign-in button.
     signInButtonElement.removeAttribute('hidden');
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithRedirect(provider);
   }
 }
 
 // Returns true if user is signed-in. Otherwise false and displays a message.
-function checkSignedInWithMessage() {
+function checkSignedInWithMessage(provider) {
   // Return true if the user is signed in Firebase
   if (isUserSignedIn()) {
     return true;
   }
+  console.log("need to log in")
 
   // Display a message to the user using a Toast.
   var data = {
     message: 'You must sign-in first',
     timeout: 2000
   };
-  signInSnackbarElement.MaterialSnackbar.showSnackbar(data);
-  return false;
+  // signInSnackbarElement.MaterialSnackbar.showSnackbar(data);
+  return false
 }
 
 // Resets the given MaterialTextField.
@@ -125,5 +128,7 @@ var signInSnackbarElement = document.getElementById('must-signin-snackbar');
 signOutButtonElement.addEventListener('click', signOut);
 signInButtonElement.addEventListener('click', signIn);
 
-// initialize Firebase
-initFirebaseAuth();
+
+$(document).ready(function() {
+  initFirebaseAuth();
+})
