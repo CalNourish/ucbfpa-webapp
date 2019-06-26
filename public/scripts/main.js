@@ -19,7 +19,7 @@
 function signIn() {
   // Sign into Firebase using popup auth & Google as the identity provider.
   var provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider);
+  firebase.auth().signInWithRedirect(provider);
 }
 
 // Signs-out of Friendly Chat.
@@ -46,7 +46,7 @@ function getUserName() {
 
 // Returns true if a user is signed-in.
 function isUserSignedIn() {
-  return !!firebase.auth().currentUser;
+  return firebase.auth().currentUser;
 }
 
 // Triggers when the auth state change for instance when the user signs-in or signs-out.
@@ -61,23 +61,23 @@ function authStateObserver(user) {
     userNameElement.textContent = userName;
 
     // Show user's profile and sign-out button.
+    $("#account-dropdown").css("display", "block")
     userNameElement.removeAttribute('hidden');
     userPicElement.removeAttribute('hidden');
     signOutButtonElement.removeAttribute('hidden');
+    
 
     // Hide sign-in button.
     signInButtonElement.setAttribute('hidden', 'true');
+    
+    $("#main-content").css("visibility", "visible");
 
   } else { // User is signed out!
     // Hide user's profile and sign-out button.
     userNameElement.setAttribute('hidden', 'true');
     userPicElement.setAttribute('hidden', 'true');
     signOutButtonElement.setAttribute('hidden', 'true');
-
-    // Show sign-in button.
-    signInButtonElement.removeAttribute('hidden');
-    var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
+    $(".nav-item:not(#nav-sign-in").hide();
   }
 }
 
@@ -113,14 +113,14 @@ function checkSetup() {
   }
 }
 
-// Checks that Firebase has been imported.
-checkSetup();
+
 
 // Shortcuts to DOM Elements.
 var userPicElement = document.getElementById('user-pic');
 var userNameElement = document.getElementById('user-name');
 var signInButtonElement = document.getElementById('sign-in');
 var signOutButtonElement = document.getElementById('sign-out');
+var accountDropdown = document.getElementById('account-dropdown');
 var signInSnackbarElement = document.getElementById('must-signin-snackbar');
 
 // Saves message on form submit.
@@ -130,5 +130,11 @@ signInButtonElement.addEventListener('click', signIn);
 
 
 $(document).ready(function() {
-  initFirebaseAuth();
-})
+  // Checks that Firebase has been imported.
+  checkSetup();
+
+  $(window).on('load', function() {
+    initFirebaseAuth();
+  })
+});
+

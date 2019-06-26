@@ -95,25 +95,28 @@
                         </a>
                     </li>
 
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle nav-link" data-toggle="dropdown">
-                            <i class="material-icons">account_circle</i>Account
-                            <span hidden id="user-pic"></span>
-                            <span hidden id="user-name"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#pablo" class="dropdown-item">Settings</a>
-                            <a href="#pablo" class="dropdown-item" id="sign-in">Sign in</a>
-                            <a href="#pablo" class="dropdown-item" id="sign-out">Sign out</a>
-                        </div>
-                    </li>
+                    <li class="nav-item" id="nav-sign-in">
+                      <a href="#" class="btn btn-primary" id="sign-in">Sign in</a>
+                  </li>
+
+                  <li class="dropdown nav-item" id="account-dropdown">
+                      <a class="dropdown-toggle nav-link" data-toggle="dropdown">
+                          <i class="material-icons">account_circle</i>Account
+                          <span hidden id="user-pic"></span>
+                          <span hidden id="user-name"></span>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                          <a href="#" class="dropdown-item">Settings</a>
+                          <a href="/" class="dropdown-item" id="sign-out">Sign out</a>
+                      </div>
+                  </li>
                 </ul>
             </div>
         </div>
   </nav>
     <!--        end primary navbar -->
 
-    <div class="container">
+    <div class="container" id="main-content">
       <div class="row">
 
 
