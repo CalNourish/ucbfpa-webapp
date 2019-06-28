@@ -63,22 +63,25 @@ function authStateObserver(user) {
     // Show user's profile and sign-out button.
     userNameElement.removeAttribute('hidden');
     userPicElement.removeAttribute('hidden');
-    
+  
+    // Display logged-in nav bar elements 
     loggedIn.css("display", "block")
     loggedOut.css("display", "none")
-    // Hide sign-in button.
-    signInButtonElement.setAttribute('hidden', 'true');
     
+    // Display content
     $("#main-content").css("visibility", "visible");
 
   } else { // User is signed out!
+
     // Hide user's profile and sign-out button.
     userNameElement.setAttribute('hidden', 'true');
     userPicElement.setAttribute('hidden', 'true');
 
+    // Display logged-out nav bar element
     loggedIn.css("display", "none");
     loggedOut.css("display", "block")
 
+    // Redirect to index if not already there
     if (window.location.pathname != "/") {
       window.location.href="/"
     }
@@ -91,14 +94,14 @@ function checkSignedInWithMessage(provider) {
   if (isUserSignedIn()) {
     return true;
   }
-  console.log("need to log in")
 
   // Display a message to the user using a Toast.
   var data = {
     message: 'You must sign-in first',
     timeout: 2000
   };
-  // signInSnackbarElement.MaterialSnackbar.showSnackbar(data);
+
+  signInSnackbarElement.MaterialSnackbar.showSnackbar(data);
   return false
 }
 
@@ -117,8 +120,6 @@ function checkSetup() {
   }
 }
 
-
-
 // Shortcuts to DOM Elements.
 var userPicElement = document.getElementById('user-pic');
 var userNameElement = document.getElementById('user-name');
@@ -134,15 +135,9 @@ var loggedOut = $(".logged-out")
 signOutButtonElement.addEventListener('click', signOut);
 signInButtonElement.addEventListener('click', signIn);
 
+// Checks that Firebase has been imported.
+checkSetup();
 
+// Initialize auth
 initFirebaseAuth();
-
-$(document).ready(function() {
-  // Checks that Firebase has been imported.
-  checkSetup();
-
-  $(window).on('load', function() {
-    
-  })
-});
 
