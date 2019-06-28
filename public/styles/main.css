@@ -24,6 +24,11 @@ html, body {
 #sign-in {
   margin-left: 8px;
 }
+
+.logged-in, .logged-out {
+  display: none;
+}
+
 #main-content {
   visibility: hidden;
 }

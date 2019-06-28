@@ -61,12 +61,11 @@ function authStateObserver(user) {
     userNameElement.textContent = userName;
 
     // Show user's profile and sign-out button.
-    $("#account-dropdown").css("display", "block")
     userNameElement.removeAttribute('hidden');
     userPicElement.removeAttribute('hidden');
-    signOutButtonElement.removeAttribute('hidden');
     
-
+    loggedIn.css("display", "block")
+    loggedOut.css("display", "none")
     // Hide sign-in button.
     signInButtonElement.setAttribute('hidden', 'true');
     
@@ -76,8 +75,10 @@ function authStateObserver(user) {
     // Hide user's profile and sign-out button.
     userNameElement.setAttribute('hidden', 'true');
     userPicElement.setAttribute('hidden', 'true');
-    signOutButtonElement.setAttribute('hidden', 'true');
-    $(".nav-item:not(#nav-sign-in").hide();
+
+    loggedIn.css("display", "none");
+    loggedOut.css("display", "block")
+    
   }
 }
 
@@ -122,6 +123,8 @@ var signInButtonElement = document.getElementById('sign-in');
 var signOutButtonElement = document.getElementById('sign-out');
 var accountDropdown = document.getElementById('account-dropdown');
 var signInSnackbarElement = document.getElementById('must-signin-snackbar');
+var loggedIn= $(".logged-in")
+var loggedOut = $(".logged-out")
 
 // Saves message on form submit.
 // messageFormElement.addEventListener('submit', onMessageFormSubmit);
@@ -129,12 +132,14 @@ signOutButtonElement.addEventListener('click', signOut);
 signInButtonElement.addEventListener('click', signIn);
 
 
+initFirebaseAuth();
+
 $(document).ready(function() {
   // Checks that Firebase has been imported.
   checkSetup();
 
   $(window).on('load', function() {
-    initFirebaseAuth();
+    
   })
 });
 

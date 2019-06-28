@@ -67,39 +67,39 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
+                    <li class="nav-item logged-in">
                         <a href="/" class="nav-link">
                             <i class="material-icons">home</i>UCBFP
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item logged-in">
                         <a href="/inventory" class="nav-link">
                             <i class="material-icons">view_headline</i> Inventory
                         </a>
                     </li>
 
-                    <li class="nav-item active">
+                    <li class="nav-item logged-in active">
                         <a href="/start-order" class="nav-link">
                             <i class="material-icons">shopping_cart</i> Checkout
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item logged-in">
                       <a href="/admin" class="nav-link">
                         <i class="material-icons">business_center</i> Admin
                       </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item logged-in">
                         <a href="/notifications" class="nav-link">
                             <i class="material-icons">explore</i> Send Notification
                         </a>
                     </li>
 
-                    <li class="nav-item" id="nav-sign-in">
+                    <li class="nav-item logged-out" id="nav-sign-in">
                       <a href="#" class="btn btn-primary" id="sign-in">Sign in</a>
                   </li>
 
-                  <li class="dropdown nav-item" id="account-dropdown">
+                  <li class="dropdown nav-item logged-in" id="account-dropdown">
                       <a class="dropdown-toggle nav-link" data-toggle="dropdown">
                           <i class="material-icons">account_circle</i>Account
                           <span hidden id="user-pic"></span>
