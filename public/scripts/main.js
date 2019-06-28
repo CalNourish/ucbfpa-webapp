@@ -19,7 +19,7 @@
 function signIn() {
   // Sign into Firebase using popup auth & Google as the identity provider.
   var provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithRedirect(provider);
+  firebase.auth().signInWithRedirect(provider)
 }
 
 // Signs-out of Friendly Chat.
@@ -78,7 +78,10 @@ function authStateObserver(user) {
 
     loggedIn.css("display", "none");
     loggedOut.css("display", "block")
-    
+
+    if (window.location.pathname != "/") {
+      window.location.href="/"
+    }
   }
 }
 
