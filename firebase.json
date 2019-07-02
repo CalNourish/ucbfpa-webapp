@@ -6,6 +6,8 @@
       "firebase-debug.log",
       "database-rules.json",
       "storage.rules",
+      "**/node_modules/**",
+      "**/.*",
       "functions"
     ]
   }

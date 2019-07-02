@@ -2,6 +2,8 @@
   "projects": {
     "temp": "testcalnourish",
     "local": "testcalnourish",
-    "default": "testcalnourish"
+    "default": "testcalnourish",
+    "production": "prodcalnourish",
+    "staging": "stagingcalnourish"
   }
 }
