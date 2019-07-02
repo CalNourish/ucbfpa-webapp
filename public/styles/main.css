@@ -17,6 +17,21 @@
 html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif
 }
+
+#account-dropdown {
+  display: none;
+}
+#sign-in {
+  margin-left: 8px;
+}
+
+.logged-in, .logged-out {
+  display: none;
+}
+
+#main-content {
+  visibility: hidden;
+}
 main, #messages-card {
   height: 100%;
   padding-bottom: 0;

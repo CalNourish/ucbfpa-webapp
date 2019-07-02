@@ -19,7 +19,7 @@
 function signIn() {
   // Sign into Firebase using popup auth & Google as the identity provider.
   var provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider);
+  firebase.auth().signInWithRedirect(provider)
 }
 
 // Signs-out of Friendly Chat.
@@ -46,7 +46,7 @@ function getUserName() {
 
 // Returns true if a user is signed-in.
 function isUserSignedIn() {
-  return !!firebase.auth().currentUser;
+  return firebase.auth().currentUser;
 }
 
 // Triggers when the auth state change for instance when the user signs-in or signs-out.
@@ -63,24 +63,33 @@ function authStateObserver(user) {
     // Show user's profile and sign-out button.
     userNameElement.removeAttribute('hidden');
     userPicElement.removeAttribute('hidden');
-    signOutButtonElement.removeAttribute('hidden');
-
-    // Hide sign-in button.
-    signInButtonElement.setAttribute('hidden', 'true');
+  
+    // Display logged-in nav bar elements 
+    loggedIn.css("display", "block")
+    loggedOut.css("display", "none")
+    
+    // Display content
+    $("#main-content").css("visibility", "visible");
 
   } else { // User is signed out!
+
     // Hide user's profile and sign-out button.
     userNameElement.setAttribute('hidden', 'true');
     userPicElement.setAttribute('hidden', 'true');
-    signOutButtonElement.setAttribute('hidden', 'true');
 
-    // Show sign-in button.
-    signInButtonElement.removeAttribute('hidden');
+    // Display logged-out nav bar element
+    loggedIn.css("display", "none");
+    loggedOut.css("display", "block")
+
+    // Redirect to index if not already there
+    if (window.location.pathname != "/") {
+      window.location.href="/"
+    }
   }
 }
 
 // Returns true if user is signed-in. Otherwise false and displays a message.
-function checkSignedInWithMessage() {
+function checkSignedInWithMessage(provider) {
   // Return true if the user is signed in Firebase
   if (isUserSignedIn()) {
     return true;
@@ -91,8 +100,9 @@ function checkSignedInWithMessage() {
     message: 'You must sign-in first',
     timeout: 2000
   };
+
   signInSnackbarElement.MaterialSnackbar.showSnackbar(data);
-  return false;
+  return false
 }
 
 // Resets the given MaterialTextField.
@@ -110,20 +120,24 @@ function checkSetup() {
   }
 }
 
-// Checks that Firebase has been imported.
-checkSetup();
-
 // Shortcuts to DOM Elements.
 var userPicElement = document.getElementById('user-pic');
 var userNameElement = document.getElementById('user-name');
 var signInButtonElement = document.getElementById('sign-in');
 var signOutButtonElement = document.getElementById('sign-out');
+var accountDropdown = document.getElementById('account-dropdown');
 var signInSnackbarElement = document.getElementById('must-signin-snackbar');
+var loggedIn= $(".logged-in")
+var loggedOut = $(".logged-out")
 
 // Saves message on form submit.
 // messageFormElement.addEventListener('submit', onMessageFormSubmit);
 signOutButtonElement.addEventListener('click', signOut);
 signInButtonElement.addEventListener('click', signIn);
 
-// initialize Firebase
+// Checks that Firebase has been imported.
+checkSetup();
+
+// Initialize auth
 initFirebaseAuth();
+
