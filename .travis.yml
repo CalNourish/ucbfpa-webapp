@@ -5,6 +5,6 @@ deploy:
     secure: cz54FNbn6Ohp2QxNuJ/mB+5S8HP9GpHWefIS1siB8A9p1RcJTbjbDmpkZQdD0pGKFaGBeXQOBxmEDpn12qjes5bGBYuTOh7NdLdnTVCq/zL6dnDKaG70GFz+m7skZesdUtc9Wbaqf7brG88F3npbOaNwpPAS/GCSa0WrfHbf5jMo+PCHUBBGjWKjG8ZjNBrsLaHpfWTEnBRfdQYmvbG06Ho48vBRoJ6OrQLGuP8eXKVKC/2uMwFg9e86jiesRg+BGZwMHhPPXiMJCQN29VQVJwgP0EEI1Zh1P1Ygnjo1b8je+qrvNVqLhSKjDxc9Tg0vkMCLsU3cNn8D3970JgEVdjZgF1th2ONRSx4+67vpYZY6T/BmPVnQASLERxl00PIMwhCb7OiWk2XHxufLcyTywfP1Nu5RLU9Hybliyj31neuppe/ZYI+bU3Dy4RBFn+jp8n85VVZONYlGhgMrUxMgo53FrGXw8QTQEzkwRZXs4SG0U10M5uLyrpJ8cRLTi9p3ekl/RwhE4jlawqAjtZbLc5jQnRru7iAAeEf7P60E1fR5ZnqoGXoJbz8sqnKOU7xomNj6o8hxD0VToYC7+svQo59XIv7nW8Ze53KhitE81s09ELreY3TikGO1PLlniYEDjo6+254c0+HhCfK3WVRQptj6c0Cch3HT+eUHZvpslo8=
   on:
     branches:
-    only:
-    - master
-    - dev-config
+      only:
+      - master
+      - dev-config
