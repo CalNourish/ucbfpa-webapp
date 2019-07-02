@@ -28,7 +28,7 @@ function generateItemID() {
 }
 
 function getCategories() {
-  return ['prepared', 'grains', 'produce', 'bread', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages'];
+  return ['prepared', 'grains', 'produce', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages'];
 }
 
 function updateItem() {
@@ -162,7 +162,7 @@ function loadItemIntoEditForm2(itemID, itemName, barcode, cost, count, categoryN
     var category = value.charAt(0).toUpperCase() + value.slice(1);
     category = 'edit' + category;
     var checkbox = document.getElementById(category);
-
+    console.log(checkbox.checked);
     if (typeof categoryName[value] !== "undefined") {
       checkbox.checked = true;
     } else {
