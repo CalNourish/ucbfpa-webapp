@@ -3,8 +3,8 @@
 var form = document.getElementById('checkout-item-form');
 var groceryList = document.querySelector('ol');
 
-function goToStartOrder() {
-  window.location.href = "/start-order";
+function goToCheckout() {
+  window.location.href = "/checkout";
 }
 
 function checkoutItem(barcodeScanned, amount) {
@@ -111,7 +111,5 @@ form.addEventListener('keypress', function(e) {
       }, function(err) {
         console.log(err);
       });
-    
-
   }
 });
