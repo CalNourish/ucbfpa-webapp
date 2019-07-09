@@ -114,21 +114,305 @@
         </div>
   </nav>
     <!--        end primary navbar -->
-    <div class="container logged-out" id="main-content">
-        restock
-    </div>
-
-
-   
-
-
-<div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
-  <div class="mdl-snackbar__text"></div>
-  <button class="mdl-snackbar__action" type="button"></button>
-</div>
-
-    </div>
-  </div>
+    <div class="container" id="main-content">
+            <div class="row">
+      
+        <!-- ADD ITEM -->
+              <div class="col-sm">
+                <h3>Add Item</h3>
+                <h4>Enter a new item to be added to the inventory.</h4>
+                <form id="add-item-form">
+                  <div class="form-group">
+                    <label for="itemName" class="bmd-label-floating">Item Name</label>
+                    <input id="itemName" name="itemName" type="text" class="form-control here" required="required">
+                    <span class="bmd-help">Example: Kellogg's Cereal</span>
+                  </div>
+                  <div class="form-group">
+                    <label for="count" class="bmd-label-floating">Quantity</label>
+                    <input id="count" name="cost" type="text" class="form-control here" required="required">
+                    <span class="bmd-help">Enter estimate if unsure. Example: 15</span>
+                  </div>
+                   <div class="form-group">
+                    <label for="cost" class="bmd-label-floating">Cost in points</label>
+                    <input id="cost" name="cost" type="text" class="form-control here" required="required">
+                    <span class="bmd-help">Example: 0</span>
+                  </div>
+      
+                  <div class="form-group row col-12">
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="prepared" class="form-check-input" type="checkbox" value=""> Prepared Foods
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="grains" class="form-check-input" type="checkbox" value=""> Grains
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="produce" class="form-check-input" type="checkbox" value=""> Produce
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="bread" class="form-check-input" type="checkbox" value=""> Bread
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="protein" class="form-check-input" type="checkbox" value=""> Protein
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="frozen" class="form-check-input" type="checkbox" value=""> Frozen
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="snacks" class="form-check-input" type="checkbox" value=""> Snacks
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="sauces" class="form-check-input" type="checkbox" value=""> Sauces
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="spices" class="form-check-input" type="checkbox" value=""> Spices
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="beverages" class="form-check-input" type="checkbox" value=""> Beverages
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+      
+                  <div class="form-group form-file-upload form-file-multiple">
+                      <span id="addItemFile" value=""></span>
+                      <input id="addItemImageDialog" type="file" multiple="" class="inputFileHidden">
+                      <div class="input-group">
+                          <input type="text" class="form-control inputFileVisible" placeholder="Single File">
+                          <span class="input-group-btn">
+                              <button type="button" class="btn btn-fab btn-round btn-primary">
+                                  <i class="material-icons">attach_file</i>
+                              </button>
+                          </span>
+                      </div>
+                  </div>
+      
+                  <div class="form-group">
+                    <label for="barcode" class="bmd-label-floating">Barcode</label>
+                    <input id="barcode" name="barcode" type="text" class="form-control here" required="required">
+                    <span class="bmd-help">Example: 3490W80E95334I</span>
+                  </div>
+      
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+              </div>
+        <!-- END ADD ITEM -->
+      
+        <!-- EDIT ITEM -->
+              <div class="col-sm">
+                <h3>Load Item</h3>
+                <h4>Enter a barcode for an item to be loaded into the form below.</h4>
+                <form id="edit-item-form-barcode">
+      
+                  <div class="form-group">
+                    <label for="editItemBarcode" class="bmd-label-floating">Barcode</label>
+                    <input id="editItemBarcode" name="editItemBarcode" type="text" class="form-control here" required="required">
+                    <span class="bmd-help">Example: apple</span>
+                  </div>
+                    <button id="editItemBarcodeSubmit" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+      
+      
+                <h3>Edit Item</h3>
+                <h4>Fill out the form to update an item.</h4>
+                <form id="edit-item-form">
+                  <span id="editItemID" value=""></span>
+                  <div class="form-group">
+                    <label for="editItemName" class="bmd-label-floating">Item Name</label>
+                    <input id="editItemName" name="editItemName" type="text" class="form-control here" required="required">
+                    <span class="bmd-help">Example: Kellogg's Cereal</span>
+                  </div>
+                  <div class="form-group">
+                    <label for="editBarcode" class="bmd-label-floating">Barcode</label>
+                    <input id="editBarcode" name="editBarcode" type="text" class="form-control here" required="required">
+                    <span class="bmd-help">Example: 3490W80E95334I</span>
+                  </div>
+                  <div class="form-group">
+                    <label for="editCost" class="bmd-label-floating">Cost in points</label>
+                    <input id="editCost" name="editCost" type="text" class="form-control here" required="required">
+                    <span class="bmd-help">Example: 0</span>
+                  </div>
+                  <div class="form-group">
+                    <label for="editCount" class="bmd-label-floating">Quantity</label>
+                    <input id="editCount" name="cost" type="text" class="form-control here" required="required">
+                    <span class="bmd-help">Enter estimate if unsure. Example: 15</span>
+                  </div>
+      
+                  <div class="form-group row col-12">
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="editPrepared" class="form-check-input" type="checkbox" value=""> Prepared Foods
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="editGrains" class="form-check-input" type="checkbox" value=""> Grains
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="editProduce" class="form-check-input" type="checkbox" value=""> Produce
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="editBread" class="form-check-input" type="checkbox" value=""> Bread
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="editProtein" class="form-check-input" type="checkbox" value=""> Protein
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="editFrozen" class="form-check-input" type="checkbox" value=""> Frozen
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="editSnacks" class="form-check-input" type="checkbox" value=""> Snacks
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="editSauces" class="form-check-input" type="checkbox" value=""> Sauces
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="editSpices" class="form-check-input" type="checkbox" value=""> Spices
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+      
+                    <div class="form-check col-4">
+                      <label class="form-check-label">
+                        <input id="editBeverages" class="form-check-input" type="checkbox" value=""> Beverages
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+      
+                  <div class="form-group form-file-upload form-file-multiple">
+                      <span id="editItemFile" value=""></span>
+                      <div id="loadItemFile"></div>
+                      <input id="editItemImageDialog" type="file" multiple="" class="inputFileHidden">
+                      <div class="input-group">
+                          <input type="text" class="form-control inputFileVisible" placeholder="Single File">
+                          <span class="input-group-btn">
+                              <button type="button" class="btn btn-fab btn-round btn-primary">
+                                  <i class="material-icons">attach_file</i>
+                              </button>
+                          </span>
+                      </div>
+                  </div>
+      
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+              </div>
+        <!-- END EDIT ITEM -->
+      
+      
+      <div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+      </div>
+      
+          </div>
+        </div>
 
 
 
