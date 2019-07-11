@@ -1,0 +1,14 @@
+/* FOR TESTING -- DELETE */
+#inventory-sidebar {
+  height: 100px;
+}
+
+#inventory-items {
+  padding: 20px;
+}
+
+.card {
+  width: 120px;
+  margin: 12px;
+}
+/* PROD CSS*/
