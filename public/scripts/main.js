@@ -83,8 +83,8 @@ function authStateObserver(user) {
     loggedOut.css("display", "block")
 
     // Redirect to index if not already there
-    if (window.location.pathname != "/") {
-      window.location.href="/"
+    if (window.location.pathname != "/pantry-volunteers/") {
+      window.location.href="/pantry-volunteers/"
     }
   }
 }

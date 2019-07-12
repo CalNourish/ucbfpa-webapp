@@ -23,7 +23,7 @@
   <meta name="msapplication-tap-highlight" content="no">
 
   <!-- Web Application Manifest -->
-  <link rel="manifest" href="../manifest.json">
+  <link rel="manifest" href="../../manifest.json">
 
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -48,8 +48,8 @@
   <!-- App Styling -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="../styles/material-kit.css?v=2.0.3">
-  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../../styles/material-kit.css?v=2.0.3">
+  <link rel="stylesheet" href="../../styles/main.css">
 
 </head>
 <body>
@@ -58,7 +58,7 @@
     <nav class="navbar navbar-expand-lg bg-info" role="navigation">
         <div class="container">
             <div class="navbar-translate">
-                <a class="navbar-brand" href="/">UC Berkeley Food Pantry</a>
+                <a class="navbar-brand" href="/pantry-volunteers">UC Berkeley Food Pantry</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                         <span class="navbar-toggler-icon"></span>
@@ -67,36 +67,35 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item logged-in">
-                        <a href="/" class="nav-link">
+                    <li class="nav-item logged-in active">
+                        <a href="/pantry-volunteers" class="nav-link active">
                             <i class="material-icons">home</i>UCBFP
                         </a>
                     </li>
                     <li class="nav-item logged-in">
-                        <a href="/inventory" class="nav-link">
-                            <i class="material-icons">view_headline</i> Inventory
+                        <a href="/pantry-volunteers/restock" class="nav-link">
+                            <i class="material-icons">view_headline</i> Restock
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="/checkout" class="nav-link">
+                    <li class="nav-item logged-in">
+                        <a href="/pantry-volunteers/checkout" class="nav-link">
                             <i class="material-icons">shopping_cart</i> Checkout
                         </a>
                     </li>
 
                     <li class="nav-item logged-in">
-                      <a href="/admin" class="nav-link">
-                        <i class="material-icons">business_center</i> Admin
-                      </a>
+                        <a href="/pantry-volunteers/admin" class="nav-link">
+                          <i class="material-icons">business_center</i> Admin
+                        </a>
                     </li>
-
-                    <li class="nav-item logged-in active">
-                        <a href="/notifications" class="nav-link">
+                    <li class="nav-item logged-in">
+                        <a href="/pantry-volunteers/notifications" class="nav-link">
                             <i class="material-icons">explore</i> Send Notification
                         </a>
                     </li>
 
                     <li class="nav-item logged-out" id="nav-sign-in">
-                      <a href="/#" class="btn btn-primary" id="sign-in">Sign in</a>
+                      <a href="/pantry-volunteers/#" class="btn btn-primary" id="sign-in">Sign in</a>
                   </li>
 
                   <li class="dropdown nav-item logged-in" id="account-dropdown">
@@ -107,7 +106,7 @@
                       </a>
                       <div class="dropdown-menu dropdown-menu-right">
                           <a href="#" class="dropdown-item">Settings</a>
-                          <a href="/" class="dropdown-item" id="sign-out">Sign out</a>
+                          <a href="/pantry-volunteers" class="dropdown-item" id="sign-out">Sign out</a>
                       </div>
                   </li>
                 </ul>
@@ -115,54 +114,44 @@
         </div>
   </nav>
     <!--        end primary navbar -->
+    <div class="container logged-out">
+            <p> Please sign in </p>
+          </div>
+          <div class="container logged-in">
+            <p> Welcome Volunteer </p>
+          </div>
+      
+   
 
-    <div class="container" id="main-content">
-      <div class="row">
-        <div class="col-sm">
-          <h3>New Notification</h3>
-          <h4>Type your notification title and text in the form below, then press "Send".</h4>
-          <form id="send-notification-form">
-            <div class="form-group">
-              <div class="col-xs-8">
-                <label for="notifTitle" class="col-xs-4">Notification Title</label>
-                <input type="string" id="notifTitle" name="notifTitle" cols="20" rows="5" class="form-control"></input>
-              </div>
-              <br><br>
-              <div class="col-xs-8">
-                <label for="notifText" class="col-xs-4">Notification Text</label>
-                <input type="string" id="notifText" name="notifText" cols="20" rows="5" class="form-control"></input>
-              </div>
-            </div>
-            <button id="notifSend" type="submit" class="btn btn-primary">Send</button>
-          </form>
-        </div>
 
-        <div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
-          <div class="mdl-snackbar__text"></div>
-          <button class="mdl-snackbar__action" type="button"></button>
-        </div>
-      </div>
+<div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
+  <div class="mdl-snackbar__text"></div>
+  <button class="mdl-snackbar__action" type="button"></button>
+</div>
+
     </div>
+  </div>
+
+
 
 <!-- Import and configure the Firebase SDK -->
 <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
 <!-- If you do not want to serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
-<script src="../__/firebase/5.5.8/firebase-app.js"></script>
-<script src="../__/firebase/5.5.8/firebase-auth.js"></script>
-<script src="../__/firebase/5.5.8/firebase-database.js"></script>
-<script src="../__/firebase/5.5.8/firebase-storage.js"></script>
-<script src="../__/firebase/5.5.8/firebase-messaging.js"></script>
-<script src="../__/firebase/init.js"></script>
+<script src="../../__/firebase/5.5.8/firebase-app.js"></script>
+<script src="../../__/firebase/5.5.8/firebase-auth.js"></script>
+<script src="../../__/firebase/5.5.8/firebase-database.js"></script>
+<script src="../../__/firebase/5.5.8/firebase-storage.js"></script>
+<script src="../../__/firebase/5.5.8/firebase-messaging.js"></script>
+<script src="../../__/firebase/init.js"></script>
 
 <!--   Core JS Files   -->
-<script src="../scripts/core/jquery.min.js"></script>
-<script src="../scripts/core/popper.min.js"></script>
-<script src="../scripts/bootstrap-material-design.js"></script>
+<script src="../../scripts/core/jquery.min.js"></script>
+<script src="../../scripts/core/popper.min.js"></script>
+<script src="../../scripts/main.js"></script>
+<script src="../../scripts/bootstrap-material-design.js"></script>
 
 <!-- Material Kit Core initialisations of plugins and Bootstrap Material Design Library -->
-<script src="../scripts/material-kit.js?v=2.0.3"></script>
-<script src="../scripts/main.js"></script>
-<script src="../scripts/notifications.js"></script>
+<script src="../../scripts/material-kit.js?v=2.0.3"></script>
 
 </body>
 </html>

@@ -49,372 +49,57 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
   <link rel="stylesheet" href="../styles/material-kit.css?v=2.0.3">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker@1.11.15/jquery.timepicker.css">
   <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/inventory-view.css">
 
 </head>
 <body>
-
-    <!--        primary navbar  -->
-    <nav class="navbar navbar-expand-lg bg-info" role="navigation">
-        <div class="container">
-            <div class="navbar-translate">
-                <a class="navbar-brand" href="/">UC Berkeley Food Pantry</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                        <span class="navbar-toggler-icon"></span>
-                        <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item logged-in">
-                        <a href="/" class="nav-link">
-                            <i class="material-icons">home</i>UCBFP
-                        </a>
-                    </li>
-                    <li class="nav-item logged-in active">
-                        <a href="/inventory" class="nav-link">
-                            <i class="material-icons">view_headline</i> Inventory
-                        </a>
-                    </li>
-                    <li class="nav-item logged-in">
-                        <a href="/checkout" class="nav-link">
-                            <i class="material-icons">shopping_cart</i> Checkout
-                        </a>
-                    </li>
-
-                    <li class="nav-item logged-in">
-                        <a href="/admin" class="nav-link">
-                          <i class="material-icons">business_center</i> Admin
-                        </a>
-                    </li>
-                    <li class="nav-item logged-in">
-                        <a href="/notifications" class="nav-link">
-                            <i class="material-icons">explore</i> Send Notification
-                        </a>
-                    </li>
-
-                    <li class="nav-item logged-out" id="nav-sign-in">
-                      <a href="/#" class="btn btn-primary" id="sign-in">Sign in</a>
-                  </li>
-
-                  <li class="dropdown nav-item logged-in" id="account-dropdown">
-                      <a class="dropdown-toggle nav-link" data-toggle="dropdown">
-                          <i class="material-icons">account_circle</i>Account
-                          <span hidden id="user-pic"></span>
-                          <span hidden id="user-name"></span>
+  <!--        primary navbar  -->
+  <nav class="navbar navbar-expand-lg bg-info" role="navigation">
+      <div class="container">
+          <div class="navbar-translate">
+              <a class="navbar-brand" href="/">UC Berkeley Food Pantry</a>
+          </div>
+          <div class="collapse navbar-collapse">
+              <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                      <a href="/" class="nav-link">
+                          <i class="material-icons">home</i>UCBFP
                       </a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                          <a href="#" class="dropdown-item">Settings</a>
-                          <a href="/" class="dropdown-item" id="sign-out">Sign out</a>
-                      </div>
                   </li>
-                </ul>
-            </div>
+                  <li class="nav-item active">
+                      <a href="/inventory" class="nav-link">
+                          <i class="material-icons">view_module</i>Inventory
+                      </a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+</nav>
+  <!--        end primary navbar -->
+  <div id="inventory" class="container">
+    <h2 id="inventory-title">Pantry Live Inventory</h2>
+    <div class="row">
+      <div id="inventory-sidebar" class="col-sm-3">
+        <div class="list-group" id="list-tab" role="tablist">
+          <a class="list-group-item list-group-item-action active" id="list-all-list" data-toggle="list" data-item="all" href="#" role="tab">All</a>
+          <a class="list-group-item list-group-item-action" id="list-beverages-list" data-toggle="list" data-item="beverages" href="#" role="tab">Beverages</a>
+          <a class="list-group-item list-group-item-action" id="list-canned-list" data-toggle="list" data-item="canned" href="#" role="tab">Canned</a>
+          <a class="list-group-item list-group-item-action" id="list-frozen-list" data-toggle="list" data-item="frozen" href="#" role="tab">Frozen</a>
+          <a class="list-group-item list-group-item-action" id="list-grains-list" data-toggle="list" data-item="grains" href="#" role="tab">Grains</a>
+          <a class="list-group-item list-group-item-action" id="list-prepared-list" data-toggle="list" data-item="prepared" href="#" role="tab">Prepared</a>
+          <a class="list-group-item list-group-item-action" id="list-produce-list" data-toggle="list" data-item="produce" href="#" role="tab">Produce</a>
+          <a class="list-group-item list-group-item-action" id="list-protein-list" data-toggle="list" data-item="protein" href="#" role="tab">Protein</a>
+          <a class="list-group-item list-group-item-action" id="list-sauces-list" data-toggle="list" data-item="sauces" href="#" role="tab">Sauces</a>
+          <a class="list-group-item list-group-item-action" id="list-snacks-list" data-toggle="list" data-item="snacks" href="#" role="tab">Snacks</a>
+          <a class="list-group-item list-group-item-action" id="list-spices-list" data-toggle="list" data-item="spices" href="#" role="tab">Spices</a>
         </div>
-  </nav>
-    <!--        end primary navbar -->
-
-    <div class="container" id="main-content">
-      <div class="row">
-
-  <!-- ADD ITEM -->
-        <div class="col-sm">
-          <h3>Add Item</h3>
-          <h4>Enter a new item to be added to the inventory.</h4>
-          <form id="add-item-form">
-            <div class="form-group">
-              <label for="itemName" class="bmd-label-floating">Item Name</label>
-              <input id="itemName" name="itemName" type="text" class="form-control here" required="required">
-              <span class="bmd-help">Example: Kellogg's Cereal</span>
-            </div>
-            <div class="form-group">
-              <label for="count" class="bmd-label-floating">Quantity</label>
-              <input id="count" name="cost" type="text" class="form-control here" required="required">
-              <span class="bmd-help">Enter estimate if unsure. Example: 15</span>
-            </div>
-             <div class="form-group">
-              <label for="cost" class="bmd-label-floating">Cost in points</label>
-              <input id="cost" name="cost" type="text" class="form-control here" required="required">
-              <span class="bmd-help">Example: 0</span>
-            </div>
-
-            <div class="form-group row col-12">
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="prepared" class="form-check-input" type="checkbox" value=""> Prepared Foods
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="grains" class="form-check-input" type="checkbox" value=""> Grains
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="produce" class="form-check-input" type="checkbox" value=""> Produce
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="bread" class="form-check-input" type="checkbox" value=""> Bread
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="protein" class="form-check-input" type="checkbox" value=""> Protein
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="frozen" class="form-check-input" type="checkbox" value=""> Frozen
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="snacks" class="form-check-input" type="checkbox" value=""> Snacks
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="sauces" class="form-check-input" type="checkbox" value=""> Sauces
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="spices" class="form-check-input" type="checkbox" value=""> Spices
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="beverages" class="form-check-input" type="checkbox" value=""> Beverages
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-            </div>
-
-            <div class="form-group form-file-upload form-file-multiple">
-                <span id="addItemFile" value=""></span>
-                <input id="addItemImageDialog" type="file" multiple="" class="inputFileHidden">
-                <div class="input-group">
-                    <input type="text" class="form-control inputFileVisible" placeholder="Single File">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-fab btn-round btn-primary">
-                            <i class="material-icons">attach_file</i>
-                        </button>
-                    </span>
-                </div>
-            </div>
-
-            <div class="form-group">
-              <label for="barcode" class="bmd-label-floating">Barcode</label>
-              <input id="barcode" name="barcode" type="text" class="form-control here" required="required">
-              <span class="bmd-help">Example: 3490W80E95334I</span>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-        </div>
-  <!-- END ADD ITEM -->
-
-  <!-- EDIT ITEM -->
-        <div class="col-sm">
-          <h3>Load Item</h3>
-          <h4>Enter a barcode for an item to be loaded into the form below.</h4>
-          <form id="edit-item-form-barcode">
-
-            <div class="form-group">
-              <label for="editItemBarcode" class="bmd-label-floating">Barcode</label>
-              <input id="editItemBarcode" name="editItemBarcode" type="text" class="form-control here" required="required">
-              <span class="bmd-help">Example: apple</span>
-            </div>
-              <button id="editItemBarcodeSubmit" type="submit" class="btn btn-primary">Submit</button>
-          </form>
-
-
-          <h3>Edit Item</h3>
-          <h4>Fill out the form to update an item.</h4>
-          <form id="edit-item-form">
-            <span id="editItemID" value=""></span>
-            <div class="form-group">
-              <label for="editItemName" class="bmd-label-floating">Item Name</label>
-              <input id="editItemName" name="editItemName" type="text" class="form-control here" required="required">
-              <span class="bmd-help">Example: Kellogg's Cereal</span>
-            </div>
-            <div class="form-group">
-              <label for="editBarcode" class="bmd-label-floating">Barcode</label>
-              <input id="editBarcode" name="editBarcode" type="text" class="form-control here" required="required">
-              <span class="bmd-help">Example: 3490W80E95334I</span>
-            </div>
-            <div class="form-group">
-              <label for="editCost" class="bmd-label-floating">Cost in points</label>
-              <input id="editCost" name="editCost" type="text" class="form-control here" required="required">
-              <span class="bmd-help">Example: 0</span>
-            </div>
-            <div class="form-group">
-              <label for="editCount" class="bmd-label-floating">Quantity</label>
-              <input id="editCount" name="cost" type="text" class="form-control here" required="required">
-              <span class="bmd-help">Enter estimate if unsure. Example: 15</span>
-            </div>
-
-            <div class="form-group row col-12">
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="editPrepared" class="form-check-input" type="checkbox" value=""> Prepared Foods
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="editGrains" class="form-check-input" type="checkbox" value=""> Grains
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="editProduce" class="form-check-input" type="checkbox" value=""> Produce
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="editBread" class="form-check-input" type="checkbox" value=""> Bread
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="editProtein" class="form-check-input" type="checkbox" value=""> Protein
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="editFrozen" class="form-check-input" type="checkbox" value=""> Frozen
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="editSnacks" class="form-check-input" type="checkbox" value=""> Snacks
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="editSauces" class="form-check-input" type="checkbox" value=""> Sauces
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="editSpices" class="form-check-input" type="checkbox" value=""> Spices
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-
-              <div class="form-check col-4">
-                <label class="form-check-label">
-                  <input id="editBeverages" class="form-check-input" type="checkbox" value=""> Beverages
-                  <span class="form-check-sign">
-                      <span class="check"></span>
-                  </span>
-                </label>
-              </div>
-            </div>
-
-            <div class="form-group form-file-upload form-file-multiple">
-                <span id="editItemFile" value=""></span>
-                <div id="loadItemFile"></div>
-                <input id="editItemImageDialog" type="file" multiple="" class="inputFileHidden">
-                <div class="input-group">
-                    <input type="text" class="form-control inputFileVisible" placeholder="Single File">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-fab btn-round btn-primary">
-                            <i class="material-icons">attach_file</i>
-                        </button>
-                    </span>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-        </div>
-  <!-- END EDIT ITEM -->
-
-
-<div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
-  <div class="mdl-snackbar__text"></div>
-  <button class="mdl-snackbar__action" type="button"></button>
-</div>
-
+      </div>
+      <div id="inventory-items" class="col-sm-9 d-flex flex-wrap">
+      </div>
     </div>
   </div>
-
 
 
 <!-- Import and configure the Firebase SDK -->
@@ -434,8 +119,13 @@
 
 <!-- Material Kit Core initialisations of plugins and Bootstrap Material Design Library -->
 <script src="../scripts/material-kit.js?v=2.0.3"></script>
-<script src="../scripts/main.js"></script>
+<script src="../scripts/messages.js"></script>
+
+<!-- Page related scripts -->
+<script src="../scripts/admin.js"></script>
 <script src="../scripts/inventory.js"></script>
 
+<!-- Timepicker CDN -->
+<script src="https://cdn.jsdelivr.net/npm/timepicker@1.11.15/jquery.timepicker.js"></script>
 </body>
 </html>
