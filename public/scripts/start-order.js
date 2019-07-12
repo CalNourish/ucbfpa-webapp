@@ -5,7 +5,7 @@ var encryptedStudentIdElement = document.getElementById('encryptedStudentId');
 var studentStatusElements = document.getElementsByName('studentStatus');
 
 function goToCheckout() {
-    window.location.href = "/checkout";
+    window.location.href = "pantry-volunteers/checkout";
 }
 
 function saveOrder(event) {

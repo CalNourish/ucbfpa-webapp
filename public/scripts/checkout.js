@@ -4,7 +4,7 @@ var form = document.getElementById('checkout-item-form');
 var groceryList = document.querySelector('ol');
 
 function goToCheckout() {
-  window.location.href = "/checkout";
+  window.location.href = "pantry-volunteers/checkout";
 }
 
 function checkoutItem(barcodeScanned, amount) {
