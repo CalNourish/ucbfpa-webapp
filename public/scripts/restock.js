@@ -28,7 +28,7 @@ function generateItemID() {
 }
 
 function getCategories() {
-  return ['prepared', 'grains', 'produce', 'bread', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages'];
+  return ['prepared', 'grains', 'produce', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages'];
 }
 
 function updateItem() {
