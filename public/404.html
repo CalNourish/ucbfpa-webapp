@@ -23,7 +23,7 @@
   <meta name="msapplication-tap-highlight" content="no">
 
   <!-- Web Application Manifest -->
-  <link rel="manifest" href="../manifest.json">
+  <link rel="manifest" href="manifest.json">
 
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -48,14 +48,14 @@
   <!-- App Styling -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="../styles/material-kit.css?v=2.0.3">
-  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="styles/material-kit.css?v=2.0.3">
+  <link rel="stylesheet" href="styles/main.css">
 
 </head>
 <body>
 
-    <!--        primary navbar  -->
-    <nav class="navbar navbar-expand-lg bg-info" role="navigation">
+  <!--        primary navbar  -->
+  <nav class="navbar navbar-expand-lg bg-info" role="navigation">
         <div class="container">
             <div class="navbar-translate">
                 <a class="navbar-brand" href="/">UC Berkeley Food Pantry</a>
@@ -77,102 +77,75 @@
                             <i class="material-icons">view_headline</i> Inventory
                         </a>
                     </li>
-                    <li class="nav-item logged-in active">
-                        <a href="/checkout" class="nav-link">
+
+                    <li class="nav-item logged-in">
+                        <a href="/start-order" class="nav-link">
                             <i class="material-icons">shopping_cart</i> Checkout
                         </a>
                     </li>
 
                     <li class="nav-item logged-in">
-                      <a href="/admin" class="nav-link">
-                        <i class="material-icons">business_center</i> Admin
-                      </a>
+                        <a href="/admin" class="nav-link">
+                            <i class="material-icons">business_center</i> Admin
+                          </a>
                     </li>
                     <li class="nav-item logged-in">
                         <a href="/notifications" class="nav-link">
                             <i class="material-icons">explore</i> Send Notification
                         </a>
                     </li>
-
                     <li class="nav-item logged-out" id="nav-sign-in">
-                      <a href="/#" class="btn btn-primary" id="sign-in">Sign in</a>
-                  </li>
+                        <a href="/" class="btn btn-primary" id="sign-in">Sign in</a>
+                    </li>
 
-                  <li class="dropdown nav-item logged-in" id="account-dropdown">
-                      <a class="dropdown-toggle nav-link" data-toggle="dropdown">
-                          <i class="material-icons">account_circle</i>Account
-                          <span hidden id="user-pic"></span>
-                          <span hidden id="user-name"></span>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                          <a href="#" class="dropdown-item">Settings</a>
-                          <a href="/" class="dropdown-item" id="sign-out">Sign out</a>
-                      </div>
-                  </li>
+                    <li class="dropdown nav-item logged-in" id="account-dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown">
+                            <i class="material-icons">account_circle</i>Account
+                            <span hidden id="user-pic"></span>
+                            <span hidden id="user-name"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#" class="dropdown-item">Settings</a>
+                            <a href="/" class="dropdown-item" id="sign-out">Sign out</a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
   </nav>
-    <!--        end primary navbar -->
+  <!--        end primary navbar -->
 
-    <div class="container" id="main-content">
-      <div class="row">
-        <div class="col-sm">
-          <h3>Checkout Item</h3>
-          <h4>Please enter the amount, then scan the item (defaults to 1 if no amount entered).</h4>
-          <form id="checkout-item-form">
-            <div class="form-group">
-              <div class="col-xs-8">
-                <label for="amount">Amount</label>
-                <input id="amount" name="amount" cols="5" rows="5" class="form-control"></input>
-              </div>
-              <div class="col-xs-8">
-                <label for="barcode" class="col-xs-4">Barcode</label>
-                <input type="string" id="barcode" name="barcode" cols="20" rows="5" class="form-control"></input>
-              </div>
-              <br>
-              <button id="backToCheckout" type="button" value="finished"
-              onclick="goToCheckout()" class="btn btn-primary">Finished</button>
-              <br><br>
-              Grocery List 
-              <br>
-              <ol>
-
-              </ol>
-            
-            </div>
-          </form>
-        </div>
-
-        <div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
-          <div class="mdl-snackbar__text"></div>
-          <button class="mdl-snackbar__action" type="button"></button>
-        </div>
-      </div>
+  <div class="container" id="main-content">
+    <h2>Error 4 :o 4</h2>
+    <p>Uh oh, the page you are looking for doesn't exist</p>
+    <div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
+      <div class="mdl-snackbar__text"></div>
+      <button class="mdl-snackbar__action" type="button"></button>
     </div>
+  </div>
 
 
 
 <!-- Import and configure the Firebase SDK -->
 <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
 <!-- If you do not want to serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
-<script src="../__/firebase/5.5.8/firebase-app.js"></script>
-<script src="../__/firebase/5.5.8/firebase-auth.js"></script>
-<script src="../__/firebase/5.5.8/firebase-database.js"></script>
-<script src="../__/firebase/5.5.8/firebase-storage.js"></script>
-<script src="../__/firebase/5.5.8/firebase-messaging.js"></script>
-<script src="../__/firebase/init.js"></script>
+<script src="/__/firebase/5.5.8/firebase-app.js"></script>
+<script src="/__/firebase/5.5.8/firebase-auth.js"></script>
+<script src="/__/firebase/5.5.8/firebase-database.js"></script>
+<script src="/__/firebase/5.5.8/firebase-storage.js"></script>
+<script src="/__/firebase/5.5.8/firebase-messaging.js"></script>
+<script src="/__/firebase/init.js"></script>
 
 <!--   Core JS Files   -->
-<script src="../scripts/core/jquery.min.js"></script>
-<script src="../scripts/core/popper.min.js"></script>
-<script src="../scripts/bootstrap-material-design.js"></script>
+<script src="scripts/core/jquery.min.js"></script>
+<script src="scripts/core/popper.min.js"></script>
+<script src="scripts/bootstrap-material-design.js"></script>
 
 <!-- Material Kit Core initialisations of plugins and Bootstrap Material Design Library -->
-<script src="../scripts/material-kit.js?v=2.0.3"></script>
-<script src="../scripts/main.js"></script>
-<script src="../scripts/inventory.js"></script>
-<script src="../scripts/checkout.js"></script>
+<script src="scripts/material-kit.js?v=2.0.3"></script>
+<script src="scripts/main.js"></script>
+<script src="scripts/inventory.js"></script>
+<script src="scripts/start-order.js"></script>
 
 </body>
 </html>
