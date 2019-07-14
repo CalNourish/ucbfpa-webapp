@@ -5,7 +5,7 @@ var notifTitleElement = document.getElementById('notifTitle');
 var notifTextElement = document.getElementById('notifText');
 
 function sendNotification(event) {
-    // event.preventDefault();
+    event.preventDefault();
 
     var notifTitle = notifTitleElement.value;
     var notifText = notifTextElement.value;
