@@ -28,7 +28,7 @@ function generateItemID() {
 }
 
 function getCategories() {
-  return ['prepared', 'grains', 'produce', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages'];
+  return ['grains', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages'];
 }
 
 function updateItem() {
@@ -44,8 +44,8 @@ function updateItem() {
     getCategories().forEach(function(value, index, array) {
       var category = 'edit' + value.charAt(0).toUpperCase() + value.slice(1);
       var checkbox = document.getElementById(category);
-      console.log(checkbox.checked);
-      if (checkbox.checked) {
+      // console.log(checkbox.checked);
+      if (checkbox !== null && checkbox.checked) {
         categoryName[value] = value;
       }
     });
@@ -163,7 +163,7 @@ function loadItemIntoEditForm2(itemID, itemName, barcode, cost, count, categoryN
     category = 'edit' + category;
     var checkbox = document.getElementById(category);
 
-    if (typeof categoryName[value] !== "undefined") {
+    if (typeof categoryName[value] !== "undefined" && checkbox !==null) {
       checkbox.checked = true;
     } else {
       checkbox.checked = false;
@@ -183,9 +183,10 @@ function saveItem() {
   // Generate hashmap that has list of categories for this item.
   var categoryName = {};
   getCategories().forEach(function(value, index, array) {
+    console.log(value);
     var checkbox = document.getElementById(value);
-    console.log(checkbox.checked);
-    if (checkbox.checked) {
+    // console.log(checkbox.checked);
+    if (checkbox !== null && checkbox.checked) {
       categoryName[value] = value;
     }
   });
@@ -237,13 +238,15 @@ function onAddItemFormSubmit(e) {
   document.getElementById("add-item-form").reset();
 }
 
-// Triggered when the add new item form is submitted.
+// Triggered when the edit item form is submitted.
 function onEditItemFormSubmit(e) {
   e.preventDefault();
   // Check that the user entered a message and is signed in.
   if (checkSignedInWithMessage()) {
     updateItem();
   }
+  document.getElementById("edit-item-form").reset();
+
 }
 
 // Triggered when the add new item form is submitted.
@@ -253,6 +256,9 @@ function onEditBarcodeItemFormSubmit(e) {
   if (checkSignedInWithMessage()) {
     loadItemIntoEditForm(editItemBarcodeElement.value);
   }
+  document.getElementById("edit-item-form-barcode").reset();
+
+
 }
 
 // Triggered when a file is selected via the media picker.
