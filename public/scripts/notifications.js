@@ -18,8 +18,6 @@ function getMostRecentNotifications() {
         });
 }
 
-getMostRecentNotifications();
-
 function sendNotification(event) {
     event.preventDefault();
 
@@ -50,4 +48,5 @@ function sendNotification(event) {
         });
 }
 
+getMostRecentNotifications();
 formElement.addEventListener('submit', sendNotification);
