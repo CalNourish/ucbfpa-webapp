@@ -1,6 +1,6 @@
 {
-  "name": "Friendly Chat",
-  "short_name": "Friendly Chat",
+  "name": "UC Berkeley Food Pantry",
+  "short_name": "UC Berkeley Food Pantry",
   "start_url": "/index.html",
   "display": "standalone",
   "orientation": "portrait",
