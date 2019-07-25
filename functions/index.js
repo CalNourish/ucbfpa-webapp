@@ -46,3 +46,34 @@ exports.sendNotification = functions
         console.log('Error sending message:', error);
       });
   });
+
+exports.authorizeLogin = functions
+  .https
+  .onCall((data, context) => {
+
+    const contextAuth = context.auth;
+    if (contextAuth == null) {
+      return {
+        authorized: "false"
+      };
+    }
+
+    const token = contextAuth.token;
+    if (token == null) {
+      return {
+        authorized: "false"
+      };
+    }
+
+    const email = token.email;
+
+    if (['wli2@berkeley.edu', 'samanthalai0914@gmail.com', 'jschnapper@berkeley.edu'].indexOf(email) >= 0) {
+      return {
+        authorized: "true"
+      };
+    }
+
+    return {
+      authorized: "false"
+    };
+});

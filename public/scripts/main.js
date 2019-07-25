@@ -52,41 +52,51 @@ function isUserSignedIn() {
 
 // Triggers when the auth state change for instance when the user signs-in or signs-out.
 function authStateObserver(user) {
-  if (user) { // User is signed in!
-    // Get the signed-in user's profile pic and name.
-    var profilePicUrl = getProfilePicUrl();
-    var userName = getUserName();
+  var authorizeLogin = firebase
+    .functions()
+    .httpsCallable('authorizeLogin');
 
-    // Set the user's profile pic and name.
-    userPicElement.style.backgroundImage = 'url(' + profilePicUrl + ')';
-    userNameElement.textContent = userName;
+  authorizeLogin({}).then(function(result) {
+    // Read result of the Cloud Function.
+    var authorized = result.data.authorized;
 
-    // Show user's profile and sign-out button.
-    userNameElement.removeAttribute('hidden');
-    userPicElement.removeAttribute('hidden');
-  
-    // Display logged-in nav bar elements 
-    loggedIn.css("display", "block")
-    loggedOut.css("display", "none")
+    if (user && authorized === "true") { // User is signed in and is authorized!
+
+      // Get the signed-in user's profile pic and name.
+      var profilePicUrl = getProfilePicUrl();
+      var userName = getUserName();
+
+      // Set the user's profile pic and name.
+      userPicElement.style.backgroundImage = 'url(' + profilePicUrl + ')';
+      userNameElement.textContent = userName;
+
+      // Show user's profile and sign-out button.
+      userNameElement.removeAttribute('hidden');
+      userPicElement.removeAttribute('hidden');
     
-    // Display content
-    $("#main-content").css("visibility", "visible");
+      // Display logged-in nav bar elements 
+      loggedIn.css("display", "block")
+      loggedOut.css("display", "none")
+      
+      // Display content
+      $("#main-content").css("visibility", "visible");
 
-  } else { // User is signed out!
+    } else { // User is signed out or unauthorized.
 
-    // Hide user's profile and sign-out button.
-    userNameElement.setAttribute('hidden', 'true');
-    userPicElement.setAttribute('hidden', 'true');
+      // Hide user's profile and sign-out button.
+      userNameElement.setAttribute('hidden', 'true');
+      userPicElement.setAttribute('hidden', 'true');
 
-    // Display logged-out nav bar element
-    loggedIn.css("display", "none");
-    loggedOut.css("display", "block")
+      // Display logged-out nav bar element
+      loggedIn.css("display", "none");
+      loggedOut.css("display", "block")
 
-    // Redirect to index if not already there
-    if (window.location.pathname != "/pantry-volunteers/") {
-      window.location.href="/pantry-volunteers/"
+      // Redirect to index if not already there
+      if (window.location.pathname != "/pantry-volunteers/") {
+        window.location.href="/pantry-volunteers/"
+      }
     }
-  }
+  });
 }
 
 // Returns true if user is signed-in. Otherwise false and displays a message.
