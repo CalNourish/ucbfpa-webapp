@@ -256,22 +256,19 @@
       
         <!-- EDIT ITEM -->
               <div class="col-sm">
-                <h3>Load Item</h3>
-                <h4>Enter a barcode for an item to be loaded into the form below.</h4>
+                <h3>Edit Item</h3>
+                <h4>Scan a barcode to load an item into the form below, or manually fill out the fields for the item.</h4>
                 <form id="edit-item-form-barcode">
       
                   <div class="form-group">
                     <label for="editItemBarcode" class="bmd-label-floating">Barcode</label>
                     <input id="editItemBarcode" name="editItemBarcode" type="text" class="form-control here" required="required">
-                    <span class="bmd-help">Example: apple</span>
+                    <span class="bmd-help">Example: 024000222040</span>
                   </div>
                     <button id="editItemBarcodeSubmit" type="submit" class="btn btn-primary">Submit</button>
                 </form>
       
-      
-                <h3>Edit Item</h3>
-                <h4>Fill out the form to update an item.</h4>
-                <form id="edit-item-form">
+                  <form id="edit-item-form">
                   <span id="editItemID" value=""></span>
                   <div class="form-group">
                     <label for="editItemName" class="bmd-label-floating">Item Name</label>
