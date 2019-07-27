@@ -13,8 +13,18 @@ function getMostRecentNotifications() {
         .limitToLast(10)
         .on("child_added", function(snapshot) {
             var notification = document.createElement("li");   
-            notification.textContent = "Title: " + snapshot.val().title + ", Text: " + snapshot.val().text + ", Timestamp: " + snapshot.val().timestamp;
+            notification.className = "notification card"
+            var title = document.createElement('h3')
+            title.className = "notification-title"
+            var body = document.createElement('p')
+            var timestamp = document.createElement('div')
+            title.textContent = snapshot.val().title
+            body.textContent = snapshot.val().text
+            timestamp.textContent = "Timestamp: " + snapshot.val().timestamp
             notificationList.insertBefore(notification, notificationList.firstChild);
+            notification.appendChild(title)
+            notification.appendChild(body)
+            notification.appendChild(timestamp)
         });
 }
 

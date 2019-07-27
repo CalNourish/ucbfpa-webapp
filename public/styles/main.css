@@ -256,3 +256,17 @@ td.day {
   background-color: rgba(9,50,90, 0.1);
 }
 
+/***********************/
+/***********************/
+/* NOTIFICATION STYLES */
+/***********************/
+/***********************/
+
+.notification.card {
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+.notification-title {
+  margin-top: 0;
+}
