@@ -63,7 +63,6 @@ function authStateObserver(user) {
     if (result.data) {
       authorized = result.data.authorized;
     }
-
     if (user && authorized === "true") { // User is signed in and is authorized!
 
       // Get the signed-in user's profile pic and name.
