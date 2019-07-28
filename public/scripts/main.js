@@ -58,10 +58,11 @@ function authStateObserver(user) {
 
   authorizeLogin({}).then(function(result) {
     // Read result of the Cloud Function.
-    var authorized = false
+    let authorized = false;
+    // Check that result.data is not null
     if (result.data) {
       authorized = result.data.authorized;
-    } 
+    }
     if (user && authorized === "true") { // User is signed in and is authorized!
 
       // Get the signed-in user's profile pic and name.
