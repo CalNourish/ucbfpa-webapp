@@ -65,15 +65,27 @@ exports.authorizeLogin = functions
       };
     }
 
-    const email = token.email;
+    return admin
+      .database()
+      .ref('authorizedUser')
+      .once('value')
+      .then(function(data) {
+        var authorizedUsersFromDb = data.val();
+        var authorizedEmails = [];
+        for (const [name, email] of Object.entries(authorizedUsersFromDb)) {
+          authorizedEmails.push(email);
+        }
 
-    if (['wli2@berkeley.edu', 'samanthalai0914@gmail.com', 'jschnapper@berkeley.edu'].indexOf(email) >= 0) {
-      return {
-        authorized: "true"
-      };
-    }
+        const loginEmail = token.email;
+        var isEmailAuthorized = authorizedEmails.indexOf(loginEmail) >= 0;
+        if (isEmailAuthorized) {
+          return {
+            authorized: "true"
+          };
+        }
 
-    return {
-      authorized: "false"
-    };
+        return {
+          authorized: "false"
+        };
+      });
 });
