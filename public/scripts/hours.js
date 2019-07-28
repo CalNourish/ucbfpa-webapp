@@ -64,15 +64,14 @@ function getHours() {
         for (let i = 0; i < 7; i++) {
           let currentRow = rows[i].children
           let currentDay = weekday[(day.getDay() + i) % 7];
+          // Find in the dictionary because we named it in weird way in the actual db
           let time = DAYS_TIMES["-" + currentDay.toLowerCase()]
           console.log(currentRow[0])
           currentRow[0].textContent = currentDay
           if (time[0] == "Closed") {
-            console.log("closed!")
             currentRow[1].textContent = "Closed"
           } else {
-            currentRow[1].textContent = time[0]
-            currentRow[2].textContent = time[1]
+            currentRow[1].textContent = time[0] + " - " + time[1]
           }
         }
     });

@@ -262,6 +262,9 @@ td.day {
 /***********************/
 /***********************/
 
+#hours-data .day {
+}
+
 .notification.card {
   padding: 12px;
   margin-bottom: 20px;
