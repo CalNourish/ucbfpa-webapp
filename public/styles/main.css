@@ -261,8 +261,13 @@ td.day {
 /* NOTIFICATION STYLES */
 /***********************/
 /***********************/
+#hours-data td {
+  padding: 4px 0;
+  font-size: 16px;
+}
 
-#hours-data .day {
+#hours-data .hours {
+  padding-left: 12px;
 }
 
 .notification.card {
