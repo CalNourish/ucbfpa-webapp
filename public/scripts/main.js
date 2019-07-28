@@ -58,7 +58,11 @@ function authStateObserver(user) {
 
   authorizeLogin({}).then(function(result) {
     // Read result of the Cloud Function.
-    var authorized = result.data.authorized;
+    let authorized = false;
+    // Check that result.data is not null
+    if (result.data) {
+      authorized = result.data.authorized;
+    }
 
     if (user && authorized === "true") { // User is signed in and is authorized!
 
