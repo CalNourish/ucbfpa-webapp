@@ -221,6 +221,12 @@ main, #messages-card {
 /*********************/
 /*********************/
 
+.hours-error {
+  color: red;
+  display: none;
+  margin: 8px 0;
+}
+
 #pantry-hours td {
   font-size: 16px !important;
   text-align: center;

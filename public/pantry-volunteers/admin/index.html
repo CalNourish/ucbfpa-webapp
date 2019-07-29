@@ -127,73 +127,72 @@
           </tr>
         </thead>
         <tbody id="pantry-hours">
-          <tr id="sunday">
-            <td class="day">    
-              Sunday
-            </td>
+          <tr>
+            <td class="day"></td>
             <td class="pantry-open">
-                <input type="text" class="timepicker" name="sunday-open"/>
+                <input type="text" class="timepicker" name="day-0-open"/>
             </td>
             <td class="pantry-closed">
-              <input type="text" class="timepicker" name="sunday-close"/>
+              <input type="text" class="timepicker" name="day-0-close"/>
             </td>       
           </tr>
-          <tr id="monday">
-            <td class="day">Monday</td>
+          <tr>
+            <td class="day"></td>
             <td class="pantry-open">
-              <input type="text" class="timepicker" name="monday-open"/>
+              <input type="text" class="timepicker" name="day-1-open"/>
             </td>
             <td class="pantry-closed">
-              <input type="text" class="timepicker" name="monday-close"/>
+              <input type="text" class="timepicker" name="day-1-close"/>
             </td>       
           </tr>
-          <tr id="tuesday">
-            <td class="day">Tuesday</td>
+          <tr>
+            <td class="day"></td>
             <td class="pantry-open">
-              <input type="text" class="timepicker" name="tuesday-open"/>
+              <input type="text" class="timepicker" name="day-2-open"/>
             </td>
             <td class="pantry-closed">
-              <input type="text" class="timepicker" name="tuesday-close"/>
+              <input type="text" class="timepicker" name="day-2-close"/>
             </td>       
           </tr>
-          <tr id="wednesday">
-            <td class="day">Wednesday</td>
+          <tr>
+            <td class="day"></td>
             <td class="pantry-open">
-              <input type="text" class="timepicker" name="wednesday-open"/>
+              <input type="text" class="timepicker" name="day-3-open"/>
             </td>
             <td class="pantry-closed">
-              <input type="text" class="timepicker" name="wednesday-close"/>
+              <input type="text" class="timepicker" name="day-3-close"/>
             </td>       
           </tr>
-          <tr id="thursday">
-            <td class="day">Thursday</td>
+          <tr>
+            <td class="day"></td>
             <td class="pantry-open">
-              <input type="text" class="timepicker" name="thursday-open"/>
+              <input type="text" class="timepicker" name="day-4-open"/>
             </td>
             <td class="pantry-closed">
-              <input type="text" class="timepicker" name="thursday-close"/>
+              <input type="text" class="timepicker" name="day-4-close"/>
             </td>       
           </tr>
-          <tr id="friday">
-            <td class="day">Friday</td>
+          <tr>
+            <td class="day"></td>
             <td class="pantry-open">
-              <input type="text" class="timepicker" name="firday-open"/>
+              <input type="text" class="timepicker" name="day-5-open"/>
             </td>
             <td class="pantry-closed">
-              <input type="text" class="timepicker" name="friday-close"/>
+              <input type="text" class="timepicker" name="day-5-close"/>
             </td>       
           </tr>
-          <tr id="saturday">
-            <td class="day">Saturday</td>
+          <tr>
+            <td class="day"></td>
             <td class="pantry-open">
-              <input type="text" class="timepicker" name="saturday-open"/>
+              <input type="text" class="timepicker" name="day-6-open"/>
             </td>
             <td class="pantry-closed">
-              <input type="text" class="timepicker" name="saturday-close"/>
+              <input type="text" class="timepicker" name="day-6-close"/>
             </td>       
           </tr>
         </tbody>
       </table>
+      <div class="hours-error">Invalid hours: make sure the open time is before the close time</div>
       <button type="submit" on="submitHours" class="btn btn-primary change-default-hours">
         submit
       </button>
