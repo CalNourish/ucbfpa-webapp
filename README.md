@@ -1,8 +1,5 @@
-# Firebase Web Codelab - Start code
+# CalNourish WebApp
 
-This folder contains the starting code for the [Firebase: Build a Real Time Web Chat App Codelab](https://codelabs.developers.google.com/codelabs/firebase-web/).
-
-# Webapp
 Tutorial followed for setup: 
 `https://codelabs.developers.google.com/codelabs/firebase-web/#0`
 
@@ -13,12 +10,15 @@ Setup:
 
 `firebase login`
 
-`firebase use --add`
+`firebase use default`
 
 From web directory: 
 `firebase serve --only hosting`
 
 `✔  hosting: Local server: http://localhost:5000`
 
-To deploy:
+To deploy the webapp:
 `firebase deploy --except functions`
+
+To deploy just the functions:
+`firebase deploy --only functions`
