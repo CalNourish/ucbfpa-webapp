@@ -120,38 +120,47 @@ const convertTime12to24 = (time12h) => {
 
 
 function changeDefaultHours(e) {
+    var day = new Date();
     for (let key in DAYS_TIMES) {
-            DAYS_TIMES[key] = {
-                '24hours': '',
-                '12hours': ''
-            }
-            let open12 = $('#' + key.slice(1)).find(".pantry-open").find(".timepicker").val()
-            let close12 = $('#' + key.slice(1)).find(".pantry-closed").find(".timepicker").val()
-            let open24 = '';
-            let close24 = '';
-            if (open12 == "Closed" || open12 == '') {
-                open24 = "Closed"
-            } else {
-                open24 = convertTime12to24(open12)
-            }
-            if (close12 == "Closed" || close12 == '') {
-                console.log("in here" + close12)
-                close24 = "Closed"
-            } else {
-                close24 = convertTime12to24(close12)
-            }
+        DAYS_TIMES[key] = {
+            '24hours': '',
+            '12hours': ''
+        }
+    }
+    let hoursTable = document.getElementById("pantry-hours")
+    let rows = hoursTable.querySelectorAll("tr");
+    for (let i = 0; i < 7; i++) {
+        let currentRow = rows[i].children
+        let currentDay = weekday[(day.getDay() + i) % 7];
+        let open = currentRow[1].children
+        let close = currentRow[2].children
+        let open12 = open[0].value
+        let close12 = close[0].value
+        let open24 = '';
+        let close24 = '';
 
-            if (open24 == "Closed" || close24 == "Closed") {
-                DAYS_TIMES[key]['24hours'] = "Closed"
-                DAYS_TIMES[key]['12hours'] = "Closed"
-            } else {
-                DAYS_TIMES[key]['24hours'] = open24 + " - " + close24
-                DAYS_TIMES[key]['12hours'] = open12 + " - " + close12
-            }
-            
+        // Check for closed and make conversions
+        if (open12 == "Closed" || open12 == '') {
+            open24 = "Closed"
+        } else {
+            open24 = convertTime12to24(open12)
+        }
+        if (close12 == "Closed" || close12 == '') {
+            close24 = "Closed"
+        } else {
+            close24 = convertTime12to24(close12)
         }
 
-
+        // Set in db
+        if (open24 == "Closed" || close24 == "Closed") {
+            DAYS_TIMES["-" + currentDay.toLowerCase()]['24hours'] = "Closed"
+            DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = "Closed"
+        } else {
+            DAYS_TIMES["-" + currentDay.toLowerCase()]['24hours'] = open24 + " - " + close24
+            DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = open12 + " - " + close12
+        }
+        console.log(DAYS_TIMES)
+    }    
     REF.update(DAYS_TIMES)
     .then(function() {
     })
