@@ -117,9 +117,23 @@ const convertTime12to24 = (time12h) => {
     return `${hours}:${minutes}`;
   }
 
+const validateHours = (open, closed) => {
+    let [openHours, openMinutes] = open.split(':')
+    let [closedHours, closedMinutes] = closed.split(':')
+    // Check that open is before close
+    if (parseInt(openHours) < parseInt(closedHours)) {
+        return true;
+    } else if (parseInt(openHours) == parseInt(closedHours) && parseInt(openMinutes) < parseInt(closedMinutes)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 
 function changeDefaultHours(e) {
+    let validHours = true;
     var day = new Date();
     for (let key in DAYS_TIMES) {
         DAYS_TIMES[key] = {
@@ -150,6 +164,14 @@ function changeDefaultHours(e) {
         } else {
             close24 = convertTime12to24(close12)
         }
+        // Make sure hours are valid
+        if (open24 != "Closed" && close24 != "Closed") {
+            if (!validateHours(open24, close24)) {
+                validHours = false;
+                break;
+            }
+        }
+
 
         // Set in db
         if (open24 == "Closed" || close24 == "Closed") {
@@ -159,15 +181,21 @@ function changeDefaultHours(e) {
             DAYS_TIMES["-" + currentDay.toLowerCase()]['24hours'] = open24 + " - " + close24
             DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = open12 + " - " + close12
         }
-        console.log(DAYS_TIMES)
-    }    
-    REF.update(DAYS_TIMES)
-    .then(function() {
-    })
-    .catch(function(error) {
-        console.error('Error updating hours', error);
+    }   
     
-    });
+    if (validHours) {
+        REF.update(DAYS_TIMES)
+        .then(function() {
+        })
+        .catch(function(error) {
+            console.error('Error updating hours', error);
+        
+        });
+    } else {
+        e.preventDefault()
+        $(".hours-error").show();
+    }
+
 }
 
 // $(".timepicker").on('change', function() {
