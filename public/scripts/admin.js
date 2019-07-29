@@ -19,6 +19,16 @@ const DAYS_TIMES = {
     '-saturday': ''
 }
 
+// Days array
+var weekday = new Array(7);
+weekday[0] =  "Sunday";
+weekday[1] = "Monday";
+weekday[2] = "Tuesday";
+weekday[3] = "Wednesday";
+weekday[4] = "Thursday";
+weekday[5] = "Friday";
+weekday[6] = "Saturday";
+
 let convertTime = time => {
     if (time != 'Closed' ) {
         let [start, end] = time.split('-')
@@ -42,25 +52,32 @@ let info = async () => {
 }
 
 function adminPageSetup() {
+    var day = new Date();
     info().then(value => {
         for (let key in DAYS_TIMES) {
             if (key in value) {
-                DAYS_TIMES[key] = value[key]["24hours"];
-                let time = convertTime(value[key]["24hours"])
-                // slice off the '-'
-                let open = document.getElementById(key.slice(1)).children[1].children[0];
-                let closed = document.getElementById(key.slice(1)).children[2].children[0];
-                if (time[0] == "Closed") {
-                    $('#' + key.slice(1)).find(".pantry-open").find(".timepicker").val(time[0])
-                    $('#' + key.slice(1)).find(".pantry-closed").find(".timepicker").val()
-                } else {
-                    if (open) {
-                        $('#' + key.slice(1)).find(".pantry-open").find(".timepicker").val(time[0])
-                    }
-    
-                    if (closed) {
-                        $('#' + key.slice(1)).find(".pantry-closed").find(".timepicker").val(time[1])
-                    }
+                DAYS_TIMES[key] = convertTime(value[key]["24hours"]);
+            }
+        }
+        let hoursTable = document.getElementById("pantry-hours")
+        let rows = hoursTable.querySelectorAll("tr");
+        for (let i = 0; i < 7; i++) {
+            let currentRow = rows[i].children
+            let currentDay = weekday[(day.getDay() + i) % 7];
+            // Find in the dictionary because we named it in weird way in the actual db
+            let time = DAYS_TIMES["-" + currentDay.toLowerCase()]
+            currentRow[0].textContent = currentDay
+            let open = currentRow[1].children
+            let closed = currentRow[2].children
+            if (time[0] == "Closed") {
+                open[0].value = time[0]
+                closed[0].value = ''
+            } else {
+                if (open) {
+                    open[0].value = time[0]
+                }
+                if (closed) {
+                    closed[0].value = time[1]
                 }
             }
         }
