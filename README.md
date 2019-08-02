@@ -25,7 +25,7 @@
 <br>
 
 ## Test and Prod Projects
-You should be granted access to the **TestCalNourish** and **ProdCalNourish** projects
+You should be granted access to the **TestCalNourish** and **ProdCalNourish** projects.
 
 View list of current aliases for this local project: `firebase use`
 
