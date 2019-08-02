@@ -204,7 +204,7 @@ function changeDefaultHours(e) {
 
 defaultHoursForm.addEventListener('submit', changeDefaultHours);    
 
-window.onload = adminPageSetup
+adminPageSetup()
 
 });
 

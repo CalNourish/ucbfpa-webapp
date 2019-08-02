@@ -1,7 +1,6 @@
 'use strict';
 $(document).ready(function() {
 
-let defaultHoursForm = document.getElementById("default-hours-form")
 // REAL DATA
 const REF = firebase.database().ref('/info/')
 
@@ -77,7 +76,7 @@ function getHours() {
 }
 
 
-window.onload = getHours
+getHours();
 
 });
 
