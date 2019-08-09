@@ -3,6 +3,42 @@
 var DEFAULT_ITEM_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
 var DEFAULT_ITEM_ID_LENGTH = 5;
 
+
+function getAllUrlParams(url) {
+
+  
+}
+
+$(document).ready( function () {
+  console.log("it worked!");
+// get query string from url (optional) or window
+  var url = window.location.href;
+  var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+
+// we'll store the parameters here
+  var obj = {};
+
+// if query string exists
+  if (queryString) {
+
+    // stuff after # is not part of query string, so get rid of it
+    queryString = queryString.split('#')[0];
+
+    // split our query string into its component parts
+    var arr = queryString.split('&');
+    var a = arr[0].split('=');
+    var barcode = typeof (a[1]) === 'undefined' ? true : a[1];
+    console.log(barcode);
+    loadItemIntoEditForm(barcode)
+
+  }
+  
+  // if (barcode) {
+  //   loadItemIntoEditForm(barcode);
+  // }
+});
+
+
 function barcodeToID(barcode) {
   var itemID;
   firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {

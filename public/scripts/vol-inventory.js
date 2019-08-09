@@ -18,10 +18,9 @@ $(document).ready(function() {
                           <img class='card-img-top item-img-placeholder' src='../../images/pantry_logo.png' alt='Card image cap'>
                         </div>
                         <div class='item-card card-body'>
-                          <h4 class='item-name'>${currentItem.itemName}</h4>
-                          <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count} in stock</p>
-                          <h4 class='item-name' data-itemid='${currentItem.barcode}'>Barcode: ${currentItem.barcode} </h4>
-
+                          <h4 class='item-name'> ${standardizeName(currentItem.itemName)}</h4>
+                          <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
+                          <button class="message-form button" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
                           <button class="message-form button" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', ${currentItem.barcode})"> Out of Stock  </button>
                           </div>
                       </div>`)
@@ -56,16 +55,16 @@ $(document).ready(function() {
               if (category == selected) {
                 console.log("tru")
                 items.push(`<div class='card item-card'>
-                              <a href="/pantry-volunteers/checkout"><span></span></a>
-                              <div class='item-img-wrapper'>
-                                <img class='card-img-top item-img-placeholder' src='../../images/pantry_logo.png' alt='Card image cap'>
-                              </div>
-                              <div class='item-card card-body'>
-                                <h4 class='item-name'>${currentItem.itemName}</h4>
-                                <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
-                                <button class="message-form button" type="button" onClick = "setOutOfStock(\'${currentItem.itemName} \', ${currentItem.barcode})"> Out of Stock </button>
-                              </div>
-                            </div>`)
+                        <div class='item-img-wrapper'>
+                          <img class='card-img-top item-img-placeholder' src='../../images/pantry_logo.png' alt='Card image cap'>
+                        </div>
+                        <div class='item-card card-body'>
+                          <h4 class='item-name'> ${standardizeName(currentItem.itemName)}</h4>
+                          <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
+                          <button class="message-form button" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
+                          <button class="message-form button" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', ${currentItem.barcode})"> Out of Stock  </button>
+                          </div>
+                      </div>`)
               }
             }
           }
@@ -113,7 +112,15 @@ $(document).ready(function() {
     //   window.location.href = "/pantry-volunteers/checkout";
     // });
   });
-function setOutOfStock(itemName, barcode) {
+function standardizeName(itemName) {
+  var newName = itemName;
+  if (itemName.length > 20) {
+    var newName = itemName.slice(0, 20) + "...";
+  }
+  return newName;
+}
+
+  function setOutOfStock(itemName, barcode) {
   if (confirm("Set " + itemName + " to Out of Stock?")) {
     return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
       var itemID = barcodesTable.val()[barcode];
@@ -130,4 +137,8 @@ function setOutOfStock(itemName, barcode) {
   }
 
   
+}
+
+function goToEditItem(barcode) {
+  window.location.href = "/pantry-volunteers/restock?barcode=" + barcode;
 }
