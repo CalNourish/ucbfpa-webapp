@@ -21,7 +21,7 @@ $(document).ready(function() {
                           <h4 class='item-name'> ${standardizeName(currentItem.itemName)}</h4>
                           <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
                           <button class="message-form button" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
-                          <button class="message-form button" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', ${currentItem.barcode})"> Out of Stock  </button>
+                          <button class="message-form button" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', \'${currentItem.barcode}\')"> Out of Stock  </button>
                           </div>
                       </div>`)
     }
@@ -62,7 +62,7 @@ $(document).ready(function() {
                           <h4 class='item-name'> ${standardizeName(currentItem.itemName)}</h4>
                           <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
                           <button class="message-form button" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
-                          <button class="message-form button" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', ${currentItem.barcode})"> Out of Stock  </button>
+                          <button class="message-form button" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', \'${currentItem.barcode}\')"> Out of Stock  </button>
                           </div>
                       </div>`)
               }
@@ -121,24 +121,26 @@ function standardizeName(itemName) {
 }
 
   function setOutOfStock(itemName, barcode) {
-  if (confirm("Set " + itemName + " to Out of Stock?")) {
-    return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-      var itemID = barcodesTable.val()[barcode];
-      firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-        var item = inventoryTable.val();
-        console.log(item);
-        console.log(item.barcode);
-        // var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
-        updateTo(itemID, item.itemName, item.barcode, item.cost, "0", item.categoryName);
+    console.log(barcode);
+    if (confirm("Set " + itemName + " to Out of Stock?")) {
+      return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
+        var itemID = barcodesTable.val()[barcode];
+        firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
+          var item = inventoryTable.val();
+          console.log(item);
+          console.log(item.barcode);
+          // var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
+          updateTo(itemID, item.itemName, item.barcode, item.cost, "0", item.categoryName);
+        });
       });
-    });
-  } else {
-    console.log("action cancelled");
-  }
+    } else {
+      console.log("action cancelled");
+    }
 
   
 }
 
 function goToEditItem(barcode) {
+  console.log(barcode);
   window.location.href = "/pantry-volunteers/restock?barcode=" + barcode;
 }

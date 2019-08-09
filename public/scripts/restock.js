@@ -10,7 +10,6 @@ function getAllUrlParams(url) {
 }
 
 $(document).ready( function () {
-  console.log("it worked!");
 // get query string from url (optional) or window
   var url = window.location.href;
   var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
@@ -28,7 +27,6 @@ $(document).ready( function () {
     var arr = queryString.split('&');
     var a = arr[0].split('=');
     var barcode = typeof (a[1]) === 'undefined' ? true : a[1];
-    console.log(barcode);
     loadItemIntoEditForm(barcode)
 
   }
