@@ -20,8 +20,10 @@ $(document).ready(function() {
                         <div class='item-card card-body'>
                           <h4 class='item-name'> ${standardizeName(currentItem.itemName)}</h4>
                           <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
-                          <button class="message-form button" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
-                          <button class="message-form button" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', \'${currentItem.barcode}\')"> Out of Stock  </button>
+                          <div>
+                          <button class="message-form button btn btn-outline-primary btn-block" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
+                          <button class="message-form button btn btn-outline-danger btn-block" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', \'${currentItem.barcode}\')"> Out of Stock  </button>
+                          </div>
                           </div>
                       </div>`)
     }
@@ -61,8 +63,10 @@ $(document).ready(function() {
                         <div class='item-card card-body'>
                           <h4 class='item-name'> ${standardizeName(currentItem.itemName)}</h4>
                           <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
-                          <button class="message-form button" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
-                          <button class="message-form button" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', \'${currentItem.barcode}\')"> Out of Stock  </button>
+                          <div>
+                          <button class="message-form button btn btn-outline-primary btn-block" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
+                          <button class="message-form button btn btn-outline-danger btn-block" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', \'${currentItem.barcode}\')"> Out of Stock  </button>
+                          </div>
                           </div>
                       </div>`)
               }
