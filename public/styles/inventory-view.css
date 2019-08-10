@@ -1,8 +1,9 @@
-.item-card {
-  width: 160px !important;
-  height: 220px !important;
-  margin: 0 12px 12px 12px;
+.item-card.card {
+  margin: 12px;
+  width: 12em !important;
+
 }
+
 #inventory-items {
   padding: .5rem 20px 20px 20px;
 }
@@ -19,6 +20,15 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
+.item-card .button {
+  box-shadow: none !important;
+  border-radius: 6px;
+  padding: 8px 12px !important;
+  margin: 4px !important;
+}
+
+
 .item-count {
   font-weight: bold;
   font-size: 20px;
