@@ -44,18 +44,55 @@ function sendNotification(event) {
         title: notifTitle
     };
 
-    firebase
-        .database()
-        .ref('/notification')
-        .push(notification)
-        .then(function() {
-            // goToCheckout();
-            notifTitleElement.value = '';
-            notifTextElement.value = '';
-        })
-        .catch(function(error) {
-            console.error('Error saving order to /notification', error);
-        });
+    if (notifTitle.length > 50) {
+        //ask if they want to shorten title
+        if (confirm("Send this notification? Your title length is " + notifTitle.length + " and may be truncated on some phone screens.")) {
+            firebase
+            .database()
+            .ref('/notification')
+            .push(notification)
+            .then(function() {
+                notifTitleElement.value = '';
+                notifTextElement.value = '';
+            })
+            .catch(function(error) {
+                console.error('Error saving order to /notification', error);
+            });
+        }
+    } else if (notifText.length > 50) {
+        //ask to shorten text
+        if (confirm("Send this notification? Your text length is " + notifText.length + " and may be truncated on some phone screens.")) {
+            firebase
+            .database()
+            .ref('/notification')
+            .push(notification)
+            .then(function() {
+                notifTitleElement.value = '';
+                notifTextElement.value = '';
+            })
+            .catch(function(error) {
+                console.error('Error saving order to /notification', error);
+            });
+        }
+    } else {
+        //confirm send
+        if (confirm("Send this notification?")) {
+            firebase
+            .database()
+            .ref('/notification')
+            .push(notification)
+            .then(function() {
+                notifTitleElement.value = '';
+                notifTextElement.value = '';
+            })
+            .catch(function(error) {
+                console.error('Error saving order to /notification', error);
+            });
+        }
+    }
+
+
+
 }
 
 getMostRecentNotifications();
