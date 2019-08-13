@@ -102,6 +102,11 @@ function updateItem() {
       imageName: itemName.replace(/\s/g, '') + '.jpg'
     }
 
+    if (JSON.stringify(itemInfo.categoryName)==='{}') {
+      alert("You must check at least one category.");
+      return;
+    }
+
     // If an image was included, also upload the image to Cloud Storage.
     if (typeof itemImageFile !== "undefined") {
       var filePath = firebase.auth().currentUser.uid + '/' + itemID + '/' + itemImageFile.name;
@@ -116,9 +121,14 @@ function updateItem() {
       });
     }
 
-    return firebase.database().ref('/inventory/' + itemID).update(itemInfo).catch(function(error) {
+    return firebase.database()
+      .ref('/inventory/' + itemID)
+      .update(itemInfo)
+      .catch(function(error) {
       console.error('Error writing item to /inventory/' + itemID, error);
-    });
+      })
+      .then(document.getElementById("edit-item-form").reset()
+    );
 }
 
 function incrementOne(barcode) {
@@ -164,7 +174,6 @@ function updateTo(itemID, itemName, barcode, cost, count, categoryName) {
       categoryName: categoryName,
       imageName: itemName.replace(/\s/g, '') + '.jpg'
     }
-
     return firebase.database().ref('/inventory/' + itemID).update(itemInfo).catch(function(error) {
       console.error('Error writing item to /inventory/' + itemID, error);
     });
@@ -225,6 +234,7 @@ function saveItem() {
     }
   });
 
+
   // Connect the generated item ID to this barcode.
   var barcodeToID = {};
   barcodeToID[barcode] = itemID;
@@ -242,6 +252,10 @@ function saveItem() {
     categoryName: categoryName,
     imageName: itemName.replace(/\s/g, '') + '.jpg'
   }
+  if (JSON.stringify(itemInfo.categoryName)==='{}') {
+    alert("You must check at least one category.");
+    return;
+  }
 
   // If an image was included, also upload the image to Cloud Storage.
   if (typeof itemImageFile !== "undefined") {
@@ -257,9 +271,14 @@ function saveItem() {
     });
   }
 
-  return firebase.database().ref('/inventory/' + itemID).update(itemInfo).catch(function(error) {
-    console.error('Error writing item to /inventory/' + itemID, error);
-  });
+  return firebase.database()
+            .ref('/inventory/' + itemID)
+            .update(itemInfo)
+            .catch(function(error) {
+                console.error('Error writing item to /inventory/' + itemID, error);
+                })
+            .then(document.getElementById("add-item-form").reset()
+            );
 }
 
 // Triggered when the add new item form is submitted.
@@ -269,7 +288,7 @@ function onAddItemFormSubmit(e) {
   if (checkSignedInWithMessage()) {
     saveItem("3", "2", "3", "4", "5");
   }
-  document.getElementById("add-item-form").reset();
+  // document.getElementById("add-item-form").reset();
 }
 
 // Triggered when the edit item form is submitted.
@@ -279,7 +298,7 @@ function onEditItemFormSubmit(e) {
   if (checkSignedInWithMessage()) {
     updateItem();
   }
-  document.getElementById("edit-item-form").reset();
+  // document.getElementById("edit-item-form").reset();
 
 }
 
