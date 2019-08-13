@@ -102,7 +102,7 @@ function updateItem() {
       imageName: itemName.replace(/\s/g, '') + '.jpg'
     }
 
-    if (JSON.stringify(itemInfo.categoryName)==='{}') {
+    if (JSON.stringify(itemInfo.categoryName) === '{}') {
       alert("You must check at least one category.");
       return;
     }
@@ -125,8 +125,8 @@ function updateItem() {
       .ref('/inventory/' + itemID)
       .update(itemInfo)
       .catch(function(error) {
-      console.error('Error writing item to /inventory/' + itemID, error);
-      })
+        console.error('Error writing item to /inventory/' + itemID, error);
+        })
       .then(document.getElementById("edit-item-form").reset()
     );
 }
@@ -252,7 +252,7 @@ function saveItem() {
     categoryName: categoryName,
     imageName: itemName.replace(/\s/g, '') + '.jpg'
   }
-  if (JSON.stringify(itemInfo.categoryName)==='{}') {
+  if (JSON.stringify(itemInfo.categoryName) === '{}') {
     alert("You must check at least one category.");
     return;
   }
@@ -288,7 +288,6 @@ function onAddItemFormSubmit(e) {
   if (checkSignedInWithMessage()) {
     saveItem("3", "2", "3", "4", "5");
   }
-  // document.getElementById("add-item-form").reset();
 }
 
 // Triggered when the edit item form is submitted.
@@ -298,8 +297,6 @@ function onEditItemFormSubmit(e) {
   if (checkSignedInWithMessage()) {
     updateItem();
   }
-  // document.getElementById("edit-item-form").reset();
-
 }
 
 // Triggered when the add new item form is submitted.
