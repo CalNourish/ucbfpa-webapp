@@ -40,8 +40,6 @@ View list of current aliases for this local project: `firebase use`
 
 To deploy the webapp: `firebase deploy --except functions`
 
-To deploy just the functions: `firebase deploy --only functions`
-
 **Test Deployment**: Feel free to deploy with **TestCalNourish** whenever to make sure things are stable
 
 **Prod Deployment**: When ready to deploy to prod, `git tag <version name>` the most recent commit to master and deploy from the prod alias 
