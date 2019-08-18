@@ -120,6 +120,7 @@ const convertTime12to24 = (time12h) => {
 const validateHours = (open, closed) => {
     let [openHours, openMinutes] = open.split(':')
     let [closedHours, closedMinutes] = closed.split(':')
+    
     // Check that open is before close
     if (parseInt(openHours) < parseInt(closedHours)) {
         return true;
@@ -133,7 +134,6 @@ const validateHours = (open, closed) => {
 
 
 function changeDefaultHours(e) {
-    $(".hours-error").hide();
     let validHours = true;
     var day = new Date();
     for (let key in DAYS_TIMES) {
@@ -156,11 +156,14 @@ function changeDefaultHours(e) {
 
         // Check for closed and make conversions
         if (open12 == "Closed" || open12 == '') {
+            close.value[0] = ""
             open24 = "Closed"
         } else {
             open24 = convertTime12to24(open12)
         }
         if (close12 == "Closed" || close12 == '') {
+            open[0].value= "Closed"
+            close[0].value = ""
             close24 = "Closed"
         } else {
             close24 = convertTime12to24(close12)
@@ -196,7 +199,6 @@ function changeDefaultHours(e) {
         });
     } else {
         e.preventDefault()
-        $(".hours-error").show();
         toastr.error("Invalid Hours")
     }
 
