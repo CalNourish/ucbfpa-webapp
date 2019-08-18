@@ -29,6 +29,9 @@ weekday[4] = "Thursday";
 weekday[5] = "Friday";
 weekday[6] = "Saturday";
 
+
+
+
 let convertTime = time => {
     if (time != 'Closed' ) {
         let [start, end] = time.split('-')
@@ -188,23 +191,32 @@ function changeDefaultHours(e) {
             DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = open12 + " - " + close12
         }
     }   
-    
-    if (validHours) {
-        REF.update(DAYS_TIMES)
-        .then(function() {
-            toastr.info('Hours set')
-        })
-        .catch(function(error) {
-            console.error('Error updating hours', error);
-            toastr.error(error, "Error setting hours")
-        });
+    if (inputChanged) {
+        if (validHours) {
+            REF.update(DAYS_TIMES)
+            .then(function() {
+                toastr.info('Hours set')
+            })
+            .catch(function(error) {
+                console.error('Error updating hours', error);
+                toastr.error(error, "Error setting hours")
+            });
+        } else {
+            toastr.error("Invalid Hours")
+        }
     } else {
-        toastr.error("Invalid Hours")
+        toastr.info("Hours did not change")
     }
+
 
 }
 
-
+// Check is input has changed
+let inputChanged = false;
+// Check for input changes
+$("td > input").on("change", () => {
+    inputChanged = true;
+})
 
 defaultHoursForm.addEventListener('submit', changeDefaultHours);    
 
