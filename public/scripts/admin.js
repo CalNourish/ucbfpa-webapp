@@ -98,6 +98,7 @@ $('.timepicker').timepicker({
     'timeFormat': 'g:i A',
     'scrollDefault': 'now',
     'forceRoundTime': true,
+    'disableTextInput': true,
     'step': 15
 });
 
@@ -134,6 +135,7 @@ const validateHours = (open, closed) => {
 
 
 function changeDefaultHours(e) {
+    e.preventDefault()
     let validHours = true;
     var day = new Date();
     for (let key in DAYS_TIMES) {
@@ -156,7 +158,7 @@ function changeDefaultHours(e) {
 
         // Check for closed and make conversions
         if (open12 == "Closed" || open12 == '') {
-            close.value[0] = ""
+            close[0].value = ""
             open24 = "Closed"
         } else {
             open24 = convertTime12to24(open12)
@@ -188,7 +190,6 @@ function changeDefaultHours(e) {
     }   
     
     if (validHours) {
-        e.preventDefault()
         REF.update(DAYS_TIMES)
         .then(function() {
             toastr.info('Hours set')
@@ -198,12 +199,10 @@ function changeDefaultHours(e) {
             toastr.error(error, "Error setting hours")
         });
     } else {
-        e.preventDefault()
         toastr.error("Invalid Hours")
     }
 
 }
-
 
 
 
