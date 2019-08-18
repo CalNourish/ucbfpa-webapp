@@ -29,6 +29,9 @@ weekday[4] = "Thursday";
 weekday[5] = "Friday";
 weekday[6] = "Saturday";
 
+
+
+
 let convertTime = time => {
     if (time != 'Closed' ) {
         let [start, end] = time.split('-')
@@ -98,6 +101,7 @@ $('.timepicker').timepicker({
     'timeFormat': 'g:i A',
     'scrollDefault': 'now',
     'forceRoundTime': true,
+    'disableTextInput': true,
     'step': 15
 });
 
@@ -120,6 +124,7 @@ const convertTime12to24 = (time12h) => {
 const validateHours = (open, closed) => {
     let [openHours, openMinutes] = open.split(':')
     let [closedHours, closedMinutes] = closed.split(':')
+    
     // Check that open is before close
     if (parseInt(openHours) < parseInt(closedHours)) {
         return true;
@@ -133,6 +138,7 @@ const validateHours = (open, closed) => {
 
 
 function changeDefaultHours(e) {
+    e.preventDefault()
     let validHours = true;
     var day = new Date();
     for (let key in DAYS_TIMES) {
@@ -155,11 +161,14 @@ function changeDefaultHours(e) {
 
         // Check for closed and make conversions
         if (open12 == "Closed" || open12 == '') {
+            close[0].value = ""
             open24 = "Closed"
         } else {
             open24 = convertTime12to24(open12)
         }
         if (close12 == "Closed" || close12 == '') {
+            open[0].value= "Closed"
+            close[0].value = ""
             close24 = "Closed"
         } else {
             close24 = convertTime12to24(close12)
@@ -182,29 +191,55 @@ function changeDefaultHours(e) {
             DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = open12 + " - " + close12
         }
     }   
-    
-    if (validHours) {
-        REF.update(DAYS_TIMES)
-        .then(function() {
-        })
-        .catch(function(error) {
-            console.error('Error updating hours', error);
-        
-        });
+    if (inputChanged) {
+        if (validHours) {
+            REF.update(DAYS_TIMES)
+            .then(function() {
+                toastr.info('Hours set')
+            })
+            .catch(function(error) {
+                console.error('Error updating hours', error);
+                toastr.error(error, "Error setting hours")
+            });
+        } else {
+            toastr.error("Invalid Hours")
+        }
     } else {
-        e.preventDefault()
-        $(".hours-error").show();
+        toastr.info("Hours did not change")
     }
+
 
 }
 
-// $(".timepicker").on('change', function() {
-//     console.log($(this).val())
-// })
+// Check is input has changed
+let inputChanged = false;
+// Check for input changes
+$("td > input").on("change", () => {
+    inputChanged = true;
+})
 
 defaultHoursForm.addEventListener('submit', changeDefaultHours);    
 
 adminPageSetup()
+
+// Toast options
+toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-bottom-right",
+    "preventDuplicates": false,
+    "showDuration": "200",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "2000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+}
+
 
 });
 
