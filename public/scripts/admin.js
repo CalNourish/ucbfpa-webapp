@@ -133,6 +133,7 @@ const validateHours = (open, closed) => {
 
 
 function changeDefaultHours(e) {
+    $(".hours-error").hide();
     let validHours = true;
     var day = new Date();
     for (let key in DAYS_TIMES) {
@@ -184,27 +185,48 @@ function changeDefaultHours(e) {
     }   
     
     if (validHours) {
+        e.preventDefault()
         REF.update(DAYS_TIMES)
         .then(function() {
+            toastr.info('Hours set')
         })
         .catch(function(error) {
             console.error('Error updating hours', error);
-        
+            toastr.error(error, "Error setting hours")
         });
     } else {
         e.preventDefault()
         $(".hours-error").show();
+        toastr.error("Invalid Hours")
     }
 
 }
 
-// $(".timepicker").on('change', function() {
-//     console.log($(this).val())
-// })
+
+
 
 defaultHoursForm.addEventListener('submit', changeDefaultHours);    
 
 adminPageSetup()
+
+// Toast options
+toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-bottom-right",
+    "preventDuplicates": false,
+    "showDuration": "200",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "2000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+}
+
 
 });
 

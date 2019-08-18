@@ -284,3 +284,13 @@ td.day {
 .notification-title {
   margin-top: 0;
 }
+
+
+/***************/
+/***************/
+/* TOAST STYLE */
+/***************/
+/***************/
+.toast-info {
+  background-color: #003262;
+}
