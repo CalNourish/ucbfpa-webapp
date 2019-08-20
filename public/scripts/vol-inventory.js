@@ -84,13 +84,6 @@ $(document).ready(function() {
 
   });
 
-var addItemModal = document.getElementById('addItemModal');
-var editItemModal = document.getElementById('editItemModal');
-
-var modalContent = document.getElementById('modalContent');
-var modalBtn = document.getElementById('modalBtn');
-var closeBtn = document.getElementById('closeBtn');
-
 function openAddModal() {
   addItemModal.style.display = 'block';
 }
@@ -128,19 +121,31 @@ function standardizeName(itemName) {
           var item = inventoryTable.val();
           console.log(item);
           console.log(item.barcode);
-          // var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
           updateTo(itemID, item.itemName, item.barcode, item.cost, "0", item.categoryName);
         });
       });
     } else {
       console.log("action cancelled");
     }
-
-  
 }
 
 function goToEditItem(barcode) {
   console.log(barcode);
   openEditModal();
-  // window.location.href = "/pantry-volunteers/restock?barcode=" + barcode;
 }
+
+var addItemModal = document.getElementById('addItemModal');
+var editItemModal = document.getElementById('editItemModal');
+var modalContent = document.getElementById('modalContent');
+var modalBtn = document.getElementById('modalBtn');
+var closeBtn = document.getElementById('closeBtn');
+
+document.onclick = function(e){
+  if(e.target.id == 'addItemModal'){
+    closeAddModal();
+  } else if (e.target.id == 'editItemModal') {
+    closeEditModal();
+  } else {
+    return;
+  }
+};
