@@ -21,8 +21,7 @@ $(document).ready(function() {
                           <h4 class='item-name'> ${standardizeName(currentItem.itemName)}</h4>
                           <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
                           <div>
-                          <button class="message-form button btn btn-outline-primary btn-block" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
-                          <button class="message-form button btn btn-outline-danger btn-block" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', \'${currentItem.barcode}\')"> Out of Stock  </button>
+                          <button class="message-form button btn btn-outline-primary btn-block" type="button" onClick = "openEditModal(\'${currentItem.barcode}\')"> Edit This Item </button>
                           </div>
                           </div>
                       </div>`)
@@ -65,7 +64,6 @@ $(document).ready(function() {
                           <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
                           <div>
                           <button class="message-form button btn btn-outline-primary btn-block" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
-                          <button class="message-form button btn btn-outline-danger btn-block" type="button" onClick = "setOutOfStock(\'${currentItem.itemName}\', \'${currentItem.barcode}\')"> Out of Stock  </button>
                           </div>
                           </div>
                       </div>`)
@@ -84,38 +82,28 @@ $(document).ready(function() {
 
     });
 
-
-    // // Clear page and select items by category
-    // $(".item-card").click(function() {
-    //   // let items = [];
-    //   // let selected = $(this).data("item")
-    //   // if (selected != 'all') {
-    //   //   REF.once("value", snapshot => {
-    //   //     let res = snapshot.val()
-    //   //     for (let item in res) {
-    //   //       let currentItem = res[item]
-    //   //       let categories = currentItem.categoryName
-    //   //       console.log (categories)
-    //   //       for (let category in categories) {
-    //   //         console.log(category)
-    //   //         if (category == selected) {
-    //   //           console.log("tru")
-    //   //           items.push(`<div class='card item-card'><div class='item-img-wrapper'><img class='card-img-top item-img-placeholder' src='../images/pantry_logo.png' alt='Card image cap'></div><div class='item-card card-body'><h4 class='item-name'>${currentItem.itemName}</h4><p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p></div></div>`)
-    //   //         }
-    //   //       }
-    //   //     }
-    //   //     // update DOM
-    //   //     $('#inventory-items').empty();
-    //   //     $("#inventory-items").append(items)
-    //   //   })
-    //   // } else {
-    //   //     // update DOM
-    //   //     $('#inventory-items').empty();
-    //   //     $("#inventory-items").append(allItems)
-    //   // }
-    //   window.location.href = "/pantry-volunteers/checkout";
-    // });
   });
+
+function openAddModal() {
+  addItemModal.style.display = 'block';
+}
+
+function closeAddModal() {
+  addItemModal.style.display = 'none';
+}
+
+function openEditModal(barcode) {
+  console.log(barcode);
+  editItemModal.style.display = 'block';
+  if (barcode) {
+      loadItemIntoEditForm(barcode);
+  }
+}
+
+function closeEditModal() {
+  editItemModal.style.display = 'none';
+}
+
 function standardizeName(itemName) {
   var newName = itemName;
   if (itemName.length > 20) {
@@ -133,18 +121,31 @@ function standardizeName(itemName) {
           var item = inventoryTable.val();
           console.log(item);
           console.log(item.barcode);
-          // var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
           updateTo(itemID, item.itemName, item.barcode, item.cost, "0", item.categoryName);
         });
       });
     } else {
       console.log("action cancelled");
     }
-
-  
 }
 
 function goToEditItem(barcode) {
   console.log(barcode);
-  window.location.href = "/pantry-volunteers/restock?barcode=" + barcode;
+  openEditModal();
 }
+
+var addItemModal = document.getElementById('addItemModal');
+var editItemModal = document.getElementById('editItemModal');
+var modalContent = document.getElementById('modalContent');
+var modalBtn = document.getElementById('modalBtn');
+var closeBtn = document.getElementById('closeBtn');
+
+document.onclick = function(e){
+  if(e.target.id == 'addItemModal'){
+    closeAddModal();
+  } else if (e.target.id == 'editItemModal') {
+    closeEditModal();
+  } else {
+    return;
+  }
+};

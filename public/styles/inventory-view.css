@@ -51,6 +51,38 @@
 }
 
 .list-group-item.active {
+  z-index: 1;
   background-color: #003262;
 }
 
+.inventory-modal {
+  display: none;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow:auto;
+  background-color: rgba(0, 0, 0, 0.5)
+}
+
+.inventory-modal-content {
+  background-color: #f4f4f4;
+  margin: 5% auto;
+  padding: 20px;
+  width: 70%;
+  z-index: 3;
+  border-radius: 6px;
+}
+
+.closeBtn { 
+  color: #cccccc;
+  float: right;
+  font-size: 30px;
+}
+
+.closeBtn:hover, .closeBtn:focus {
+  cursor: pointer;
+  color: #000000
+}
