@@ -254,7 +254,6 @@ function saveItem() {
   }
   if (JSON.stringify(itemInfo.categoryName) === '{}') {
     alert("You must check at least one category.");
-    console.log('alerted');
     return;
   }
 
