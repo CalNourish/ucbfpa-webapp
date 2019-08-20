@@ -120,7 +120,7 @@
     <h2 id="inventory-title">Pantry Live Inventory</h2>
 
     <!-- begin add item modal -->
-    <div id="addItemModal" class="inventory-modal">
+    <div id="addItemModal" class="inventory-modal" onload="document.add-item-form.itemName.focus();">
         <div id = "modalContent" class="inventory-modal-content">
             <span class="closeBtn" onclick="closeAddModal()"> &times;</span>
             <div class="col-sm">
@@ -129,7 +129,7 @@
                 <form id="add-item-form">
                     <div class="form-group">
                     <label for="itemName" class="bmd-label-floating">Item Name</label>
-                    <input id="itemName" name="itemName" type="text" class="form-control here" required="required">
+                    <input id="itemName" name="itemName" type="text" class="form-control here" required="required" autofocus>
                     <span class="bmd-help">Example: Kellogg's Cereal</span>
                     </div>
                     <div class="form-group">
@@ -259,7 +259,7 @@
           
                       <div class="form-group">
                         <label for="editItemBarcode" class="bmd-label-floating">Barcode</label>
-                        <input id="editItemBarcode" name="editItemBarcode" type="text" class="form-control here" required="required">
+                        <input id="editItemBarcode" name="editItemBarcode" type="text" class="form-control here" required="required" autofocus>
                         <span class="bmd-help">Example: 024000222040</span>
                       </div>
                         <button id="editItemBarcodeSubmit" type="submit" class="btn btn-primary">Submit</button>

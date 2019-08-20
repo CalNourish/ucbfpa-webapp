@@ -93,7 +93,6 @@ function closeAddModal() {
 }
 
 function openEditModal(barcode) {
-  console.log(barcode);
   editItemModal.style.display = 'block';
   if (barcode) {
       loadItemIntoEditForm(barcode);
