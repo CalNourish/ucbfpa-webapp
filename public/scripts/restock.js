@@ -223,6 +223,21 @@ function saveItem() {
   var cost = document.getElementById('cost').value;
   var count = document.getElementById('count').value;
 
+  //check if barcode already exists in database
+  var isDuplicate = firebase.database().ref('barcodes').once('value').then((data) => {
+    var barcodesFromDb = data.val();
+    var barcodes = [];
+    for (const [bc, itemID] of Object.entries(barcodesFromDb)) {
+      barcodes.push(bc);
+    }
+    return (barcodes.indexOf(barcode) >= 0);
+  });
+
+  if (isDuplicate) {
+    alert('An item with this barcode already exists.');
+    return;
+  }
+
   // Generate hashmap that has list of categories for this item.
   var categoryName = {};
   getCategories().forEach(function(value, index, array) {
