@@ -224,18 +224,16 @@ function saveItem() {
   var count = document.getElementById('count').value;
 
   //check if barcode already exists in database
-  var isDuplicate = false;
   firebase.database().ref('barcodes').once('value').then((data) => {
     var barcodesFromDb = data.val();
     var barcodes = [];
     for (const [bc, itemID] of Object.entries(barcodesFromDb)) {
       barcodes.push(bc);
     }
-    isDuplicate = (barcodes.indexOf(barcode) >= 0);
+    var isDuplicate = (barcodes.indexOf(barcode) >= 0);
     console.log(isDuplicate);
     if (isDuplicate === true) {
       alert('An item with this barcode already exists.');
-      throw('Item already exists.');
       return;
     } else {
         // Generate hashmap that has list of categories for this item.

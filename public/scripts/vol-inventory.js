@@ -112,24 +112,18 @@ function standardizeName(itemName) {
 }
 
   function setOutOfStock(itemName, barcode) {
-    console.log(barcode);
     if (confirm("Set " + itemName + " to Out of Stock?")) {
       return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
         var itemID = barcodesTable.val()[barcode];
         firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
           var item = inventoryTable.val();
-          console.log(item);
-          console.log(item.barcode);
           updateTo(itemID, item.itemName, item.barcode, item.cost, "0", item.categoryName);
         });
       });
-    } else {
-      console.log("action cancelled");
     }
 }
 
 function goToEditItem(barcode) {
-  console.log(barcode);
   openEditModal();
 }
 
