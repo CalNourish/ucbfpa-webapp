@@ -218,9 +218,7 @@ $("td > input").on("change", () => {
     inputChanged = true;
 })
 
-try {
-    defaultHoursForm.addEventListener('submit', changeDefaultHours);    
-
+defaultHoursForm.addEventListener('submit', changeDefaultHours);    
 
 adminPageSetup()
 
@@ -240,9 +238,6 @@ toastr.options = {
     "hideEasing": "linear",
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut"
-}
-} catch (e) {
-    console.log(e);
 }
 
 
