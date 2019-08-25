@@ -193,7 +193,11 @@ function changeDefaultHours(e) {
         let close24 = '';
         let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]['restock']
         //update restodckindicators table with the checked boxes 
+        let boxes_checked = 0;
         for (let j = 0; j < Object.keys(restock_today).length; j++) {
+            if (document.getElementById(i + '_' + j).checked) {
+                boxes_checked++;
+            }
             if (document.getElementById(i + '_' + j).checked && restock_today[Object.keys(restock_today)[j]] === 0) {
                 //update appropriate restock indicators in RESTOCK_INDICATORS dictionary
                 restock_today[Object.keys(restock_today)[j]] = 1;
@@ -203,6 +207,10 @@ function changeDefaultHours(e) {
                 inputChanged = true;
             }
         }
+        if (boxes_checked == 0) {
+            alert("If nothing is restocked, please check None.");
+            return;
+          }
 
 
 
