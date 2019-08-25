@@ -20,13 +20,13 @@ const DAYS_TIMES = {
 }
 
 const RESTOCK_INDICATORS = {
-    '-sunday': '',
-    '-monday': '',
-    '-tuesday': '', 
-    '-wednesday': '',
-    '-thursday': '',
-    '-friday': '',
-    '-saturday': ''
+    '-sunday': {},
+    '-monday': {},
+    '-tuesday': {}, 
+    '-wednesday': {},
+    '-thursday': {},
+    '-friday': {},
+    '-saturday': {}
 }
 
 // Days array
@@ -69,8 +69,9 @@ function adminPageSetup() {
     info().then(value => {
         for (let key in DAYS_TIMES) {
             if (key in value) {
+                // console.log(value[key]["24hours"]);
                 DAYS_TIMES[key] = convertTime(value[key]["24hours"]);
-                RESTOCK_INDICATORS[key] = value[key]["restock"];
+                RESTOCK_INDICATORS[key]['restock'] = value[key]["restock"];
             }
         }
         let hoursTable = document.getElementById("pantry-hours")
@@ -80,7 +81,7 @@ function adminPageSetup() {
             let currentDay = weekday[(day.getDay() + i) % 7];
             // Find in the dictionary because we named it in weird way in the actual db
             let time = DAYS_TIMES["-" + currentDay.toLowerCase()]
-            let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]
+            let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]['restock']
 
             currentRow[0].textContent = currentDay
             let open = currentRow[1].children
@@ -98,7 +99,8 @@ function adminPageSetup() {
             }
             //Make checkboxes for the number of restock indicators in the database
             for (let j = 0; j < Object.keys(restock_today).length; j++) {
-                let id_string = 'id = ' + i + '_' + j; //ensure each checkbox element has own id.
+                //ensure each checkbox element has own id.
+                let id_string = 'id = ' + i + '_' + j; 
                 var checkbox = $('<td><div class="form-check col-4"> \
                 <label class="form-check-label" vertical-align=middle> \
                     <input ' + id_string + ' class="form-check-input" type="checkbox" value="" vertical-align=middle> \
@@ -113,7 +115,6 @@ function adminPageSetup() {
                     toCheck.checked = true; 
                 }
             }
-            
         }
     });
 }
@@ -175,7 +176,8 @@ function changeDefaultHours(e) {
     for (let key in DAYS_TIMES) {
         DAYS_TIMES[key] = {
             '24hours': '',
-            '12hours': ''
+            '12hours': '',
+            'restock': {}
         }
     }
     let hoursTable = document.getElementById("pantry-hours")
@@ -189,6 +191,22 @@ function changeDefaultHours(e) {
         let close12 = close[0].value
         let open24 = '';
         let close24 = '';
+        let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]['restock']
+        //update restodckindicators table with the checked boxes 
+        for (let j = 0; j < Object.keys(restock_today).length; j++) {
+            if (document.getElementById(i + '_' + j).checked && restock_today[Object.keys(restock_today)[j]] === 0) {
+                //update appropriate restock indicators in RESTOCK_INDICATORS dictionary
+                restock_today[Object.keys(restock_today)[j]] = 1;
+                inputChanged = true;
+            } else if (!document.getElementById(i + '_' + j).checked && restock_today[Object.keys(restock_today)[j]] === 1) {
+                restock_today[Object.keys(restock_today)[j]] = 0;
+                inputChanged = true;
+            }
+        }
+
+
+
+        
 
         // Check for closed and make conversions
         if (open12 == "Closed" || open12 == '') {
@@ -221,8 +239,8 @@ function changeDefaultHours(e) {
             DAYS_TIMES["-" + currentDay.toLowerCase()]['24hours'] = open24 + " - " + close24
             DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = open12 + " - " + close12
         }
+        DAYS_TIMES["-" + currentDay.toLowerCase()]['restock'] = restock_today
     }
-    console.log('input changed: ' + inputChanged);   
     if (inputChanged) {
         if (validHours) {
             REF.update(DAYS_TIMES)
