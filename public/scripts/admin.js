@@ -19,6 +19,16 @@ const DAYS_TIMES = {
     '-saturday': ''
 }
 
+const RESTOCK_INDICATORS = {
+    '-sunday': '',
+    '-monday': '',
+    '-tuesday': '', 
+    '-wednesday': '',
+    '-thursday': '',
+    '-friday': '',
+    '-saturday': ''
+}
+
 // Days array
 var weekday = new Array(7);
 weekday[0] =  "Sunday";
@@ -60,6 +70,7 @@ function adminPageSetup() {
         for (let key in DAYS_TIMES) {
             if (key in value) {
                 DAYS_TIMES[key] = convertTime(value[key]["24hours"]);
+                RESTOCK_INDICATORS[key] = value[key]["restock"];
             }
         }
         let hoursTable = document.getElementById("pantry-hours")
@@ -69,9 +80,11 @@ function adminPageSetup() {
             let currentDay = weekday[(day.getDay() + i) % 7];
             // Find in the dictionary because we named it in weird way in the actual db
             let time = DAYS_TIMES["-" + currentDay.toLowerCase()]
+            let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]
+
             currentRow[0].textContent = currentDay
             let open = currentRow[1].children
-            let closed = currentRow[2].children
+            let closed = currentRow[2].children            
             if (time[0] == "Closed") {
                 open[0].value = time[0]
                 closed[0].value = ''
@@ -83,6 +96,24 @@ function adminPageSetup() {
                     closed[0].value = time[1]
                 }
             }
+            //Make checkboxes for the number of restock indicators in the database
+            for (let j = 0; j < Object.keys(restock_today).length; j++) {
+                let id_string = 'id = ' + i + '_' + j; //ensure each checkbox element has own id.
+                var checkbox = $('<td><div class="form-check col-4"> \
+                <label class="form-check-label" vertical-align=middle> \
+                    <input ' + id_string + ' class="form-check-input" type="checkbox" value="" vertical-align=middle> \
+                    <span class="form-check-sign">\
+                        <span class="check"></span>\
+                    </span>\
+                </label>\
+                </div></td>');
+                checkbox.appendTo('#day' + i);
+                if (restock_today[Object.keys(restock_today)[j]] == 1) {
+                    let toCheck = document.getElementById(i + "_" + j);
+                    toCheck.checked = true; 
+                }
+            }
+            
         }
     });
 }
@@ -190,7 +221,8 @@ function changeDefaultHours(e) {
             DAYS_TIMES["-" + currentDay.toLowerCase()]['24hours'] = open24 + " - " + close24
             DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = open12 + " - " + close12
         }
-    }   
+    }
+    console.log('input changed: ' + inputChanged);   
     if (inputChanged) {
         if (validHours) {
             REF.update(DAYS_TIMES)
