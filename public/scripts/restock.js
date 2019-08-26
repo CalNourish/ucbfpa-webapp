@@ -231,54 +231,80 @@ function saveItem() {
     // console.log(checkbox.checked);
     if (checkbox !== null && checkbox.checked) {
       categoryName[value] = value;
+      
+  //check if barcode already exists in database
+  firebase.database().ref('barcodes').once('value').then((data) => {
+    var barcodesFromDb = data.val();
+    var barcodes = [];
+    for (const [bc, itemID] of Object.entries(barcodesFromDb)) {
+      barcodes.push(bc);
+    }
+    var isDuplicate = (barcodes.indexOf(barcode) >= 0);
+    console.log(isDuplicate);
+    if (isDuplicate === true) {
+      alert('An item with this barcode already exists.');
+      return;
+    } else {
+        // Generate hashmap that has list of categories for this item.
+        var categoryName = {};
+        getCategories().forEach(function(value, index, array) {
+          console.log(value);
+          var checkbox = document.getElementById(value);
+          // console.log(checkbox.checked);
+          if (checkbox !== null && checkbox.checked) {
+            categoryName[value] = value;
+          }
+        });
+
+        // Connect the generated item ID to this barcode.
+        var barcodeToID = {};
+        barcodeToID[barcode] = itemID;
+        firebase.database().ref('/barcodes/').update(barcodeToID).catch(function(error) {
+          console.error('Error writing [' + barcode + ' : ' + itemID + '] to /barcodes/', error);
+        });
+
+        // Save to inventory this new item to the generated item ID.
+        var itemInfo = {
+          createdBy: getUserName(),
+          itemName: itemName,
+          barcode: barcode,
+          cost: cost,
+          count: count,
+          categoryName: categoryName,
+          imageName: itemName.replace(/\s/g, '') + '.jpg'
+        }
+        if (JSON.stringify(itemInfo.categoryName) === '{}') {
+          alert("You must check at least one category.");
+          return;
+        }
+
+        // If an image was included, also upload the image to Cloud Storage.
+        if (typeof itemImageFile !== "undefined") {
+          var filePath = firebase.auth().currentUser.uid + '/' + itemID + '/' + itemImageFile.name;
+          return firebase.storage().ref(filePath).put(itemImageFile).then(function(fileSnapshot) {
+            return fileSnapshot.ref.getDownloadURL().then(function(url) {
+              itemInfo["imageUrl"] = url;
+              itemInfo["storageUri"] = fileSnapshot.metadata.fullPath;
+              return firebase.database().ref('/inventory/' + itemID).update(itemInfo).catch(function(error) {
+                console.error('Error writing item to /inventory/' + itemID, error);
+              });
+            });
+          });
+        }
+
+        return firebase.database()
+                  .ref('/inventory/' + itemID)
+                  .update(itemInfo)
+                  .catch(function(error) {
+                      console.error('Error writing item to /inventory/' + itemID, error);
+                      })
+                  .then(document.getElementById("add-item-form").reset()
+                  );
     }
   });
+ 
 
 
-  // Connect the generated item ID to this barcode.
-  var barcodeToID = {};
-  barcodeToID[barcode] = itemID;
-  firebase.database().ref('/barcodes/').update(barcodeToID).catch(function(error) {
-    console.error('Error writing [' + barcode + ' : ' + itemID + '] to /barcodes/', error);
-  });
-
-  // Save to inventory this new item to the generated item ID.
-  var itemInfo = {
-    createdBy: getUserName(),
-    itemName: itemName,
-    barcode: barcode,
-    cost: cost,
-    count: count,
-    categoryName: categoryName,
-    imageName: itemName.replace(/\s/g, '') + '.jpg'
-  }
-  if (JSON.stringify(itemInfo.categoryName) === '{}') {
-    alert("You must check at least one category.");
-    return;
-  }
-
-  // If an image was included, also upload the image to Cloud Storage.
-  if (typeof itemImageFile !== "undefined") {
-    var filePath = firebase.auth().currentUser.uid + '/' + itemID + '/' + itemImageFile.name;
-    return firebase.storage().ref(filePath).put(itemImageFile).then(function(fileSnapshot) {
-      return fileSnapshot.ref.getDownloadURL().then(function(url) {
-        itemInfo["imageUrl"] = url;
-        itemInfo["storageUri"] = fileSnapshot.metadata.fullPath;
-        return firebase.database().ref('/inventory/' + itemID).update(itemInfo).catch(function(error) {
-          console.error('Error writing item to /inventory/' + itemID, error);
-        });
-      });
-    });
-  }
-
-  return firebase.database()
-            .ref('/inventory/' + itemID)
-            .update(itemInfo)
-            .catch(function(error) {
-                console.error('Error writing item to /inventory/' + itemID, error);
-                })
-            .then(document.getElementById("add-item-form").reset()
-            );
 }
 
 // Triggered when the add new item form is submitted.
