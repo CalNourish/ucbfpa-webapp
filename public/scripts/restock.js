@@ -226,7 +226,6 @@ function saveItem() {
   // Generate hashmap that has list of categories for this item.
   var categoryName = {};
   getCategories().forEach(function(value, index, array) {
-    // console.log(value);
     var checkbox = document.getElementById(value);
     // console.log(checkbox.checked);
     if (checkbox !== null && checkbox.checked) {
