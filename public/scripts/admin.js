@@ -19,6 +19,7 @@ const DAYS_TIMES = {
     '-saturday': ''
 }
 
+//Dictionary to hold the categories that are restocked each day
 const RESTOCK_INDICATORS = {
     '-sunday': {},
     '-monday': {},
@@ -38,9 +39,6 @@ weekday[3] = "Wednesday";
 weekday[4] = "Thursday";
 weekday[5] = "Friday";
 weekday[6] = "Saturday";
-
-
-
 
 let convertTime = time => {
     if (time != 'Closed' ) {
@@ -97,18 +95,22 @@ function adminPageSetup() {
                     closed[0].value = time[1]
                 }
             }
-            //Make checkboxes for the number of restock indicators in the database
+
+            // Make checkboxes for the number of restock indicators in the database
             for (let j = 0; j < Object.keys(restock_today).length; j++) {
-                //ensure each checkbox element has own id.
+                // Ensure each checkbox element has a unique id (day + _ + position).
                 let id_string = 'id = ' + i + '_' + j; 
-                var checkbox = $('<td><div class="form-check col-4"> \
-                <label class="form-check-label" vertical-align=middle> \
-                    <input ' + id_string + ' class="form-check-input" type="checkbox" value="" vertical-align=middle> \
-                    <span class="form-check-sign">\
-                        <span class="check"></span>\
-                    </span>\
-                </label>\
-                </div></td>');
+                var checkbox = $(
+                    '<td>\
+                        <div class="form-check col-4"> \
+                            <label class="form-check-label" vertical-align=middle> \
+                                <input ' + id_string + ' class="form-check-input" type="checkbox" value="" vertical-align=middle> \
+                                <span class="form-check-sign"> \
+                                    <span class="check"></span> \
+                                </span> \
+                            </label> \
+                        </div> \
+                    </td>');
                 checkbox.appendTo('#day' + i);
                 if (restock_today[Object.keys(restock_today)[j]] == 1) {
                     let toCheck = document.getElementById(i + "_" + j);
@@ -173,6 +175,8 @@ function changeDefaultHours(e) {
     e.preventDefault()
     let validHours = true;
     var day = new Date();
+
+    // Format dictionary for db push
     for (let key in DAYS_TIMES) {
         DAYS_TIMES[key] = {
             '24hours': '',
@@ -192,7 +196,8 @@ function changeDefaultHours(e) {
         let open24 = '';
         let close24 = '';
         let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]['restock']
-        //update restodckindicators table with the checked boxes 
+
+        // Update restock indicators table with the checked boxes 
         let boxes_checked = 0;
         for (let j = 0; j < Object.keys(restock_today).length; j++) {
             if (document.getElementById(i + '_' + j).checked) {
@@ -211,10 +216,6 @@ function changeDefaultHours(e) {
             alert("If nothing is restocked, please check None.");
             return;
           }
-
-
-
-        
 
         // Check for closed and make conversions
         if (open12 == "Closed" || open12 == '') {
@@ -247,6 +248,8 @@ function changeDefaultHours(e) {
             DAYS_TIMES["-" + currentDay.toLowerCase()]['24hours'] = open24 + " - " + close24
             DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = open12 + " - " + close12
         }
+
+        // Transfer new info from RESTOCK_INDICATORS to DAYS_TIMES for database push.
         DAYS_TIMES["-" + currentDay.toLowerCase()]['restock'] = restock_today
     }
     if (inputChanged) {
@@ -265,8 +268,6 @@ function changeDefaultHours(e) {
     } else {
         toastr.info("Hours did not change")
     }
-
-
 }
 
 // Check is input has changed

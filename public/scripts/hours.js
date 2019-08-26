@@ -18,6 +18,7 @@ const DAYS_TIMES = {
     '-saturday': ''
 }
 
+//Dictionary for the categories that are restocked each day
 const RESTOCK_INDICATORS = {
   '-sunday': {},
   '-monday': {},
@@ -28,6 +29,7 @@ const RESTOCK_INDICATORS = {
   '-saturday': {}
 }
 
+//Dictionary for emojis for each resotck category
 const EMOJIS = {
   '-none':'',
   'bread': '🥖',
@@ -96,12 +98,11 @@ function getHours() {
             currentRow[1].textContent = time[0] + " - " + time[1]
           }
 
-          for (let j = 0; j < Object.keys(restock_today).length; j++) {
-            //ensure each checkbox element has own id.
+          for (let j = 0; j < Object.keys(restock_today).length; j++) { 
+            // If the category gets restocked today, append the emoji to today's row.
             if (restock_today[Object.keys(restock_today)[j]] == 1) {
               let emojiName = EMOJIS[Object.keys(restock_today)[j]];
               let emoji = $('<td class="hours">' + emojiName + '</td>');
-              console.log(Object.keys(restock_today)[j]);
               emoji.appendTo('#day' + i);
             }
         }
