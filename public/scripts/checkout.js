@@ -2,10 +2,15 @@
 
 var form = document.getElementById('checkout-item-form');
 var groceryList = document.querySelector('ol');
+var finished = document.getElementById('backToCheckout')
 
-function goToCheckout() {
-  window.location.href = "/pantry-volunteers/checkout";
-}
+finished.addEventListener("click", (e) => {
+  e.preventDefault()
+  if (groceryList.childElementCount > 0) {
+    $('#grocery-list').empty();
+    toastr.info('Checked out')
+  }
+})
 
 function checkoutItem(barcodeScanned, amount) {
   var barcode = barcodeScanned.value;
