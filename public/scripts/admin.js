@@ -256,7 +256,7 @@ function changeDefaultHours(e) {
         if (validHours) {
             REF.update(DAYS_TIMES)
             .then(function() {
-                toastr.info('Hours set')
+                toastr.info('Hours and restock indicators set')
             })
             .catch(function(error) {
                 console.error('Error updating hours', error);
