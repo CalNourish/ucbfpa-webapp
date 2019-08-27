@@ -213,7 +213,6 @@ function changeDefaultHours(e) {
             }
         }
         if (boxes_checked == 0) {
-            // alert("If nothing is restocked, please check None.");
             toastr.error("If nothing is restocked, please check None.")
             return;
           }
