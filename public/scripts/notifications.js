@@ -84,15 +84,35 @@ function sendNotification(event) {
             .then(function() {
                 notifTitleElement.value = '';
                 notifTextElement.value = '';
+                toastr.info('Notification sent')
             })
             .catch(function(error) {
                 console.error('Error saving order to /notification', error);
+                toastr.error(error, "Error sending notification")
             });
         }
     }
 
 
 
+}
+
+// Toast options
+toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-bottom-right",
+    "preventDuplicates": false,
+    "showDuration": "200",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "2000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
 }
 
 getMostRecentNotifications();
