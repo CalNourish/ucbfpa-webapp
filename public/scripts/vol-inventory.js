@@ -111,16 +111,16 @@ function standardizeName(itemName) {
   return newName;
 }
 
-  function setOutOfStock(itemName, barcode) {
-    if (confirm("Set " + itemName + " to Out of Stock?")) {
-      return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-        var itemID = barcodesTable.val()[barcode];
-        firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-          var item = inventoryTable.val();
-          updateTo(itemID, item.itemName, item.barcode, item.cost, "0", item.categoryName);
-        });
+function setOutOfStock(itemName, barcode) {
+  if (confirm("Set " + itemName + " to Out of Stock?")) {
+    return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
+      var itemID = barcodesTable.val()[barcode];
+      firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
+        var item = inventoryTable.val();
+        updateTo(itemID, item.itemName, item.barcode, item.cost, "0", item.categoryName);
       });
-    }
+    });
+  }
 }
 
 function goToEditItem(barcode) {

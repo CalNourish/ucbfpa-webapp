@@ -126,8 +126,12 @@ function updateItem() {
       .update(itemInfo)
       .catch(function(error) {
         console.error('Error writing item to /inventory/' + itemID, error);
+        toastr.error(error, "Error writing item to inventory")
         })
-      .then(document.getElementById("edit-item-form").reset()
+      .then( () => {
+        document.getElementById("edit-item-form").reset();
+        toastr.info("Edit Successful");
+      }
     );
 }
 
@@ -288,8 +292,12 @@ function saveItem() {
                   .update(itemInfo)
                   .catch(function(error) {
                       console.error('Error writing item to /inventory/' + itemID, error);
+                      toastr.error(error, "Error adding new item")
                       })
-                  .then(document.getElementById("add-item-form").reset()
+                  .then(() => {
+                    document.getElementById("add-item-form").reset();
+                    toastr.info("New item successfully added");
+                    }
                   );
     }
   });
@@ -379,3 +387,21 @@ editItemFormBarcodeElement.addEventListener('submit', onEditBarcodeItemFormSubmi
 // Events for image upload.
 addItemImageDialogElement.addEventListener('change', onAddItemImageSelected);
 editItemImageDialogElement.addEventListener('change', onAddItemImageSelected);
+
+// Toast options
+toastr.options = {
+  "closeButton": false,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": false,
+  "positionClass": "toast-bottom-right",
+  "preventDuplicates": false,
+  "showDuration": "200",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "2000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+}
