@@ -96,8 +96,8 @@ function adminPageSetup() {
                 }
             }
 
-            // Make checkboxes for the number of restock indicators in the database
-            for (let j = 0; j < Object.keys(restock_today).length; j++) {
+            // Make checkboxes for the number of restock indicators in the database. Skip displaying the "None" category.
+            for (let j = 1; j < Object.keys(restock_today).length; j++) {
                 // Ensure each checkbox element has a unique id (day + _ + position).
                 let id_string = 'id = ' + i + '_' + j; 
                 var checkbox = $(
@@ -199,7 +199,7 @@ function changeDefaultHours(e) {
 
         // Update restock indicators table with the checked boxes 
         let boxes_checked = 0;
-        for (let j = 0; j < Object.keys(restock_today).length; j++) {
+        for (let j = 1; j < Object.keys(restock_today).length; j++) {
             if (document.getElementById(i + '_' + j).checked) {
                 boxes_checked++;
             }
@@ -213,8 +213,7 @@ function changeDefaultHours(e) {
             }
         }
         if (boxes_checked == 0) {
-            toastr.error("If nothing is restocked, please check None.")
-            return;
+            restock_today[Object.keys(restock_today)[0]] = 1;
           }
 
         // Check for closed and make conversions
