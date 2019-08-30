@@ -19,6 +19,17 @@ const DAYS_TIMES = {
     '-saturday': ''
 }
 
+//Dictionary to hold the categories that are restocked each day
+const RESTOCK_INDICATORS = {
+    '-sunday': {},
+    '-monday': {},
+    '-tuesday': {}, 
+    '-wednesday': {},
+    '-thursday': {},
+    '-friday': {},
+    '-saturday': {}
+}
+
 // Days array
 var weekday = new Array(7);
 weekday[0] =  "Sunday";
@@ -28,9 +39,6 @@ weekday[3] = "Wednesday";
 weekday[4] = "Thursday";
 weekday[5] = "Friday";
 weekday[6] = "Saturday";
-
-
-
 
 let convertTime = time => {
     if (time != 'Closed' ) {
@@ -59,7 +67,9 @@ function adminPageSetup() {
     info().then(value => {
         for (let key in DAYS_TIMES) {
             if (key in value) {
+                // console.log(value[key]["24hours"]);
                 DAYS_TIMES[key] = convertTime(value[key]["24hours"]);
+                RESTOCK_INDICATORS[key]['restock'] = value[key]["restock"];
             }
         }
         let hoursTable = document.getElementById("pantry-hours")
@@ -69,9 +79,11 @@ function adminPageSetup() {
             let currentDay = weekday[(day.getDay() + i) % 7];
             // Find in the dictionary because we named it in weird way in the actual db
             let time = DAYS_TIMES["-" + currentDay.toLowerCase()]
+            let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]['restock']
+
             currentRow[0].textContent = currentDay
             let open = currentRow[1].children
-            let closed = currentRow[2].children
+            let closed = currentRow[2].children            
             if (time[0] == "Closed") {
                 open[0].value = time[0]
                 closed[0].value = ''
@@ -81,6 +93,28 @@ function adminPageSetup() {
                 }
                 if (closed) {
                     closed[0].value = time[1]
+                }
+            }
+
+            // Make checkboxes for the number of restock indicators in the database. Skip displaying the "None" category.
+            for (let j = 1; j < Object.keys(restock_today).length; j++) {
+                // Ensure each checkbox element has a unique id (day + _ + position).
+                let id_string = 'id = ' + i + '_' + j; 
+                var checkbox = $(
+                    '<td>\
+                        <div class="form-check col-4"> \
+                            <label class="form-check-label" vertical-align=middle> \
+                                <input ' + id_string + ' class="form-check-input" type="checkbox" value="" vertical-align=middle> \
+                                <span class="form-check-sign"> \
+                                    <span class="check"></span> \
+                                </span> \
+                            </label> \
+                        </div> \
+                    </td>');
+                checkbox.appendTo('#day' + i);
+                if (restock_today[Object.keys(restock_today)[j]] == 1) {
+                    let toCheck = document.getElementById(i + "_" + j);
+                    toCheck.checked = true; 
                 }
             }
         }
@@ -141,10 +175,13 @@ function changeDefaultHours(e) {
     e.preventDefault()
     let validHours = true;
     var day = new Date();
+
+    // Format dictionary for db push
     for (let key in DAYS_TIMES) {
         DAYS_TIMES[key] = {
             '24hours': '',
-            '12hours': ''
+            '12hours': '',
+            'restock': {}
         }
     }
     let hoursTable = document.getElementById("pantry-hours")
@@ -158,6 +195,26 @@ function changeDefaultHours(e) {
         let close12 = close[0].value
         let open24 = '';
         let close24 = '';
+        let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]['restock']
+
+        // Update restock indicators table with the checked boxes 
+        let boxes_checked = 0;
+        for (let j = 1; j < Object.keys(restock_today).length; j++) {
+            if (document.getElementById(i + '_' + j).checked) {
+                boxes_checked++;
+            }
+            if (document.getElementById(i + '_' + j).checked && restock_today[Object.keys(restock_today)[j]] === 0) {
+                //update appropriate restock indicators in RESTOCK_INDICATORS dictionary
+                restock_today[Object.keys(restock_today)[j]] = 1;
+                inputChanged = true;
+            } else if (!document.getElementById(i + '_' + j).checked && restock_today[Object.keys(restock_today)[j]] === 1) {
+                restock_today[Object.keys(restock_today)[j]] = 0;
+                inputChanged = true;
+            }
+        }
+        if (boxes_checked == 0) {
+            restock_today[Object.keys(restock_today)[0]] = 1;
+          }
 
         // Check for closed and make conversions
         if (open12 == "Closed" || open12 == '') {
@@ -190,12 +247,15 @@ function changeDefaultHours(e) {
             DAYS_TIMES["-" + currentDay.toLowerCase()]['24hours'] = open24 + " - " + close24
             DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = open12 + " - " + close12
         }
-    }   
+
+        // Transfer new info from RESTOCK_INDICATORS to DAYS_TIMES for database push.
+        DAYS_TIMES["-" + currentDay.toLowerCase()]['restock'] = restock_today
+    }
     if (inputChanged) {
         if (validHours) {
             REF.update(DAYS_TIMES)
             .then(function() {
-                toastr.info('Hours set')
+                toastr.info('Hours and restock indicators set')
             })
             .catch(function(error) {
                 console.error('Error updating hours', error);
@@ -207,8 +267,6 @@ function changeDefaultHours(e) {
     } else {
         toastr.info("Hours did not change")
     }
-
-
 }
 
 // Check is input has changed

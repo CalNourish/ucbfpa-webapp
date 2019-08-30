@@ -13,7 +13,16 @@ $(document).ready(function() {
     let res = snapshot.val()
     for (let item in res) {
       let currentItem = res[item]
-      allItems.push(`<div class='card item-card'><div class='item-img-wrapper'><img class='card-img-top item-img-placeholder' src='../images/pantry_logo.png' alt='Card image cap'></div><div class='item-card card-body'><h4 class='item-name'>${currentItem.itemName}</h4><p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p></div></div>`)
+      allItems.push(
+        `<div class='card item-card'>
+          <div class='item-img-wrapper'>
+            <img class='card-img-top item-img-placeholder' src='../images/pantry_logo.png' alt='Card image cap'>
+          </div>
+          <div class='item-card card-body'>
+            <h4 class='item-name'>${currentItem.itemName}</h4>
+            <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
+          </div>
+        </div>`)
     }
     // append to dom
     $("#inventory-items").append(allItems)

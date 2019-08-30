@@ -223,6 +223,15 @@ function saveItem() {
   var cost = document.getElementById('cost').value;
   var count = document.getElementById('count').value;
 
+  // Generate hashmap that has list of categories for this item.
+  var categoryName = {};
+  getCategories().forEach(function(value, index, array) {
+    // console.log(value);
+    var checkbox = document.getElementById(value);
+    // console.log(checkbox.checked);
+    if (checkbox !== null && checkbox.checked) {
+      categoryName[value] = value;
+      
   //check if barcode already exists in database
   firebase.database().ref('barcodes').once('value').then((data) => {
     var barcodesFromDb = data.val();
