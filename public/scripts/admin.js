@@ -63,7 +63,8 @@ let info = async () => {
 }
 
 function adminPageSetup() {
-    var day = new Date();
+    // Uncomment below to make days rotate with the current day on top
+    // var day = new Date();
     info().then(value => {
         for (let key in DAYS_TIMES) {
             if (key in value) {
@@ -76,7 +77,11 @@ function adminPageSetup() {
         let rows = hoursTable.querySelectorAll("tr");
         for (let i = 0; i < 7; i++) {
             let currentRow = rows[i].children
-            let currentDay = weekday[(day.getDay() + i) % 7];
+            let currentDay = weekday[i];
+
+            // Uncomment below to make days rotate with the current day on top
+            // let currentDay = weekday[(day.getDay() + i) % 7];
+
             // Find in the dictionary because we named it in weird way in the actual db
             let time = DAYS_TIMES["-" + currentDay.toLowerCase()]
             let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]['restock']
@@ -174,7 +179,8 @@ const validateHours = (open, closed) => {
 function changeDefaultHours(e) {
     e.preventDefault()
     let validHours = true;
-    var day = new Date();
+    // Uncomment below to make days rotate with the current day on top
+    // var day = new Date();
 
     // Format dictionary for db push
     for (let key in DAYS_TIMES) {
@@ -188,7 +194,11 @@ function changeDefaultHours(e) {
     let rows = hoursTable.querySelectorAll("tr");
     for (let i = 0; i < 7; i++) {
         let currentRow = rows[i].children
-        let currentDay = weekday[(day.getDay() + i) % 7];
+        let currentDay = weekday[i];
+
+        // Uncomment below to make days rotate with the current day on top
+        // let currentDay = weekday[(day.getDay() + i) % 7];
+
         let open = currentRow[1].children
         let close = currentRow[2].children
         let open12 = open[0].value
@@ -233,23 +243,23 @@ function changeDefaultHours(e) {
         // Make sure hours are valid
         if (open24 != "Closed" && close24 != "Closed") {
             if (!validateHours(open24, close24)) {
+                currentRow[1].classList.add("invalid-hours")
+                currentRow[2].classList.add("invalid-hours")
                 validHours = false;
-                break;
             }
         }
 
-
-        // Set in db
-        if (open24 == "Closed" || close24 == "Closed") {
-            DAYS_TIMES["-" + currentDay.toLowerCase()]['24hours'] = "Closed"
-            DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = "Closed"
-        } else {
-            DAYS_TIMES["-" + currentDay.toLowerCase()]['24hours'] = open24 + " - " + close24
-            DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = open12 + " - " + close12
+        if (validHours) {
+            if (open24 == "Closed" || close24 == "Closed") {
+                DAYS_TIMES["-" + currentDay.toLowerCase()]['24hours'] = "Closed"
+                DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = "Closed"
+            } else {
+                DAYS_TIMES["-" + currentDay.toLowerCase()]['24hours'] = open24 + " - " + close24
+                DAYS_TIMES["-" + currentDay.toLowerCase()]['12hours'] = open12 + " - " + close12
+            }
+            // Transfer new info from RESTOCK_INDICATORS to DAYS_TIMES for database push.
+            DAYS_TIMES["-" + currentDay.toLowerCase()]['restock'] = restock_today
         }
-
-        // Transfer new info from RESTOCK_INDICATORS to DAYS_TIMES for database push.
-        DAYS_TIMES["-" + currentDay.toLowerCase()]['restock'] = restock_today
     }
     if (inputChanged) {
         if (validHours) {
@@ -272,9 +282,18 @@ function changeDefaultHours(e) {
 // Check is input has changed
 let inputChanged = false;
 // Check for input changes
-$("td > input").on("change", () => {
+$("td > input").on("change", (input) => {
     inputChanged = true;
+
+    // Remove error background color if present 
+    let row = $(input)[0].target.parentNode.parentNode.children
+    let open = row[1]
+    let closed = row[2]
+    open.classList.remove("invalid-hours")
+    closed.classList.remove("invalid-hours")
 })
+
+
 
 defaultHoursForm.addEventListener('submit', changeDefaultHours);    
 
