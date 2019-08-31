@@ -97,7 +97,17 @@
   color: #000000
 }
 
-/* Card style for small screens */
+/* Card style for smaller screens */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+  .item-card.card {
+    height: 150px;
+    width: 100%;
+  }
+
+  .public-item {
+    padding-bottom: 20px;
+  }
+}
 @media screen and (max-width: 400px) {
   .item-card.card {
     height: 140px;
