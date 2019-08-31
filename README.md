@@ -1,71 +1,63 @@
 # CalNourish WebApp
 
-## Tutorial followed for setup: 
-`https://codelabs.developers.google.com/codelabs/firebase-web/#0`
+## Setup Tutorial
 
-## To run the webapp locally:
+We followed [this guide](https://codelabs.developers.google.com/codelabs/firebase-web/#0).
 
-**Setup:**
+## Quick Start
 
-`npm -g install firebase-tools`
+```npm -g install firebase-tools```
+```firebase login```
+```firebase use default```
 
-`firebase login`
+## Local Hosting
 
-`firebase use default`
+```firebase serve --only hosting```
+```✔  hosting: Local server: http://localhost:5000```
 
-<br>
+## Test and Prod Environments
 
-**From web directory:** 
-
-`firebase serve --only hosting`
-
-`✔  hosting: Local server: http://localhost:5000`
-
-
-<br>
-
-## Test and Prod Projects
 You should be granted access to the **TestCalNourish** and **ProdCalNourish** projects.
 
-View list of current aliases for this local project: `firebase use`
+View list of current aliases for this local project: ```firebase use```.
 
-**Add an alias:** Run `firebase use --add` to add aliases for the test and prod projects
+To add an alias, run ```firebase use --add``` to add aliases for the test and prod projects.
 
-**Switch between projects**: Run `firebase use <alias>`
+To switch between projects, run ```firebase use <alias>```.
 
-<br>
+## Deployment
 
-## Deploying
-**Make sure to make note of which firebase alias you are using when deploying**
+**Make sure to make note of which firebase alias you are using when deploying!**
 
-To deploy the webapp: `firebase deploy --except functions`
+To deploy the webapp: ```firebase deploy --except functions```
 
 **Test Deployment**: Feel free to deploy with **TestCalNourish** whenever to make sure things are stable
 
-**Prod Deployment**: When ready to deploy to prod, `git tag <version name>` the most recent commit to master and deploy from the prod alias 
+**Prod Deployment**: When ready to deploy to prod, ```git tag <version name>``` the most recent commit to master and deploy from the prod alias.
 
-## Setting up Amazon Cognito
+## Configuring Notifications with AWS Cognito and Lambda
 
-1. The next few steps were taken from this guide: [Setting up Amazon Cognito and the Amazon SDK for Javascript](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/getting-started-browser.html).
-2. Sign in to the AWS Management Console and open the Amazon Cognito console [here](https://console.aws.amazon.com/cognito/).
-3. We selected "us-west-1 (Oregon)" as our region.
-4. Choose "Manage Identity Pools" on the console opening page.
-5. On the next page, choose "Create new identity pool". If you have no existing identity pools, skip this step. It will automatically go to the pool creation page.
-6. In the Getting started wizard, type a name for your identity pool in Identity pool name. We picked ```CalNourish```.
-7. Choose "Enable access to unauthenticated identities".
-8. Choose "Create Pool".
-9. On the next page, choose "View Details" to see the names of the two IAM roles created for your identity pool. Make a note of the name of both roles.
-10. Choose "Allow".
-11. For the platform, select "Javascript".
-12. Under "Get AWS Credentials", remember this piece of code. You'll be adding it to the webapp.
-13. To reiterate, remember the names of the two IAM roles you created for your identity pool as well as the code snippet above.
-14. Go back to the IAM console [here](https://console.aws.amazon.com/iam/).
-15. In the navigation panel on the left of the page, choose Roles.
-16. In the list of IAM roles, click on the link for the unauthenticated identities role previously created by Amazon Cognito.
-17. In the "Summary" page for this role, choose "Attach policies".
-18. In the "Attach Permissions" page for this role, search for "Lambda" and then select the check box for AWSLambdaRole.
-19. Choose "Attach policy".
-20. Repeat for the authenticated identities role.
+Our sendNotification logic resides in AWS Lambda, and we use AWS Cognito to authenticate. The following guide will walk you step-by-step in recreating the installation instructions. For security, the credentials reside in the database. This guide was adapted from [Setting up Amazon Cognito and the Amazon SDK for Javascript](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/getting-started-browser.html).
+
+1. Sign in to the AWS Management Console and open the Amazon Cognito console [here](https://console.aws.amazon.com/cognito/).
+2. We selected "us-west-1 (Oregon)" as our region.
+3. Choose "Manage Identity Pools" on the console opening page.
+4. On the next page, choose "Create new identity pool". If you have no existing identity pools, skip this step. It will automatically go to the pool creation page.
+5. In the Getting started wizard, type a name for your identity pool in Identity pool name. We picked ```CalNourish```.
+6. Choose "Enable access to unauthenticated identities".
+7. Choose "Create Pool".
+8. On the next page, choose "View Details" to see the names of the two IAM roles created for your identity pool. Make a note of the name of both roles.
+9. Choose "Allow".
+10. For the platform, select "Javascript".
+11. Under "Get AWS Credentials", remember this piece of code. You'll be adding it to the webapp.
+12. To reiterate, remember the names of the two IAM roles you created for your identity pool as well as the code snippet above.
+13. Go back to the IAM console [here](https://console.aws.amazon.com/iam/).
+14. In the navigation panel on the left of the page, choose Roles.
+15. In the list of IAM roles, click on the link for the unauthenticated identities role previously created by Amazon Cognito.
+16. In the "Summary" page for this role, choose "Attach policies".
+17. In the "Attach Permissions" page for this role, search for "Lambda" and then select the check box for AWSLambdaRole.
+18. Choose "Attach policy".
+19. Repeat for the authenticated identities role.
 
 ## Setting up Amazon SDK in Browser
 
