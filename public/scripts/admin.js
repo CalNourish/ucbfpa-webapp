@@ -76,7 +76,11 @@ function adminPageSetup() {
         let rows = hoursTable.querySelectorAll("tr");
         for (let i = 0; i < 7; i++) {
             let currentRow = rows[i].children
-            let currentDay = weekday[(day.getDay() + i) % 7];
+            let currentDay = weekday[i];
+
+            // Uncomment below to make days rotate with the current day on top
+            // let currentDay = weekday[(day.getDay() + i) % 7];
+
             // Find in the dictionary because we named it in weird way in the actual db
             let time = DAYS_TIMES["-" + currentDay.toLowerCase()]
             let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]['restock']
@@ -188,7 +192,11 @@ function changeDefaultHours(e) {
     let rows = hoursTable.querySelectorAll("tr");
     for (let i = 0; i < 7; i++) {
         let currentRow = rows[i].children
-        let currentDay = weekday[(day.getDay() + i) % 7];
+        let currentDay = weekday[i];
+        
+        // Uncomment below to make days rotate with the current day on top
+        // let currentDay = weekday[(day.getDay() + i) % 7];
+
         let open = currentRow[1].children
         let close = currentRow[2].children
         let open12 = open[0].value
