@@ -41,17 +41,15 @@ $(document).ready(function() {
     $(".list-group-item").click(function() {
       let items = [];
       let selected = $(this).data("item")
+      $("#selected-category").text(selected.charAt(0).toUpperCase() + selected.slice(1))
       if (selected != 'all') {
         REF.once("value", snapshot => {
           let res = snapshot.val()
           for (let item in res) {
             let currentItem = res[item]
             let categories = currentItem.categoryName
-            console.log (categories)
             for (let category in categories) {
-              console.log(category)
               if (category == selected) {
-                console.log("tru")
                 items.push(`
                 <div class='card item-card'>
                   <div class='item-card card-body'>
