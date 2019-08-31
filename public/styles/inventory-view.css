@@ -4,7 +4,6 @@
   margin: 12px;
   width: 150px;
   height: 200px
-
 }
 
 #inventory-items {
@@ -96,4 +95,16 @@
 .closeBtn:hover, .closeBtn:focus {
   cursor: pointer;
   color: #000000
+}
+
+/* Card style for small screens */
+@media screen and (max-width: 400px) {
+  .item-card.card {
+    height: 140px;
+    width: 100%;
+  }
+
+  .public-item {
+    padding-bottom: 20px;
+  }
 }
