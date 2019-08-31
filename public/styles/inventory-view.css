@@ -1,6 +1,9 @@
+
+
 .item-card.card {
   margin: 12px;
-  width: 12em !important;
+  width: 150px;
+  height: 200px
 
 }
 
@@ -19,6 +22,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
 }
 
 .item-card .button {
@@ -32,6 +36,7 @@
 .item-count {
   font-weight: bold;
   font-size: 20px;
+  text-align: center;
 }
 
 .item-img-placeholder {
@@ -48,6 +53,7 @@
 
 .item-name {
   margin: 0;
+  height: 50px;
 }
 
 .list-group-item.active {
@@ -74,6 +80,11 @@
   width: 70%;
   z-index: 3;
   border-radius: 6px;
+}
+
+.public-item {
+  font-size: 2em;
+  padding-bottom: 40px;
 }
 
 .closeBtn { 

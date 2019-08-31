@@ -15,12 +15,11 @@ $(document).ready(function() {
       let currentItem = res[item]
       allItems.push(
         `<div class='card item-card'>
-          <div class='item-img-wrapper'>
-            <img class='card-img-top item-img-placeholder' src='../images/pantry_logo.png' alt='Card image cap'>
-          </div>
           <div class='item-card card-body'>
             <h4 class='item-name'>${currentItem.itemName}</h4>
-            <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
+            <div class='count-wrapper'>
+              <p class='card-text item-count public-item' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
+            </div>
           </div>
         </div>`)
     }
@@ -53,7 +52,13 @@ $(document).ready(function() {
               console.log(category)
               if (category == selected) {
                 console.log("tru")
-                items.push(`<div class='card item-card'><div class='item-img-wrapper'><img class='card-img-top item-img-placeholder' src='../images/pantry_logo.png' alt='Card image cap'></div><div class='item-card card-body'><h4 class='item-name'>${currentItem.itemName}</h4><p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p></div></div>`)
+                items.push(`
+                <div class='card item-card'>
+                  <div class='item-card card-body'>
+                    <h4 class='item-name'>${currentItem.itemName}</h4>
+                    <p class='card-text item-count public-item' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
+                  </div>
+                </div>`)
               }
             }
           }
