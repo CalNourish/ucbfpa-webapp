@@ -227,6 +227,11 @@ main, #messages-card {
   margin: 8px 0;
 }
 
+/* background for input hours */
+.invalid-hours {
+  background-color: rgba(189, 54, 47, 0.2)
+}
+
 #pantry-hours td {
   font-size: 16px !important;
   text-align: center;
