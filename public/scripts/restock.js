@@ -235,7 +235,9 @@ function saveItem() {
     // console.log(checkbox.checked);
     if (checkbox !== null && checkbox.checked) {
       categoryName[value] = value;
-      
+    }
+  });
+    
   //check if barcode already exists in database
   firebase.database().ref('barcodes').once('value').then((data) => {
     var barcodesFromDb = data.val();

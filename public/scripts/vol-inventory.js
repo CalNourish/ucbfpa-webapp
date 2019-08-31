@@ -61,7 +61,7 @@ $(document).ready(function() {
                         </div>
                         <div class='item-card card-body'>
                           <h4 class='item-name'> ${standardizeName(currentItem.itemName)}</h4>
-                          <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
+                          <p class='card-text item-count' data-itemid='\'${currentItem.barcode}\''>${currentItem.count}</p>
                           <div>
                           <button class="message-form button btn btn-outline-primary btn-block" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
                           </div>
@@ -124,7 +124,7 @@ function setOutOfStock(itemName, barcode) {
 }
 
 function goToEditItem(barcode) {
-  openEditModal();
+  openEditModal(barcode);
 }
 
 var addItemModal = document.getElementById('addItemModal');
