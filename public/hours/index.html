@@ -95,43 +95,82 @@
   <!--        end primary navbar -->
   <div class="container d-flex justify-content-center">
     <div class="d-flex flex-column align-items-center">
-      <h2>Pantry Hours</h2>
+      <h2>Pantry Hours & Restock Days</h2> 
       <table id="hours-table">
         <thead>
           <tr>
             <th scope="col"><!-- Day --></th>
             <th scope="col"><!-- Hours--></th>
+            <th scope="col"><!-- Restock--></th>
+
           </tr>
         </thead>
         <tbody id="hours-data">
-            <tr>
+            <tr id = "day0">
+              <td class="day"></td>
+              <td class="hours"></td>
+
+            </tr>
+            <tr id = "day1">
               <td class="day"></td>
               <td class="hours"></td>
             </tr>
-            <tr>
+            <tr id = "day2">
               <td class="day"></td>
               <td class="hours"></td>
             </tr>
-            <tr>
+            <tr id = "day3">
               <td class="day"></td>
               <td class="hours"></td>
             </tr>
-            <tr>
+            <tr id = "day4">
               <td class="day"></td>
               <td class="hours"></td>
             </tr>
-            <tr>
+            <tr id = "day5">
               <td class="day"></td>
               <td class="hours"></td>
             </tr>
-            <tr>
+            <tr id = "day6">
               <td class="day"></td>
               <td class="hours"></td>
             </tr>
-            <tr>
-              <td class="day"></td>
-              <td class="hours"></td>
-            </tr>
+        </tbody>
+      </table>
+      <h3>Legend</h3>
+      <p>Indicates when certain items are restocked</p> 
+      <table id="emoji-indicator-table">
+        <thead>
+          <tr>
+            <th scope="col"><!-- emoji --></th>
+            <th scope="col"><!-- description --></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🥖</td>
+            <td>Bread</td>
+          </tr>
+          <tr>
+            <td>🥚</td>
+            <td>Eggs</td>
+          </tr>
+          <tr>
+            <td>🥛</td>
+            <td>Milk</td>
+          </tr>
+          <tr>
+            <td>🥡</td>
+            <td>Prepared food</td>
+          </tr>
+          <tr>
+            <td>🥦</td>
+            <td>Produce</td>
+          </tr>
+          <tr>
+            <td>🥫</td>
+            <td>Shelf items</td>
+          </tr>
         </tbody>
       </table>
     </div>

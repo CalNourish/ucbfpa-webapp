@@ -18,6 +18,28 @@ const DAYS_TIMES = {
     '-saturday': ''
 }
 
+//Dictionary for the categories that are restocked each day
+const RESTOCK_INDICATORS = {
+  '-sunday': {},
+  '-monday': {},
+  '-tuesday': {}, 
+  '-wednesday': {},
+  '-thursday': {},
+  '-friday': {},
+  '-saturday': {}
+}
+
+//Dictionary for emojis for each resotck category
+const EMOJIS = {
+  '-none':'',
+  'bread': '🥖',
+  'eggs': '🥚',
+  'milk': '🥛', 
+  'prepared': '🥡',
+  'produce': '🥦',
+  'shelf': '🥫',
+}
+
 // Days array
 var weekday = new Array(7);
 weekday[0] =  "Sunday";
@@ -56,6 +78,8 @@ function getHours() {
         for (let key in DAYS_TIMES) {
           if (key in value) {
               DAYS_TIMES[key] = convertTime(value[key]["24hours"])
+              RESTOCK_INDICATORS[key]['restock'] = value[key]["restock"];
+
           }
         }
         let hoursTable = document.getElementById("hours-data")
@@ -65,12 +89,23 @@ function getHours() {
           let currentDay = weekday[(day.getDay() + i) % 7];
           // Find in the dictionary because we named it in weird way in the actual db
           let time = DAYS_TIMES["-" + currentDay.toLowerCase()]
+          let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]['restock']
+
           currentRow[0].textContent = currentDay
           if (time[0] == "Closed") {
             currentRow[1].textContent = "Closed"
           } else {
             currentRow[1].textContent = time[0] + " - " + time[1]
           }
+
+          for (let j = 0; j < Object.keys(restock_today).length; j++) { 
+            // If the category gets restocked today, append the emoji to today's row.
+            if (restock_today[Object.keys(restock_today)[j]] == 1) {
+              let emojiName = EMOJIS[Object.keys(restock_today)[j]];
+              let emoji = $('<td class="hours">' + emojiName + '</td>');
+              emoji.appendTo('#day' + i);
+            }
+        }
         }
     });
 }

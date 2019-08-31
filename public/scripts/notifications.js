@@ -28,56 +28,64 @@ function getMostRecentNotifications() {
         });
 }
 
-function sendNotification(event) {
+async function sendNotification(event) {
     event.preventDefault();
 
     var notifTitle = notifTitleElement.value;
     var notifText = notifTextElement.value;
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var timestamp = date + ' ' + time;
-  
-    var notification = {
-        text: notifText,
-        timestamp: timestamp,
-        title: notifTitle
-    };
 
+    var confirmationMessage;
     if (notifTitle.length > 50) {
-        //ask if they want to shorten title
-        if (confirm("Send this notification? Your title length is " + notifTitle.length + " and may be truncated on some phone screens.")) {
-            firebase
-            .database()
-            .ref('/notification')
-            .push(notification)
-            .then(function() {
-                notifTitleElement.value = '';
-                notifTextElement.value = '';
-            })
-            .catch(function(error) {
-                console.error('Error saving order to /notification', error);
-            });
-        }
+        confirmationMessage = "Send this notification? Your title length is " + notifTitle.length + " and may be truncated on some phone screens.";
     } else if (notifText.length > 50) {
-        //ask to shorten text
-        if (confirm("Send this notification? Your text length is " + notifText.length + " and may be truncated on some phone screens.")) {
-            firebase
-            .database()
-            .ref('/notification')
-            .push(notification)
-            .then(function() {
-                notifTitleElement.value = '';
-                notifTextElement.value = '';
-            })
-            .catch(function(error) {
-                console.error('Error saving order to /notification', error);
-            });
-        }
+        confirmationMessage = "Send this notification? Your text length is " + notifText.length + " and may be truncated on some phone screens.";
     } else {
-        //confirm send
-        if (confirm("Send this notification?")) {
-            firebase
+        confirmationMessage = "Send this notification?";
+    }
+
+    if (confirm(confirmationMessage)) {
+        var lambdaAuthorization = await firebase
+        .database()
+        .ref('lambdaAuthorization')
+        .once('value')
+        .then((data) => {
+            return data.val();
+        });
+
+        var expoNotification = {
+            title: notifTitle,
+            message: notifText
+        };
+
+        var sendNotificationParams = {
+            FunctionName : lambdaAuthorization['AWS_LAMBDA_FUNCTION_NAME'],
+            InvocationType : 'Event',
+            LogType : 'None',
+            Payload: JSON.stringify(expoNotification)
+        };
+
+        AWS.config.region = lambdaAuthorization['AWS_COGNITO_REGION'];
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: lambdaAuthorization['AWS_COGNITO_IDENTITY_POOL'],
+        });
+        var lambda = new AWS.Lambda({region: lambdaAuthorization['AWS_LAMBDA_REGION'], apiVersion: lambdaAuthorization['AWS_LAMBDA_API_VERSION']});
+        lambda.invoke(sendNotificationParams, function(error, unused) {
+            if (error) {
+                prompt(error);
+            }
+        });
+
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var timestamp = date + ' ' + time;
+        var notification = {
+            text: notifText,
+            timestamp: timestamp,
+            title: notifTitle
+        };
+
+        firebase
             .database()
             .ref('/notification')
             .push(notification)
@@ -87,14 +95,10 @@ function sendNotification(event) {
                 toastr.info('Notification sent')
             })
             .catch(function(error) {
-                console.error('Error saving order to /notification', error);
-                toastr.error(error, "Error sending notification")
+                console.error('Error saving to /notification', error);
+                toastr.error(error, "Error sending notification");
             });
-        }
     }
-
-
-
 }
 
 // Toast options
