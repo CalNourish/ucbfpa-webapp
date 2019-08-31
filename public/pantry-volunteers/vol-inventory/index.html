@@ -39,7 +39,8 @@
   <!-- Tile icon for Win8 -->
   <meta name="msapplication-TileColor" content="#3372DF">
   <meta name="msapplication-navbutton-color" content="#303F9F">
-
+  <!-- Toast Style -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
   <!-- Material Design Lite -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
@@ -396,7 +397,7 @@
           
                       <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
                     </form>
-                    <button id=submitNewItem class="btn btn-primary" onclick="updateItem()"> Submit </button>
+                    <button id="submitNewItem" class="btn btn-primary" onclick="updateItem()"> Submit </button>
 
                   </div>
             <!-- END EDIT ITEM -->
@@ -450,8 +451,8 @@
 
 <!-- Material Kit Core initialisations of plugins and Bootstrap Material Design Library -->
 <script src="../../scripts/material-kit.js?v=2.0.3"></script>
-<script src="../../scripts/restock.js"></script>
-
+<!-- Toast -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <!-- Page related scripts -->
 <script src="../../scripts/admin.js"></script>
 <script src="../../scripts/vol-inventory.js"></script>

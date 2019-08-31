@@ -111,16 +111,16 @@ function standardizeName(itemName) {
   return newName;
 }
 
-  function setOutOfStock(itemName, barcode) {
-    if (confirm("Set " + itemName + " to Out of Stock?")) {
-      return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-        var itemID = barcodesTable.val()[barcode];
-        firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-          var item = inventoryTable.val();
-          updateTo(itemID, item.itemName, item.barcode, item.cost, "0", item.categoryName);
-        });
+function setOutOfStock(itemName, barcode) {
+  if (confirm("Set " + itemName + " to Out of Stock?")) {
+    return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
+      var itemID = barcodesTable.val()[barcode];
+      firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
+        var item = inventoryTable.val();
+        updateTo(itemID, item.itemName, item.barcode, item.cost, "0", item.categoryName);
       });
-    }
+    });
+  }
 }
 
 function goToEditItem(barcode) {
@@ -142,3 +142,21 @@ document.onclick = function(e){
     return;
   }
 };
+
+// Toast options
+toastr.options = {
+  "closeButton": false,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": false,
+  "positionClass": "toast-bottom-right",
+  "preventDuplicates": false,
+  "showDuration": "200",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "2000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+}

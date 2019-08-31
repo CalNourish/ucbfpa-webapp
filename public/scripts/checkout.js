@@ -2,10 +2,15 @@
 
 var form = document.getElementById('checkout-item-form');
 var groceryList = document.querySelector('ol');
+var finished = document.getElementById('backToCheckout')
 
-function goToCheckout() {
-  window.location.href = "/pantry-volunteers/checkout";
-}
+finished.addEventListener("click", (e) => {
+  e.preventDefault()
+  if (groceryList.childElementCount > 0) {
+    $('#grocery-list').empty();
+    toastr.info('Checked out')
+  }
+})
 
 function checkoutItem(barcodeScanned, amount) {
   var barcode = barcodeScanned.value;
@@ -112,4 +117,22 @@ form.addEventListener('keypress', function(e) {
         console.log(err);
       });
   }
+
+    // Toast options
+    toastr.options = {
+      "closeButton": false,
+      "debug": false,
+      "newestOnTop": false,
+      "progressBar": false,
+      "positionClass": "toast-bottom-right",
+      "preventDuplicates": false,
+      "showDuration": "200",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "2000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
 });
