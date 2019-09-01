@@ -98,7 +98,7 @@ function getHours() {
             currentRow[1].textContent = time[0] + " - " + time[1]
           }
 
-          for (let j = 0; j < Object.keys(restock_today).length; j++) { 
+          for (let j = 1; j < Object.keys(restock_today).length; j++) { 
             // If the category gets restocked today, append the emoji to today's row.
             if (restock_today[Object.keys(restock_today)[j]] == 1) {
               let emojiName = EMOJIS[Object.keys(restock_today)[j]];
