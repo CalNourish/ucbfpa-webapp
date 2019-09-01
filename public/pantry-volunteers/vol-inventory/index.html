@@ -408,7 +408,7 @@
      <!-- end add item modal -->
 
     <div class="row">
-      <div id="inventory-sidebar" class="col-sm-3">
+      <div id="inventory-sidebar" class="col-sm-4">
         <button id=modalBtn class="message-form button btn btn-outline-primary btn-block" onclick="openAddModal()"> Add New Item </button>
         <button id=modalBtn class="message-form button btn btn-outline-primary btn-block" onclick="openEditModal()"> Edit Existing Item </button>
 
@@ -426,7 +426,26 @@
           <a class="list-group-item list-group-item-action" id="list-spices-list" data-toggle="list" data-item="spices" href="#" role="tab">Spices</a>
         </div>
       </div>
-      <div id="inventory-items" class="col-sm-9 d-flex flex-wrap">
+      <div class="dropdown list-dropdown" class="col-sm-4">
+          <h3 id="selected-category">All</h3>
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Category
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="list-group-item list-group-item-action active" id="list-all-list" data-toggle="list" data-item="all" href="#" role="tab">All</a>
+            <a class="list-group-item list-group-item-action" id="list-beverages-list" data-toggle="list" data-item="beverages" href="#" role="tab">Beverages</a>
+            <a class="list-group-item list-group-item-action" id="list-canned-list" data-toggle="list" data-item="canned" href="#" role="tab">Canned</a>
+            <a class="list-group-item list-group-item-action" id="list-frozen-list" data-toggle="list" data-item="frozen" href="#" role="tab">Frozen</a>
+            <a class="list-group-item list-group-item-action" id="list-grains-list" data-toggle="list" data-item="grains" href="#" role="tab">Grains</a>
+            <!-- <a class="list-group-item list-group-item-action" id="list-prepared-list" data-toggle="list" data-item="prepared" href="#" role="tab">Prepared</a>
+            <a class="list-group-item list-group-item-action" id="list-produce-list" data-toggle="list" data-item="produce" href="#" role="tab">Produce</a> -->
+            <a class="list-group-item list-group-item-action" id="list-protein-list" data-toggle="list" data-item="protein" href="#" role="tab">Protein</a>
+            <a class="list-group-item list-group-item-action" id="list-sauces-list" data-toggle="list" data-item="sauces" href="#" role="tab">Sauces</a>
+            <a class="list-group-item list-group-item-action" id="list-snacks-list" data-toggle="list" data-item="snacks" href="#" role="tab">Snacks</a>
+            <a class="list-group-item list-group-item-action" id="list-spices-list" data-toggle="list" data-item="spices" href="#" role="tab">Spices</a>
+          </div>
+        </div>
+      <div id="inventory-items" class="col-sm-8 d-flex flex-wrap">
       </div>
     </div>
   </div>

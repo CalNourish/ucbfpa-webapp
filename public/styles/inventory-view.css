@@ -1,7 +1,9 @@
+
+
 .item-card.card {
   margin: 12px;
-  width: 12em !important;
-
+  width: 150px;
+  height: 200px
 }
 
 #inventory-items {
@@ -32,6 +34,7 @@
 .item-count {
   font-weight: bold;
   font-size: 20px;
+  text-align: center;
 }
 
 .item-img-placeholder {
@@ -48,6 +51,7 @@
 
 .item-name {
   margin: 0;
+  height: 50px;
 }
 
 .list-group-item.active {
@@ -76,6 +80,15 @@
   border-radius: 6px;
 }
 
+.list-dropdown {
+  display: none;
+}
+
+.public-item {
+  font-size: 2em;
+  padding-bottom: 40px;
+}
+
 .closeBtn { 
   color: #cccccc;
   float: right;
@@ -85,4 +98,41 @@
 .closeBtn:hover, .closeBtn:focus {
   cursor: pointer;
   color: #000000
+}
+
+.row {
+  margin: 0 !important;
+}
+
+/* Card style for smaller screens */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+  .item-card.card {
+    height: 150px;
+    width: 100%;
+  }
+
+  .public-item {
+    padding-bottom: 20px;
+  }
+}
+
+/* Format of categories */
+@media screen and (max-width: 576px) {
+  .list-dropdown {
+    display: block;
+  }
+  .list-group {
+    display: none;
+  }
+}
+@media screen and (max-width: 480px) {
+  .item-card.card {
+    height: 150px;
+    width: 100%;
+    min-width: 150px;
+  }
+
+  .public-item {
+    padding-bottom: 20px;
+  }
 }

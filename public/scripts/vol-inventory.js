@@ -14,16 +14,13 @@ $(document).ready(function() {
     for (let item in res) {
       let currentItem = res[item]
       allItems.push(`<div class='card item-card'>
-                        <div class='item-img-wrapper'>
-                          <img class='card-img-top item-img-placeholder' src='../../images/pantry_logo.png' alt='Card image cap'>
-                        </div>
                         <div class='item-card card-body'>
                           <h4 class='item-name'> ${standardizeName(currentItem.itemName)}</h4>
                           <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
                           <div>
                           <button class="message-form button btn btn-outline-primary btn-block" type="button" onClick = "openEditModal(\'${currentItem.barcode}\')"> Edit This Item </button>
                           </div>
-                          </div>
+                        </div>
                       </div>`)
     }
     // append to dom
@@ -44,6 +41,7 @@ $(document).ready(function() {
     $(".list-group-item").click(function() {
       let items = [];
       let selected = $(this).data("item")
+      $("#selected-category").text(selected.charAt(0).toUpperCase() + selected.slice(1))
       if (selected != 'all') {
         REF.once("value", snapshot => {
           let res = snapshot.val()
@@ -55,17 +53,15 @@ $(document).ready(function() {
               console.log(category)
               if (category == selected) {
                 console.log("tru")
-                items.push(`<div class='card item-card'>
-                        <div class='item-img-wrapper'>
-                          <img class='card-img-top item-img-placeholder' src='../../images/pantry_logo.png' alt='Card image cap'>
-                        </div>
+                items.push(`
+                      <div class='card item-card'>
                         <div class='item-card card-body'>
                           <h4 class='item-name'> ${standardizeName(currentItem.itemName)}</h4>
                           <p class='card-text item-count' data-itemid='\'${currentItem.barcode}\''>${currentItem.count}</p>
                           <div>
                           <button class="message-form button btn btn-outline-primary btn-block" type="button" onClick = "goToEditItem(\'${currentItem.barcode}\')"> Edit This Item </button>
                           </div>
-                          </div>
+                        </div>
                       </div>`)
               }
             }
