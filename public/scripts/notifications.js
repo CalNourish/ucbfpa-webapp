@@ -76,8 +76,9 @@ async function sendNotification(event) {
         });
 
         var today = new Date();
-        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        function pad(n) { return n < 10 ? '0' + n : n }
+        var date = today.getFullYear() + '-' + pad(today.getMonth()+1) + '-' + pad(today.getDate());
+        var time = pad(today.getHours()) + ":" + pad(today.getMinutes()) + ":" + pad(today.getSeconds());
         var timestamp = date + ' ' + time;
         var notification = {
             text: notifText,
