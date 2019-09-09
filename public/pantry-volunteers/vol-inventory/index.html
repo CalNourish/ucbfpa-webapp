@@ -119,7 +119,15 @@
 
   <div id="inventory" class="container">
     <h2 id="inventory-title">Pantry Live Inventory</h2>
-
+    <!-- Switch between views -->
+    <div class="d-flex view-group justify-content-end">
+      <div class="view-item active" data-view="cards">
+          <i class="material-icons">view_module</i>
+      </div>
+      <div class="view-item" data-view="table">
+        <i class="material-icons">view_headlines</i>
+      </div>
+    </div>
     <!-- begin add item modal -->
     <div id="addItemModal" class="inventory-modal" onload="document.add-item-form.itemName.focus();">
         <div id = "modalContent" class="inventory-modal-content">
@@ -447,6 +455,16 @@
         </div>
       <div id="inventory-items" class="col-sm-8 d-flex flex-wrap">
       </div>
+      <table class="col-sm-8 table inventory-table"">
+        <thead>
+          <tr>
+            <th scope="col">Item Name</th>
+            <th scope="col">Stock Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
   </div>
 
