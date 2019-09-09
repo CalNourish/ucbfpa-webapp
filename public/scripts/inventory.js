@@ -48,6 +48,8 @@ $(document).ready(function() {
     // Clear page and select items by category
     $(".list-group-item.category-item").click(function() {
       let selected = $(this).data("item")
+      $(".list-group-item.category-item").removeClass("active")
+      $(`[data-item=${selected}`).addClass("active")
       let view = $(".view-item.active").data("view")
       showCategory(selected, view);
     });

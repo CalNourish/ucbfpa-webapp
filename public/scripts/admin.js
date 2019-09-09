@@ -224,7 +224,9 @@ function changeDefaultHours(e) {
         }
         if (boxes_checked == 0) {
             restock_today[Object.keys(restock_today)[0]] = 1;
-          }
+        } else {
+            restock_today[Object.keys(restock_today)[0]] = 0;
+        }
 
         // Check for closed and make conversions
         if (open12 == "Closed" || open12 == '') {
