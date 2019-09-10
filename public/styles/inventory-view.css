@@ -105,6 +105,11 @@
 }
 
 /* VIEW STYLES  */
+
+#inventory .view-group {
+  padding-bottom: 12px;
+
+}
 .view-item {
   cursor: pointer;
   display: flex;
@@ -138,8 +143,11 @@ tbody tr td:nth-child(2) {
   width: 200px;
 }
 
-
-
+.inventory-table td a:hover,
+.inventory-table td a:active {
+  text-decoration: underline;
+  color: #C4820E;
+}
 
 /* Card style for smaller screens */
 @media screen and (min-width: 576px) and (max-width: 768px) {

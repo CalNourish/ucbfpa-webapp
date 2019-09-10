@@ -27,7 +27,7 @@ $(document).ready(function() {
 
       fullTable.push(`
       <tr>
-        <td>${currentItem.itemName}</td>
+        <td><a href='#' onClick = "goToEditItem(\'${currentItem.barcode}\')">${currentItem.itemName}</a></td>
         <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
       </tr>`)
       
@@ -103,7 +103,7 @@ $(document).ready(function() {
                 } else {
                   items.push(`
                   <tr>
-                    <td>${currentItem.itemName}</td>
+                    <td><a href='#' onClick = "goToEditItem(\'${currentItem.barcode}\')">${currentItem.itemName}</a></td>
                     <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
                   </tr>
                   `)
