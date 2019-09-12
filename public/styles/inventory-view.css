@@ -104,6 +104,51 @@
   margin: 0 !important;
 }
 
+/* VIEW STYLES  */
+
+#inventory .view-group {
+  padding-bottom: 12px;
+
+}
+.view-item {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e3e3e3;
+}
+
+.view-item.active, .view-item.active:hover {
+  color: #C4820E !important;
+}
+.view-item:hover {
+  color: #acacac;
+}
+
+/* TABLE STYLES */
+.inventory-table {
+  display: none;
+}
+
+.inventory-table td{
+  font-size: 1rem !important;
+}
+
+.inventory-table th {
+  font-size: 1.125rem !important;
+}
+
+thead tr th:nth-child(2),
+tbody tr td:nth-child(2) {
+  width: 200px;
+}
+
+.inventory-table td a:hover,
+.inventory-table td a:active {
+  text-decoration: underline;
+  color: #C4820E;
+}
+
 /* Card style for smaller screens */
 @media screen and (min-width: 576px) and (max-width: 768px) {
   .item-card.card {
