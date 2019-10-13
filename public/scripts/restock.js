@@ -303,6 +303,28 @@ function onEditBarcodeItemFormSubmit(e) {
 
 }
 
+function addToCountByInterval() {
+  changeCountByInterval(true)
+}
+
+function subtractFromCountByInterval() {
+  changeCountByInterval(false)
+}
+
+function changeCountByInterval(adding) {
+  var newCount = 0;
+  var interval = parseInt(document.getElementById("edit-count-by-interval").value, 10);
+  interval = interval ? interval : 0;
+  var count = document.getElementById("editCount");
+  if (adding) {
+    newCount = parseInt(count.value, 10) + interval;
+  } else {
+    newCount = parseInt(count.value, 10) - interval;
+  }
+  count.value = newCount;
+  parseInt
+}
+
 // Shortcuts to DOM Elements.
 var addItemFormElement = document.getElementById('add-item-form');
 var editItemFormElement = document.getElementById('edit-item-form');
