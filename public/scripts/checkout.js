@@ -2,9 +2,22 @@
 
 var form = document.getElementById('checkout-item-form');
 var groceryList = document.querySelector('ol');
-var finished = document.getElementById('backToCheckout')
+var finished = document.getElementById('backToCheckout');
+var groceryCart  = [];
 
 finished.addEventListener("click", (e) => {
+
+  for (let i = 0; i < groceryCart.length; i++) {
+    console.log(groceryCart[i][0], groceryCart[i][1]);
+    checkoutItem(groceryCart[i][0], groceryCart[i][1]) 
+    .then(function(result) {
+      console.log(result);
+    }, function(err) {
+      console.log(err);
+    });
+  }
+
+  groceryCart = [];
   e.preventDefault()
   if (groceryList.childElementCount > 0) {
     $('#grocery-list').empty();
@@ -13,13 +26,9 @@ finished.addEventListener("click", (e) => {
 })
 
 function checkoutItem(barcodeScanned, amount) {
-  var barcode = barcodeScanned.value;
-  var amt = amount.value;
-  var amount = amt ? amt : 1;
-
+  var amount = amount ? amount : 1;
   return new Promise(function(resolve, reject) {
-    var firebaseReturn = decrementItem(barcode, amount);
-  
+    var firebaseReturn = decrementItem(barcodeScanned, amount);
     if (firebaseReturn) {
       resolve(firebaseReturn);
     }
@@ -86,19 +95,11 @@ form.addEventListener('keypress', function(e) {
     if (!amount.value) {
       amount.value = "1";
     }
-
-    checkoutItem(barcodeScanned, amount)
-      .then(function(result) {
-        console.log(result);
-      }, function(err) {
-        console.log(err);
-      });
     
-    getItemIdByBarcode(barcodeScanned.value)
-      .then(function(itemId) {
-        console.log("itemid hello: " + itemId);
-        console.log(amount.value);
+    groceryCart.push([barcodeScanned.value, amount.value]);
 
+    getItemIdByBarcode(barcodeScanned.value) 
+      .then(function(itemId) {
         getItemNameByItemId(itemId)
           .then(function(itemName) {
             var groceryItem = document.createElement("li");
