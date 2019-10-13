@@ -10,13 +10,13 @@ finished.addEventListener("click", (e) => {
   for (let i = 0; i < groceryCart.length; i++) {
     console.log(groceryCart[i][0], groceryCart[i][1]);
     checkoutItem(groceryCart[i][0], groceryCart[i][1]) 
-    .then(function(result) {
-      console.log(result);
-    }, function(err) {
-      console.log(err);
-    });
+      .then(function(result) {
+        console.log(result);
+      }, function(err) {
+        console.log(err);
+      });
   }
-
+  
   groceryCart = [];
   e.preventDefault()
   if (groceryList.childElementCount > 0) {
