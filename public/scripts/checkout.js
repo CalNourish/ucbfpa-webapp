@@ -6,17 +6,29 @@ var finished = document.getElementById('backToCheckout');
 var groceryCart  = [];
 
 finished.addEventListener("click", (e) => {
+  let groceryDict = {};
 
+  // turn grocery cart into a dictionary 
   for (let i = 0; i < groceryCart.length; i++) {
-    console.log(groceryCart[i][0], groceryCart[i][1]);
-    checkoutItem(groceryCart[i][0], groceryCart[i][1]) 
+    let barcode = groceryCart[i][0];
+    let amount = groceryCart[i][1];
+
+    if (groceryDict[barcode]) {
+      groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount)
+    } else {
+      groceryDict[barcode] = parseInt(amount);
+    }
+  }
+  console.log(groceryDict);
+  Object.entries(groceryDict).forEach(([barcode, amount]) => {
+    checkoutItem(barcode, amount) 
       .then(function(result) {
         console.log(result);
       }, function(err) {
         console.log(err);
       });
-  }
-  
+  });
+
   groceryCart = [];
   e.preventDefault()
   if (groceryList.childElementCount > 0) {
