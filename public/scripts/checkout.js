@@ -3,7 +3,12 @@
 var form = document.getElementById('checkout-item-form');
 var groceryList = document.querySelector('ol');
 var finished = document.getElementById('backToCheckout');
+var undo = document.getElementById('undoLastItem');
 var groceryCart  = [];
+
+undo.addEventListener("click", (e) => {
+  undoLastItem();
+});
 
 finished.addEventListener("click", (e) => {
   let groceryDict = {};
@@ -98,12 +103,21 @@ function getAmount() {
   }
 }
 
+function undoLastItem() {
+  groceryList.removeChild(groceryList.childNodes[groceryList.childNodes.length-1]);
+  groceryCart.pop();
+  console.log(groceryCart);
+}
+
 
 form.addEventListener('keypress', function(e) {
   if (e.keyCode == 13) {
   	e.preventDefault();
     var barcodeScanned = document.getElementById('barcode');
     var amount = document.getElementById('amount');
+    if (barcodeScanned == "") {
+      return;
+    } 
     if (!amount.value) {
       amount.value = "1";
     }
