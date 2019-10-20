@@ -167,6 +167,10 @@ function decrementItem(barcode, amount) {
     });
 }
 
+function deleteItem(barcode) {
+  console.log("delete " + barcode);
+}
+
 function updateTo(itemID, itemName, barcode, cost, count, categoryName) {
     // Save to inventory this new item to the generated item ID.
     var itemInfo = {
