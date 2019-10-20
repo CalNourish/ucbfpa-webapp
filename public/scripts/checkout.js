@@ -9,6 +9,8 @@ var groceryCart  = [];
 undo.addEventListener("click", (e) => {
   undoLastItem();
 });
+undo.style.visibility = 'hidden';
+
 
 finished.addEventListener("click", (e) => {
   if (groceryCart.length == 0) {
@@ -24,7 +26,6 @@ finished.addEventListener("click", (e) => {
       groceryDict[barcode] = parseInt(amount);
     }
   }
-  console.log(groceryDict);
   Object.entries(groceryDict).forEach(([barcode, amount]) => {
     checkoutItem(barcode, amount) 
       .then(function(result) {
@@ -33,7 +34,7 @@ finished.addEventListener("click", (e) => {
         console.log(err);
       });
   });
-
+  undo.style.visibility = 'hidden'
   groceryCart = [];
   e.preventDefault()
   if (groceryList.childElementCount > 0) {
@@ -108,6 +109,9 @@ function undoLastItem() {
     groceryList.removeChild(groceryList.childNodes[groceryList.childNodes.length-1]);
     groceryCart.pop();
   }
+  if (groceryList.childNodes.length == 0) {
+    undo.style.visibility = 'hidden'
+  }
   return;
 }
 
@@ -136,6 +140,7 @@ form.addEventListener('keypress', function(e) {
             }
             groceryItem.textContent = itemName + ", Amount: " + amount.value;
             groceryList.appendChild(groceryItem);
+            undo.style.visibility = 'visible';
             barcodeScanned.value = "";
             amount.value = "";
           }, function(err) {
