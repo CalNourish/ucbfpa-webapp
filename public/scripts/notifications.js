@@ -5,9 +5,6 @@ var notifTitleElement = document.getElementById('notifTitle');
 var notifTextElement = document.getElementById('notifText');
 var notificationList = document.querySelector('ol');
 
-var testLambdaButton = document.getElementById('notifTest');
-
-
 function getMostRecentNotifications() {
     firebase
         .database()
@@ -103,10 +100,6 @@ async function sendNotification(event) {
                 toastr.error(error, "Error sending notification");
             });
     }
-}
-
-async function testLambda() {
-    console.log('Testing AWS lambda function...')
 }
 
 // Toast options
