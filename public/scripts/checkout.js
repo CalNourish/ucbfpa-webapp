@@ -12,12 +12,9 @@ undo.addEventListener("click", (e) => {
 
 finished.addEventListener("click", (e) => {
   let groceryDict = {};
-
-  // turn grocery cart into a dictionary 
   for (let i = 0; i < groceryCart.length; i++) {
     let barcode = groceryCart[i][0];
     let amount = groceryCart[i][1];
-
     if (groceryDict[barcode]) {
       groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount)
     } else {
@@ -106,9 +103,7 @@ function getAmount() {
 function undoLastItem() {
   groceryList.removeChild(groceryList.childNodes[groceryList.childNodes.length-1]);
   groceryCart.pop();
-  console.log(groceryCart);
 }
-
 
 form.addEventListener('keypress', function(e) {
   if (e.keyCode == 13) {
