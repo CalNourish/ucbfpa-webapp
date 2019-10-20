@@ -11,6 +11,9 @@ undo.addEventListener("click", (e) => {
 });
 
 finished.addEventListener("click", (e) => {
+  if (groceryCart.length == 0) {
+    return;
+  }
   let groceryDict = {};
   for (let i = 0; i < groceryCart.length; i++) {
     let barcode = groceryCart[i][0];
@@ -101,8 +104,11 @@ function getAmount() {
 }
 
 function undoLastItem() {
-  groceryList.removeChild(groceryList.childNodes[groceryList.childNodes.length-1]);
-  groceryCart.pop();
+  if (groceryList.childNodes.length > 0) {
+    groceryList.removeChild(groceryList.childNodes[groceryList.childNodes.length-1]);
+    groceryCart.pop();
+  }
+  return;
 }
 
 form.addEventListener('keypress', function(e) {
