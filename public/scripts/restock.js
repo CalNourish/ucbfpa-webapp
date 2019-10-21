@@ -155,9 +155,7 @@ function deleteItem(barcode, itemName) {
     if (confirm("Delete " + itemName + "?")) {
       firebase.database().ref('/inventory/' + itemID).remove().then(function() {
         firebase.database().ref('/barcodes/' + barcode).remove().then(function() {
-          window.location.reload().then(function() {
-            toastr.info(itemName + " deleted.");
-          });
+          window.location.reload();
         });
       });
     }
