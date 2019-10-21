@@ -21,7 +21,7 @@ $(document).ready(function() {
                           <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
                           <div>
                             <button class="button" type="button" onClick = "openEditModal(\'${currentItem.barcode}\')"> EDIT </button>
-                            <button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\')"><i class="fa fa-trash"></i></button>
+                            <button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${currentItem.itemName}\')"><i class="fa fa-trash"></i></button>
                           </div>
                         </div>
                       </div>`)
