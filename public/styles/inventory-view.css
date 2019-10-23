@@ -2,7 +2,7 @@
 
 .item-card.card {
   margin: 12px;
-  width: 150px;
+  width: 160px;
   height: 200px
 }
 
@@ -24,6 +24,17 @@
 }
 
 .item-card .button {
+  color:#C4820E;
+  border-color: #C4820E;
+  box-shadow: none !important;
+  border-radius: 6px;
+  padding: 8px 12px !important;
+  margin: 4px !important;
+}
+
+.item-card .delete-button {
+  color: crimson;
+  border-color: crimson;
   box-shadow: none !important;
   border-radius: 6px;
   padding: 8px 12px !important;

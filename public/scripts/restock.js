@@ -149,7 +149,20 @@ function decrementItem(barcode, amount) {
     });
 }
 
-function updateTo(itemID, itemName, barcode, count, categoryName) {
+function deleteItem(barcode, itemName) {
+  firebase.database().ref('/barcodes/' + barcode).once('value').then(function(barcodeData) {
+    var itemID = barcodeData.val();
+    if (confirm("Delete " + itemName + "?")) {
+      firebase.database().ref('/inventory/' + itemID).remove().then(function() {
+        firebase.database().ref('/barcodes/' + barcode).remove().then(function() {
+          window.location.reload();
+        });
+      });
+    }
+  }); 
+}
+
+function updateTo(itemID, itemName, barcode, cost, count, categoryName) {
     // Save to inventory this new item to the generated item ID.
     var itemInfo = {
       createdBy: getUserName(),
