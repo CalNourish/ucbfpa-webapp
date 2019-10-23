@@ -2,9 +2,40 @@
 
 var form = document.getElementById('checkout-item-form');
 var groceryList = document.querySelector('ol');
-var finished = document.getElementById('backToCheckout')
+var finished = document.getElementById('backToCheckout');
+var undo = document.getElementById('undoLastItem');
+var groceryCart  = [];
+
+undo.addEventListener("click", (e) => {
+  undoLastItem();
+});
+undo.style.visibility = 'hidden';
+
 
 finished.addEventListener("click", (e) => {
+  if (groceryCart.length == 0) {
+    return;
+  }
+  let groceryDict = {};
+  for (let i = 0; i < groceryCart.length; i++) {
+    let barcode = groceryCart[i][0];
+    let amount = groceryCart[i][1];
+    if (groceryDict[barcode]) {
+      groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount)
+    } else {
+      groceryDict[barcode] = parseInt(amount);
+    }
+  }
+  Object.entries(groceryDict).forEach(([barcode, amount]) => {
+    checkoutItem(barcode, amount) 
+      .then(function(result) {
+        console.log(result);
+      }, function(err) {
+        console.log(err);
+      });
+  });
+  undo.style.visibility = 'hidden'
+  groceryCart = [];
   e.preventDefault()
   if (groceryList.childElementCount > 0) {
     $('#grocery-list').empty();
@@ -13,13 +44,9 @@ finished.addEventListener("click", (e) => {
 })
 
 function checkoutItem(barcodeScanned, amount) {
-  var barcode = barcodeScanned.value;
-  var amt = amount.value;
-  var amount = amt ? amt : 1;
-
+  var amount = amount ? amount : 1;
   return new Promise(function(resolve, reject) {
-    var firebaseReturn = decrementItem(barcode, amount);
-  
+    var firebaseReturn = decrementItem(barcodeScanned, amount);
     if (firebaseReturn) {
       resolve(firebaseReturn);
     }
@@ -77,28 +104,33 @@ function getAmount() {
   }
 }
 
+function undoLastItem() {
+  if (groceryList.childNodes.length > 0) {
+    groceryList.removeChild(groceryList.childNodes[groceryList.childNodes.length-1]);
+    groceryCart.pop();
+  }
+  if (groceryList.childNodes.length == 0) {
+    undo.style.visibility = 'hidden'
+  }
+  return;
+}
 
 form.addEventListener('keypress', function(e) {
   if (e.keyCode == 13) {
   	e.preventDefault();
     var barcodeScanned = document.getElementById('barcode');
     var amount = document.getElementById('amount');
+    if (barcodeScanned == "") {
+      return;
+    } 
     if (!amount.value) {
       amount.value = "1";
     }
-
-    checkoutItem(barcodeScanned, amount)
-      .then(function(result) {
-        console.log(result);
-      }, function(err) {
-        console.log(err);
-      });
     
-    getItemIdByBarcode(barcodeScanned.value)
-      .then(function(itemId) {
-        console.log("itemid hello: " + itemId);
-        console.log(amount.value);
+    groceryCart.push([barcodeScanned.value, amount.value]);
 
+    getItemIdByBarcode(barcodeScanned.value) 
+      .then(function(itemId) {
         getItemNameByItemId(itemId)
           .then(function(itemName) {
             var groceryItem = document.createElement("li");
@@ -108,6 +140,7 @@ form.addEventListener('keypress', function(e) {
             }
             groceryItem.textContent = itemName + ", Amount: " + amount.value;
             groceryList.appendChild(groceryItem);
+            undo.style.visibility = 'visible';
             barcodeScanned.value = "";
             amount.value = "";
           }, function(err) {
