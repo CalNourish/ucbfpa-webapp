@@ -312,7 +312,7 @@ function focusOnQuantity() {
   clearTimeout(focusOn)
   focusOn = setTimeout(function() {
     quantity.style.fontWeight = 'normal';
-    quantityLabel.style.color = 'inherit'
+    quantityLabel.style.color = '#AAAAAA'
   }, 2500)
 }
 
