@@ -303,6 +303,19 @@ function onEditBarcodeItemFormSubmit(e) {
 
 }
 
+// focus on quantity when clicking
+var focusOn;
+function focusOnQuantity() {
+  quantity.style.fontWeight = 'bold'
+  quantityLabel.style.color = '#C4820E'
+  // Clear if already set
+  clearTimeout(focusOn)
+  focusOn = setTimeout(function() {
+    quantity.style.fontWeight = 'normal';
+    quantityLabel.style.color = '#AAAAAA'
+  }, 2500)
+}
+
 function addToCountByInterval() {
   changeCountByInterval(true)
 }
@@ -316,13 +329,13 @@ function changeCountByInterval(adding) {
   var interval = parseInt(document.getElementById("edit-count-by-interval").value, 10);
   interval = interval ? interval : 0;
   var count = document.getElementById("editCount");
+  focusOnQuantity()
   if (adding) {
-    newCount = parseInt(count.value, 10) + interval;
+    newCount = parseInt(count.value, 10) + interval < 0 ? 0 : parseInt(count.value, 10) + interval;
   } else {
-    newCount = parseInt(count.value, 10) - interval;
+    newCount = parseInt(count.value, 10) - interval < 0 ? 0 : parseInt(count.value, 10) - interval;
   }
   count.value = newCount;
-  parseInt
 }
 
 // Shortcuts to DOM Elements.
@@ -330,7 +343,8 @@ var addItemFormElement = document.getElementById('add-item-form');
 var editItemFormElement = document.getElementById('edit-item-form');
 var editItemFormBarcodeElement = document.getElementById('edit-item-form-barcode');
 var editItemBarcodeElement = document.getElementById('editItemBarcode');
-
+var quantity = document.getElementById("editCount")
+var quantityLabel= document.getElementById("quantity-label")
 
 // Saves message on form submit.
 // messageFormElement.addEventListener('submit', onMessageFormSubmit);
