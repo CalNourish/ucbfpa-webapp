@@ -162,7 +162,7 @@ function deleteItem(barcode, itemName) {
   }); 
 }
 
-function updateTo(itemID, itemName, barcode, cost, count, categoryName) {
+function updateTo(itemID, itemName, barcode, count, categoryName) {
     // Save to inventory this new item to the generated item ID.
     var itemInfo = {
       createdBy: getUserName(),
@@ -171,6 +171,7 @@ function updateTo(itemID, itemName, barcode, cost, count, categoryName) {
       count: count,
       categoryName: categoryName,
     }
+    console.log(itemInfo);
     return firebase.database().ref('/inventory/' + itemID).update(itemInfo).catch(function(error) {
       console.error('Error writing item to /inventory/' + itemID, error);
     });
