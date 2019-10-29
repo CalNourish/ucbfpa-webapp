@@ -171,7 +171,6 @@ function updateTo(itemID, itemName, barcode, count, categoryName) {
       count: count,
       categoryName: categoryName,
     }
-    console.log(itemInfo);
     return firebase.database().ref('/inventory/' + itemID).update(itemInfo).catch(function(error) {
       console.error('Error writing item to /inventory/' + itemID, error);
     });
