@@ -162,7 +162,7 @@ function deleteItem(barcode, itemName) {
   }); 
 }
 
-function updateTo(itemID, itemName, barcode, cost, count, categoryName) {
+function updateTo(itemID, itemName, barcode, count, categoryName) {
     // Save to inventory this new item to the generated item ID.
     var itemInfo = {
       createdBy: getUserName(),
