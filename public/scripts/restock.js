@@ -71,6 +71,12 @@ function updateItem() {
     var barcode = document.getElementById('editBarcode').value;
     var count = document.getElementById('editCount').value;
 
+
+    if (itemName == "" || barcode == "" || count == "") {
+      alert("Please make sure all fields are filled out.");
+      return;
+    } 
+
     // Generate hashmap that has list of categories for this item.
     var categoryName = {};
     getCategories().forEach(function(value, index, array) {
@@ -211,6 +217,11 @@ function saveItem() {
   var itemName = document.getElementById('itemName').value;
   var barcode = document.getElementById('barcode').value;
   var count = document.getElementById('count').value;
+
+  if (itemName == "" || barcode == "" || count == "") {
+    alert("Please make sure all fields are filled out.");
+    return;
+  } 
 
   // Generate hashmap that has list of categories for this item.
   var categoryName = {};
