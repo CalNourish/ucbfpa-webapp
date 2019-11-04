@@ -33,6 +33,7 @@ finished.addEventListener("click", (e) => {
         console.log(result);
       }, function(err) {
         console.log(err);
+        toastr.error("Item checkout error")
       });
   });
   undo.style.visibility = 'hidden'
@@ -156,9 +157,11 @@ form.addEventListener('keypress', function(e) {
             amount.value = "";
           }, function(err) {
             console.log(err);
+            toastr.error("item not found")
           });
       }, function(err) {
         console.log(err);
+        toastr.error("item not found")
       });
   }
 
