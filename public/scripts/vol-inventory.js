@@ -30,6 +30,8 @@ $(document).ready(function() {
       <tr>
         <td><a href='#' onClick = "goToEditItem(\'${currentItem.barcode}\')">${currentItem.itemName}</a></td>
         <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
+        <td><button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${currentItem.itemName}\')"><i class="fa fa-trash"></i></button></td>
+
       </tr>`)
       
     }

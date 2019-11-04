@@ -292,9 +292,6 @@ function saveItem() {
                   );
     }
   });
- 
-
-
 }
 
 // Triggered when the add new item form is submitted.
