@@ -2,6 +2,7 @@
 
 var form = document.getElementById('checkout-item-form');
 var groceryList = document.querySelector('ol');
+var totalItems = document.getElementById("total-items")
 var finished = document.getElementById('backToCheckout');
 var undo = document.getElementById('undoLastItem');
 var groceryCart  = [];
@@ -32,10 +33,12 @@ finished.addEventListener("click", (e) => {
         console.log(result);
       }, function(err) {
         console.log(err);
+        toastr.error("Item checkout error")
       });
   });
   undo.style.visibility = 'hidden'
   groceryCart = [];
+  totalItems.textContent = '0'
   e.preventDefault()
   if (groceryList.childElementCount > 0) {
     $('#grocery-list').empty();
@@ -106,13 +109,21 @@ function getAmount() {
 
 function undoLastItem() {
   if (groceryList.childNodes.length > 0) {
+
     groceryList.removeChild(groceryList.childNodes[groceryList.childNodes.length-1]);
-    groceryCart.pop();
+    var lastItem = groceryCart.pop();
+    updateTotal('-' + lastItem[1])
   }
   if (groceryList.childNodes.length == 0) {
     undo.style.visibility = 'hidden'
   }
   return;
+}
+
+function updateTotal(amount) {
+  var currentAmount = parseInt(totalItems.textContent)
+  var scannedAmount = parseInt(amount)
+  totalItems.textContent = currentAmount + scannedAmount
 }
 
 form.addEventListener('keypress', function(e) {
@@ -139,15 +150,18 @@ form.addEventListener('keypress', function(e) {
               amount.value = "1";
             }
             groceryItem.textContent = itemName + ", Amount: " + amount.value;
+            updateTotal(amount.value)
             groceryList.appendChild(groceryItem);
             undo.style.visibility = 'visible';
             barcodeScanned.value = "";
             amount.value = "";
           }, function(err) {
             console.log(err);
+            toastr.error("item not found")
           });
       }, function(err) {
         console.log(err);
+        toastr.error("item not found")
       });
   }
 
