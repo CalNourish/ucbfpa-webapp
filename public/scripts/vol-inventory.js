@@ -96,10 +96,11 @@ $(document).ready(function() {
                   <div class='card item-card'>
                   <div class='item-card card-body'>
                     <h4 class='item-name'> ${standardizeName(currentItem.itemName)}</h4>
+                    <p class='card-text item-count' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
                     <div>
-                    <button class="button" type="button" onClick = "openEditModal(\'${currentItem.barcode}\')"> EDIT </button>
-                    <button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${currentItem.itemName}\')"><i class="fa fa-trash"></i></button>
-                  </div>
+                      <button class="button" type="button" onClick = "openEditModal(\'${currentItem.barcode}\')"> EDIT </button>
+                      <button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${currentItem.itemName}\')"><i class="fa fa-trash"></i></button>
+                    </div>
                   </div>
                 </div>`)
                 } else {
