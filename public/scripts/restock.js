@@ -71,12 +71,6 @@ function updateItem() {
     var barcode = document.getElementById('editBarcode').value;
     var count = document.getElementById('editCount').value;
 
-
-    if (itemName == "" || barcode == "" || count == "") {
-      alert("Please make sure all fields are filled out.");
-      return;
-    } 
-
     // Generate hashmap that has list of categories for this item.
     var categoryName = {};
     getCategories().forEach(function(value, index, array) {
@@ -218,11 +212,6 @@ function saveItem() {
   var barcode = document.getElementById('barcode').value;
   var count = document.getElementById('count').value;
 
-  if (itemName == "" || barcode == "" || count == "") {
-    alert("Please make sure all fields are filled out.");
-    return;
-  } 
-
   // Generate hashmap that has list of categories for this item.
   var categoryName = {};
   getCategories().forEach(function(value, index, array) {
@@ -298,20 +287,12 @@ function saveItem() {
 function onAddItemFormSubmit(e) {
   e.preventDefault();
   saveItem();
-  // // Check that the user entered a message and is signed in.
-  // if (checkSignedInWithMessage()) {
-  //   saveItem("3", "2", "3", "4", "5");
-  // }
 }
 
 // Triggered when the edit item form is submitted.
 function onEditItemFormSubmit(e) {
   e.preventDefault();
   updateItem();
-  // // Check that the user entered a message and is signed in.
-  // if (checkSignedInWithMessage()) {
-  //   updateItem();
-  // }
 }
 
 // Triggered when the add new item form is submitted.
