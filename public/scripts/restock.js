@@ -297,19 +297,21 @@ function saveItem() {
 // Triggered when the add new item form is submitted.
 function onAddItemFormSubmit(e) {
   e.preventDefault();
-  // Check that the user entered a message and is signed in.
-  if (checkSignedInWithMessage()) {
-    saveItem("3", "2", "3", "4", "5");
-  }
+  saveItem();
+  // // Check that the user entered a message and is signed in.
+  // if (checkSignedInWithMessage()) {
+  //   saveItem("3", "2", "3", "4", "5");
+  // }
 }
 
 // Triggered when the edit item form is submitted.
 function onEditItemFormSubmit(e) {
   e.preventDefault();
-  // Check that the user entered a message and is signed in.
-  if (checkSignedInWithMessage()) {
-    updateItem();
-  }
+  updateItem();
+  // // Check that the user entered a message and is signed in.
+  // if (checkSignedInWithMessage()) {
+  //   updateItem();
+  // }
 }
 
 // Triggered when the add new item form is submitted.
