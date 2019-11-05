@@ -160,6 +160,15 @@ tbody tr td:nth-child(2) {
   color: #C4820E;
 }
 
+.inventory-table td .delete-button{
+  color: crimson;
+  border-color: crimson;
+  box-shadow: none !important;
+  border-radius: 6px;
+  padding: 4px 6px !important;
+  margin: 2px !important;
+}
+
 /* Card style for smaller screens */
 @media screen and (min-width: 576px) and (max-width: 768px) {
   .item-card.card {
