@@ -121,6 +121,9 @@
     <h2 id="inventory-title">Pantry Live Inventory</h2>
     <!-- Switch between views -->
     <div class="d-flex view-group justify-content-end">
+      <div>
+          <input type="text" id="searchInput" onkeyup="myFunction()" placeholder="Search for an item">
+      </div>
       <div class="view-item active" data-view="cards">
           <i class="material-icons">view_module</i>
       </div>
@@ -413,7 +416,7 @@
             <th scope="col">Stock Amount</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id = "table-items">
         </tbody>
       </table>
     </div>
