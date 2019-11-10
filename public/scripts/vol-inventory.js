@@ -143,8 +143,8 @@ $(document).ready(function() {
 function myFunction() {
   // Declare variables
   var input, filter, items, li, a, i, txtValue;
+  input = document.getElementById("searchInput");
   filter = input.value.toUpperCase();
-  input = document.getElementById('searchInput');
   items = document.getElementById("table-items");
   li = items.getElementsByTagName('tr');
 
