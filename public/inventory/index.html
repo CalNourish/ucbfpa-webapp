@@ -96,11 +96,14 @@
   <div id="inventory" class="container">
     <h2 id="inventory-title">Pantry Live Inventory</h2>
     <div class="d-flex view-group justify-content-end">
-      <div class="view-item active" data-view="cards">
+      <div class="view-item active" data-view="table">
+        <i class="material-icons">view_headlines</i>
+      </div>
+      <div class="view-item" data-view="cards">
           <i class="material-icons">view_module</i>
       </div>
-      <div class="view-item" data-view="table">
-        <i class="material-icons">view_headlines</i>
+      <div>
+          <input type="text" id="searchInput" onkeyup="searchItem()" placeholder="Search for an item">
       </div>
     </div>
     <div class="row">
@@ -138,7 +141,7 @@
         <a class="list-group-item category-item list-group-item-action" id="list-spices-list" data-toggle="dropdown" data-item="spices" href="#" role="tab">Spices</a>
       </div>
     </div>
-    <div id="inventory-items" class="col-sm-8 d-flex flex-wrap inventory-cards">
+    <div id="inventory-items" class="col-sm-8 flex-wrap inventory-cards">
     </div>
     <table class="col-sm-8 table inventory-table"">
       <thead>
@@ -147,7 +150,7 @@
           <th scope="col">Stock Amount</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="table-items">
       </tbody>
     </table>
   </div>
