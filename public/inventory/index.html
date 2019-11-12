@@ -102,6 +102,9 @@
       <div class="view-item" data-view="cards">
           <i class="material-icons">view_module</i>
       </div>
+      <div>
+          <input type="text" id="searchInput" onkeyup="searchItem()" placeholder="Search for an item">
+      </div>
     </div>
     <div class="row">
       <div id="inventory-sidebar" class="col-sm-4">
@@ -147,7 +150,7 @@
           <th scope="col">Stock Amount</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="table-items">
       </tbody>
     </table>
   </div>

@@ -78,7 +78,7 @@ $(document).ready(function() {
 
 
 
-function myFunction() {
+function searchItem() {
   // Declare variables
   var input, filter, items, li, a, i, txtValue;
   input = document.getElementById("searchInput");
