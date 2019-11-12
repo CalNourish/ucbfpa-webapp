@@ -97,6 +97,32 @@ function getItemNameByItemId(itemId) {
   });
 }
 
+function getItemNameByBarcode(barcode) {
+  return new Promise(function(resolve, reject) {
+    var ref = firebase
+      .database()
+      .ref('/inventory/')
+      .orderByChild('barcode')
+      .equalTo(barcode)
+      .once('value')
+      .then(function(inventoryTable) {
+        var itemNames = [];
+        inventoryTable.forEach(function(childNode) {
+          var item = childNode.val();
+          itemNames.push(item['itemName']);
+        });
+        return itemNames[0];
+      });
+  
+    if (ref) {
+      resolve(ref);
+    }
+    else {
+      reject(Error("Something broke here."));
+    }
+  });
+}
+
 function getAmount() {
   var amount = document.getElementById('amount');
   if (!amount.value) {
@@ -140,29 +166,44 @@ form.addEventListener('keypress', function(e) {
     
     groceryCart.push([barcodeScanned.value, amount.value]);
 
-    getItemIdByBarcode(barcodeScanned.value) 
-      .then(function(itemId) {
-        getItemNameByItemId(itemId)
-          .then(function(itemName) {
-            var groceryItem = document.createElement("li");
-            var amount = document.getElementById('amount');
-            if (!amount.value) {
-              amount.value = "1";
-            }
-            groceryItem.textContent = itemName + ", Amount: " + amount.value;
-            updateTotal(amount.value)
-            groceryList.appendChild(groceryItem);
-            undo.style.visibility = 'visible';
-            barcodeScanned.value = "";
-            amount.value = "";
-          }, function(err) {
-            console.log(err);
-            toastr.error("item not found")
-          });
-      }, function(err) {
-        console.log(err);
-        toastr.error("item not found")
-      });
+    // get item name from barcode
+    getItemNameByBarcode(barcodeScanned.value)
+    .then(function(itemName) {
+      var groceryItem = document.createElement("li");
+      var amount = document.getElementById('amount');
+      if (!amount.value) {
+        amount.value = "1";
+      }
+      groceryItem.textContent = itemName + ", Amount: " + amount.value;
+      groceryList.appendChild(groceryItem);
+      undo.style.visibility = 'visible';
+      barcodeScanned.value = "";
+      amount.value = "";
+    }, function(err) {
+      console.log(err);
+    });
+
+
+    // getItemIdByBarcode(barcodeScanned.value) 
+    //   .then(function(itemId) {
+    //     getItemNameByItemId(itemId)
+    //       .then(function(itemName) {
+    //         var groceryItem = document.createElement("li");
+    //         var amount = document.getElementById('amount');
+    //         if (!amount.value) {
+    //           amount.value = "1";
+    //         }
+    //         groceryItem.textContent = itemName + ", Amount: " + amount.value;
+    //         groceryList.appendChild(groceryItem);
+    //         undo.style.visibility = 'visible';
+    //         barcodeScanned.value = "";
+    //         amount.value = "";
+    //       }, function(err) {
+    //         console.log(err);
+    //       });
+    //   }, function(err) {
+    //     console.log(err);
+    //   });
   }
 
     // Toast options

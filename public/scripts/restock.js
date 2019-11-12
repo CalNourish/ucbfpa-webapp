@@ -224,7 +224,7 @@ function saveItem() {
   });
     
   //check if barcode already exists in database
-  firebase.database().ref('barcodes').once('value').then((data) => {
+  firebase.database().ref('/barcodes/').once('value').then((data) => {
     var barcodesFromDb = data.val();
     var barcodes = [];
     for (const [bc, itemID] of Object.entries(barcodesFromDb)) {
