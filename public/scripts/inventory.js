@@ -32,7 +32,7 @@ $(document).ready(function() {
       `)
     }
     // append to dom
-    $("#inventory-items").append(allItems)
+    $(".inventory-table tbody").append(fullTable)
   })
 
     // watch for data changes while page is open
