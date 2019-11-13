@@ -121,8 +121,9 @@
     <h2 id="inventory-title">Pantry Live Inventory</h2>
     <div class="d-flex view-group justify-content-end">
       <div>
-          <input type="text" id="searchInput" onkeyup="searchItem()" placeholder="Search for an item">
-      </div>
+          <input id="searchInput" onkeyup="searchItem()" class="form-control ml-3 w-75" type="text" placeholder="Search"
+          aria-label="Search">
+        </div>
     </div>
     <!-- begin add item modal -->
     <div id="addItemModal" class="inventory-modal" onload="document.add-item-form.itemName.focus();">
