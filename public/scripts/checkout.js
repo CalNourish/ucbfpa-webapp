@@ -1,6 +1,8 @@
 'use strict';
 
 var form = document.getElementById('checkout-item-form');
+var amount = document.getElementById('amount');
+var barcode = document.getElementById('barcode');
 var groceryList = document.querySelector('ol');
 var totalItems = document.getElementById("total-items")
 var finished = document.getElementById('backToCheckout');
@@ -107,6 +109,27 @@ function updateTotal(amount) {
   var scannedAmount = parseInt(amount)
   totalItems.textContent = currentAmount + scannedAmount
 }
+
+/*
+* Page-wide hotkeys
+* q - Amount field
+* w - Barcode field
+* Shift + Enter - checkout
+*/
+document.onkeydown = function(e) {
+  if (e.which == 81) {
+    e.preventDefault();
+    amount.select();
+  } else if (e.which == 87) {
+    e.preventDefault();
+    barcode.select();
+  } else if (e.shiftKey && e.which == 13) {
+    // Hacky, should move checkout functionality into own function and call that from here and checkout button listener
+    e.preventDefault();
+    finished.click();
+  }
+}
+
 
 form.addEventListener('keypress', function(e) {
   if (e.keyCode == 13) {
