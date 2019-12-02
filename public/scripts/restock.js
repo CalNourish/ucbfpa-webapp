@@ -9,32 +9,32 @@ function getAllUrlParams(url) {
   
 }
 
-$(document).ready( function () {
-// get query string from url (optional) or window
-  var url = window.location.href;
-  var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+// $(document).ready( function () {
+// // get query string from url (optional) or window
+//   var url = window.location.href;
+//   var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
 
-// we'll store the parameters here
-  var obj = {};
+// // we'll store the parameters here
+//   var obj = {};
 
-// if query string exists
-  if (queryString) {
+// // if query string exists
+//   if (queryString) {
 
-    // stuff after # is not part of query string, so get rid of it
-    queryString = queryString.split('#')[0];
+//     // stuff after # is not part of query string, so get rid of it
+//     queryString = queryString.split('#')[0];
 
-    // split our query string into its component parts
-    var arr = queryString.split('&');
-    var a = arr[0].split('=');
-    var barcode = typeof (a[1]) === 'undefined' ? true : a[1];
-    loadItemIntoEditForm(barcode)
+//     // split our query string into its component parts
+//     var arr = queryString.split('&');
+//     var a = arr[0].split('=');
+//     var barcode = typeof (a[1]) === 'undefined' ? true : a[1];
+//     loadItemIntoEditForm(barcode)
 
-  }
+//   }
   
-  // if (barcode) {
-  //   loadItemIntoEditForm(barcode);
-  // }
-});
+//   // if (barcode) {
+//   //   loadItemIntoEditForm(barcode);
+//   // }
+// });
 
 
 function barcodeToID(barcode) {
@@ -82,14 +82,17 @@ function updateItem() {
       }
     });
 
-    // Connect the generated item ID to this barcode.
-    var barcodeToID = {};
-    barcodeToID[barcode] = itemID;
-    firebase.database().ref('/barcodes/').update(barcodeToID).catch(function(error) {
-      console.error('Error writing [' + barcode + ' : ' + itemID + '] to /barcodes/', error);
-    });
+    // // Write barcode to inventory 
+    // var barcodeToID = {};
+    // barcodeToID[barcode] = itemID;
+    // firebase.database()
+    //   .ref('/barcodes/')
+    //   .update(barcodeToID)
+    //   .catch(function(error) {
+    //     console.error('Error writing [' + barcode + ' : ' + itemID + '] to /barcodes/', error);
+    // });
 
-    // Save to inventory this new item to the generated item ID.
+    // Save this new item to inventory
     var itemInfo = {
       createdBy: getUserName(),
       itemName: itemName,
@@ -103,8 +106,22 @@ function updateItem() {
       return;
     }
 
+    // // OLD SCHEMA
+    // return firebase.database()
+    //   .ref('/inventory/' + itemID)
+    //   .update(itemInfo)
+    //   .catch(function(error) {
+    //     console.error('Error writing item to /inventory/' + itemID, error);
+    //     toastr.error(error, "Error writing item to inventory")
+    //     })
+    //   .then( () => {
+    //     document.getElementById("edit-item-form").reset();
+    //     toastr.info("Edit Successful");
+    //   });
+
+    // NEW SCHEMA
     return firebase.database()
-      .ref('/inventory/' + itemID)
+      .ref('/inventory/' + barcode)
       .update(itemInfo)
       .catch(function(error) {
         console.error('Error writing item to /inventory/' + itemID, error);
@@ -113,56 +130,81 @@ function updateItem() {
       .then( () => {
         document.getElementById("edit-item-form").reset();
         toastr.info("Edit Successful");
-      }
-    );
-}
-
-function incrementOne(barcode) {
-    return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-        var itemID = barcodesTable.val()[barcode];
-        firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-          var item = inventoryTable.val();
-          updateTo(itemID, item.itemName, item.barcode, (parseInt(item.count, 10) + 1).toString(), item.categoryName);
-        });
-    });
-}
-
-function decrementOne(barcode) {
-    return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-        var itemID = barcodesTable.val()[barcode];
-        firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-          var item = inventoryTable.val();
-          var dec = ((parseInt(item.count, 10) - 1) < 0) ? 0 : (parseInt(item.count, 10) - 1);
-          updateTo(itemID, item.itemName, item.barcode, dec.toString(), item.categoryName);
-        });
-    });
-}
-
-function decrementItem(barcode, amount) {
-    return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-        var itemID = barcodesTable.val()[barcode];
-        firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-          var item = inventoryTable.val();
-          var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
-          updateTo(itemID, item.itemName, item.barcode, dec.toString(), item.categoryName);
-        });
-    });
-}
-
-function deleteItem(barcode, itemName) {
-  firebase.database().ref('/barcodes/' + barcode).once('value').then(function(barcodeData) {
-    var itemID = barcodeData.val();
-    if (confirm("Delete " + itemName + "?")) {
-      firebase.database().ref('/inventory/' + itemID).remove().then(function() {
-        firebase.database().ref('/barcodes/' + barcode).remove().then(function() {
-          window.location.reload();
-        });
       });
-    }
-  }); 
 }
 
-function updateTo(itemID, itemName, barcode, count, categoryName) {
+// Why does this exist lol
+// function incrementOne(barcode) {
+//     return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
+//         var itemID = barcodesTable.val()[barcode];
+//         firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
+//           var item = inventoryTable.val();
+//           updateTo(itemID, item.itemName, item.barcode, (parseInt(item.count, 10) + 1).toString(), item.categoryName);
+//         });
+//     });
+// }
+// Get rid of this
+// function decrementOne(barcode) {
+//     return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
+//         var itemID = barcodesTable.val()[barcode];
+//         firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
+//           var item = inventoryTable.val();
+//           var dec = ((parseInt(item.count, 10) - 1) < 0) ? 0 : (parseInt(item.count, 10) - 1);
+//           updateTo(itemID, item.itemName, item.barcode, dec.toString(), item.categoryName);
+//         });
+//     });
+// }
+
+function decrementItem(barcode, amount) { // TO FIX
+    // // OLD SCHEMA
+    // return firebase.database()
+    //   .ref('/barcodes/')
+    //   .once('value')
+    //   .then(function(barcodesTable) {
+    //     var itemID = barcodesTable.val()[barcode];
+    //     firebase.database().
+    //       ref('/inventory/' + itemID)
+    //       .once('value')
+    //       .then(function(inventoryTable) {
+    //         var item = inventoryTable.val();
+    //         var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
+    //         updateTo(itemID, item.itemName, item.barcode, dec.toString(), item.categoryName);
+    //     });
+    // });
+
+    // NEW SCHEMA
+    return firebase.database()
+      .ref('/inventory/' + barcode)
+      .once('value')
+      .then(function(inventoryTable) {
+        var item = inventoryTable.val();
+        var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
+        updateTo(item.itemName, item.barcode, dec.toString(), item.categoryName);
+    });
+}
+
+function deleteItem(barcode, itemName) { 
+  // // OLD SCHEMA
+  // firebase.database().ref('/barcodes/' + barcode).once('value').then(function(barcodeData) {
+  //   var itemID = barcodeData.val();
+  //   if (confirm("Delete " + itemName + "?")) {
+  //     firebase.database().ref('/inventory/' + itemID).remove().then(function() {
+  //       firebase.database().ref('/barcodes/' + barcode).remove().then(function() {
+  //         window.location.reload();
+  //       });
+  //     });
+  //   }
+  // }); 
+  
+  // NEW SCHEMA
+  if (confirm("Delete " + itemName + "?")) {
+    firebase.database().ref('/inventory/' + barcode).remove().then(function() {
+      window.location.reload();
+    });
+  }
+}
+
+function updateTo(itemName, barcode, count, categoryName) { 
     // Save to inventory this new item to the generated item ID.
     var itemInfo = {
       createdBy: getUserName(),
@@ -171,23 +213,51 @@ function updateTo(itemID, itemName, barcode, count, categoryName) {
       count: count,
       categoryName: categoryName,
     }
-    return firebase.database().ref('/inventory/' + itemID).update(itemInfo).catch(function(error) {
-      console.error('Error writing item to /inventory/' + itemID, error);
+    // // OLD SCHEMA
+    // return firebase.database()
+    //   .ref('/inventory/' + itemID)
+    //   .update(itemInfo)
+    //   .catch(function(error) {
+    //     console.error('Error writing item to /inventory/' + itemID, error);
+    //   });
+
+    // NEW SCHEMA
+    return firebase.database() 
+      .ref('/inventory/' + barcode)
+      .update(itemInfo)
+      .catch(function(error) {
+          console.error('Error writing item to /inventory/' + barcode, error);
+          toastr.error(error, "Error adding new item")
+          })
+      .then(() => {
+        document.getElementById("add-item-form").reset();
+        toastr.info("New item successfully added");
+        }
+      );
+}
+
+function loadItemIntoEditForm(barcode) { 
+    // // OLD SCHEMA
+    // return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
+    //     var itemID = barcodesTable.val()[barcode];
+    //     firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
+    //       var item = inventoryTable.val();
+    //       loadItemIntoEditForm2(itemID, item.itemName, item.barcode, item.count, item.categoryName);
+    //     });
+    // });
+
+    // NEW SCHEMA
+    return firebase.database()
+      .ref('/inventory/' + barcode)
+      .once('value')
+      .then(function(inventoryTable) {
+        var item = inventoryTable.val();
+        loadItemIntoEditForm2(item.itemName, item.barcode, item.count, item.categoryName);
     });
 }
 
-function loadItemIntoEditForm(barcode) {
-    return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-        var itemID = barcodesTable.val()[barcode];
-        firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-          var item = inventoryTable.val();
-          loadItemIntoEditForm2(itemID, item.itemName, item.barcode, item.count, item.categoryName);
-        });
-    });
-}
-
-function loadItemIntoEditForm2(itemID, itemName, barcode, count, categoryName) {
-  document.getElementById('editItemID').value = itemID;
+function loadItemIntoEditForm2(itemName, barcode, count, categoryName) {
+  // document.getElementById('editItemID').value = itemID;
   document.getElementById('editItemName').value = itemName;
   document.getElementById('editBarcode').value = barcode;
   document.getElementById('editCount').value = count;
@@ -224,14 +294,17 @@ function saveItem() {
   });
     
   //check if barcode already exists in database
-  firebase.database().ref('/barcodes/').once('value').then((data) => {
+  // // OLD SCHEMA
+  // firebase.database().ref('/barcodes/').once('value').then((data) => {
+
+  // NEW SCHEMA
+  firebase.database().ref('/inventory/').once('value').then((data) => {
     var barcodesFromDb = data.val();
     var barcodes = [];
     for (const [bc, itemID] of Object.entries(barcodesFromDb)) {
       barcodes.push(bc);
     }
     var isDuplicate = (barcodes.indexOf(barcode) >= 0);
-    console.log(isDuplicate);
     if (isDuplicate === true) {
       alert('An item with this barcode already exists.');
       return;
@@ -247,12 +320,12 @@ function saveItem() {
           }
         });
 
-        // Connect the generated item ID to this barcode.
-        var barcodeToID = {};
-        barcodeToID[barcode] = itemID;
-        firebase.database().ref('/barcodes/').update(barcodeToID).catch(function(error) {
-          console.error('Error writing [' + barcode + ' : ' + itemID + '] to /barcodes/', error);
-        });
+        // Connect the generated item ID to this barcode. TO DELETE
+        // var barcodeToID = {};
+        // barcodeToID[barcode] = '';
+        // firebase.database().ref('/barcodes/').update(barcodeToID).catch(function(error) {
+        //   console.error('Error writing [' + barcode + '] to /barcodes/', error);
+        // });
 
         // Save to inventory this new item to the generated item ID.
         var itemInfo = {
@@ -267,18 +340,37 @@ function saveItem() {
           return;
         }
 
-        return firebase.database()
-                  .ref('/inventory/' + itemID)
-                  .update(itemInfo)
-                  .catch(function(error) {
-                      console.error('Error writing item to /inventory/' + itemID, error);
-                      toastr.error(error, "Error adding new item")
-                      })
-                  .then(() => {
-                    document.getElementById("add-item-form").reset();
-                    toastr.info("New item successfully added");
-                    }
-                  );
+        // // OLD SCHEMA
+
+        // firebase.database()
+        //   .ref('/inventory/')
+        //   .push(itemInfo)
+        //   // .ref('/inventory/' + itemID)
+        //   // .update(itemInfo)
+        //   .catch(function(error) {
+        //       console.error('Error writing item to /inventory/' + itemID, error);
+        //       toastr.error(error, "Error adding new item")
+        //       })
+        //   .then(() => {
+        //     document.getElementById("add-item-form").reset();
+        //     toastr.info("New item successfully added");
+        //     }
+        //   );
+
+        // NEW SCHEMA
+        firebase.database()
+          .ref('/inventory/' + barcode)
+          .update(itemInfo)
+          .catch(function(error) {
+              console.error('Error writing item to /inventory/' + itemID, error);
+              toastr.error(error, "Error adding new item")
+              })
+          .then(() => {
+            document.getElementById("add-item-form").reset();
+            toastr.info("New item successfully added");
+            }
+          );
+        return;
     }
   });
 }
@@ -351,7 +443,6 @@ var quantity = document.getElementById("editCount")
 var quantityLabel= document.getElementById("quantity-label")
 
 // Saves message on form submit.
-// messageFormElement.addEventListener('submit', onMessageFormSubmit);
 addItemFormElement.addEventListener('submit', onAddItemFormSubmit);
 editItemFormElement.addEventListener('submit', onEditItemFormSubmit);
 editItemFormBarcodeElement.addEventListener('submit', onEditBarcodeItemFormSubmit);

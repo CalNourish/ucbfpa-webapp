@@ -59,59 +59,21 @@ function checkoutItem(barcodeScanned, amount) {
   });
 }
 
-function getItemIdByBarcode(barcode) {
-  return new Promise(function(resolve, reject) {
-    var itemId = firebase
-      .database()
-      .ref('/barcodes/')
-      .once('value')
-      .then(function(barcodesTable) {
-        return barcodesTable.val()[barcode];
-      });
-  
-    if (itemId) {
-      resolve(itemId);
-    }
-    else {
-      reject(Error("Something broke here."));
-    }
-  });
-}
-
-function getItemNameByItemId(itemId) {
-  return new Promise(function(resolve, reject) {
-    var itemName = firebase
-      .database()
-      .ref('/inventory/' + itemId)
-      .once('value')
-      .then(function(inventoryTable) {
-        return inventoryTable.val().itemName;
-      });
-  
-    if (itemName) {
-      resolve(itemName);
-    }
-    else {
-      reject(Error("Something broke here."));
-    }
-  });
-}
-
 function getItemNameByBarcode(barcode) {
   return new Promise(function(resolve, reject) {
     var ref = firebase
       .database()
-      .ref('/inventory/')
-      .orderByChild('barcode')
-      .equalTo(barcode)
+      .ref('/inventory/' + barcode)
       .once('value')
       .then(function(inventoryTable) {
-        var itemNames = [];
-        inventoryTable.forEach(function(childNode) {
-          var item = childNode.val();
-          itemNames.push(item['itemName']);
-        });
-        return itemNames[0];
+        var item = inventoryTable.val();
+        return item.itemName;
+        // var itemNames = [];
+        // inventoryTable.forEach(function(childNode) {
+        //   var item = childNode.val();
+        //   itemNames.push(item['itemName']);
+        // });
+        // return itemNames[0];
       });
   
     if (ref) {
@@ -182,28 +144,6 @@ form.addEventListener('keypress', function(e) {
     }, function(err) {
       console.log(err);
     });
-
-
-    // getItemIdByBarcode(barcodeScanned.value) 
-    //   .then(function(itemId) {
-    //     getItemNameByItemId(itemId)
-    //       .then(function(itemName) {
-    //         var groceryItem = document.createElement("li");
-    //         var amount = document.getElementById('amount');
-    //         if (!amount.value) {
-    //           amount.value = "1";
-    //         }
-    //         groceryItem.textContent = itemName + ", Amount: " + amount.value;
-    //         groceryList.appendChild(groceryItem);
-    //         undo.style.visibility = 'visible';
-    //         barcodeScanned.value = "";
-    //         amount.value = "";
-    //       }, function(err) {
-    //         console.log(err);
-    //       });
-    //   }, function(err) {
-    //     console.log(err);
-    //   });
   }
 
     // Toast options

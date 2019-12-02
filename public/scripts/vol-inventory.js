@@ -140,7 +140,24 @@ $(document).ready(function() {
 });
 
 
+function refactorScript() {
+  console.log('refactor script running');
+  // get inventory table 
+  firebase.database()
+    .ref('/inventory')
+    .once("value", snapshot => {
+      let res = snapshot.val()
+      for (let item in res) {
+        let currentItem = res[item]
+        console.log(currentItem);
+    }
+  })
 
+
+  // for each child
+    // write a new table under barcode
+    // delete the table under item ID
+}
 
 
 function openAddModal() {
@@ -176,7 +193,7 @@ function setOutOfStock(itemName, barcode) {
       var itemID = barcodesTable.val()[barcode];
       firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
         var item = inventoryTable.val();
-        updateTo(itemID, item.itemName, item.barcode, item.cost, "0", item.categoryName);
+        updateTo(item.itemName, item.barcode, item.cost, "0", item.categoryName);
       });
     });
   }
