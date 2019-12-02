@@ -141,22 +141,26 @@ $(document).ready(function() {
 
 
 function refactorScript() {
-  console.log('refactor script running');
-  // get inventory table 
-  firebase.database()
+  if (confirm("Run script to change DB schema?????")) {
+    firebase.database()
     .ref('/inventory')
     .once("value", snapshot => {
       let res = snapshot.val()
       for (let item in res) {
         let currentItem = res[item]
-        console.log(currentItem);
-    }
-  })
-
-
-  // for each child
-    // write a new table under barcode
-    // delete the table under item ID
+        firebase.database()
+          .ref('/inventory/' + currentItem.barcode)
+          .update(currentItem) // write new schema version
+          .catch(function(error) {
+            console.error('Error writing item to /inventory/' + currentItem.barcode, error);
+            toastr.error(error, "Error writing item to inventory")
+            })
+          .then( () => {
+            deleteItem(currentItem.barcode); // delete the old schema version
+          });
+      }
+    });
+  }    
 }
 
 
