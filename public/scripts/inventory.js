@@ -32,7 +32,7 @@ $(document).ready(function() {
       `)
     }
     // append to dom
-    $("#inventory-items").append(allItems)
+    $(".inventory-table tbody").append(fullTable)
   })
 
     // watch for data changes while page is open
@@ -130,3 +130,39 @@ $(document).ready(function() {
       }
     }
   });
+
+  function searchItem() {
+    // Declare variables
+    var input, filter, items, li, a, i, txtValue, cards, name;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    if ($("[data-view='table']").hasClass("active")) {
+      items = document.getElementById("table-items");
+      li = items.getElementsByTagName('tr');
+      // Loop through all list items, and hide those who don't match the search query
+      for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("td")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          li[i].style.display = "";
+        } else {
+          li[i].style.display = "none";
+        }
+      }
+    } else {
+      items = document.getElementById("inventory-items");
+      cards = document.querySelectorAll(".card.item-card")
+      // Loop through all list items, and hide those who don't match the search query
+      for (i = 0; i < cards.length; i++) {
+        name = cards[i].querySelector(".item-name")
+        txtValue = name.textContent || name.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          cards[i].style.display = "";
+        } else {
+          cards[i].style.display = "none";
+        }
+      }
+    }
+  
+
+  }

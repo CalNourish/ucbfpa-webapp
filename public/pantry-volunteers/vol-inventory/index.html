@@ -119,14 +119,10 @@
 
   <div id="inventory" class="container">
     <h2 id="inventory-title">Pantry Live Inventory</h2>
-    <!-- Switch between views -->
     <div class="d-flex view-group justify-content-end">
-      <div class="view-item active" data-view="cards">
-          <i class="material-icons">view_module</i>
-      </div>
-      <div class="view-item" data-view="table">
-        <i class="material-icons">view_headlines</i>
-      </div>
+      <div>
+          <input id="searchInput" onkeyup="searchItem()" class="form-control ml-3 w-75" type="text" placeholder="Search for an item">
+        </div>
     </div>
     <!-- begin add item modal -->
     <div id="addItemModal" class="inventory-modal" onload="document.add-item-form.itemName.focus();">
@@ -405,8 +401,6 @@
             <a class="list-group-item category-item list-group-item-action" id="list-spices-list" data-toggle="list" data-item="spices" href="#" role="tab">Spices</a>
           </div>
         </div>
-      <div id="inventory-items" class="col-sm-8 d-flex flex-wrap">
-      </div>
       <table class="col-sm-8 table inventory-table">
         <thead>
           <tr>
@@ -414,7 +408,7 @@
             <th scope="col">Stock Amount</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id = "table-items">
         </tbody>
       </table>
     </div>

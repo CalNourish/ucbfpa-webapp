@@ -15,6 +15,10 @@ We followed [this guide](https://codelabs.developers.google.com/codelabs/firebas
 ```firebase serve --only hosting```
 ```✔  hosting: Local server: http://localhost:5000```
 
+Ensure that you have the proper permissions to access the volunteer side of the application. Sign in with the google email that has been granted acccess.
+
+For now, the volunteer side requires manually navigating to the volunteer path `/pantry-volunteers`. We decided on this for user experience reasons; we did not want a sign-in button floating on the page and potentially confusing non-volunteers. 
+
 ## Test and Prod Environments
 
 You should be granted access to the **TestCalNourish** and **ProdCalNourish** projects.
@@ -24,6 +28,8 @@ View list of current aliases for this local project: ```firebase use```.
 To add an alias, run ```firebase use --add``` to add aliases for the test and prod projects.
 
 To switch between projects, run ```firebase use <alias>```.
+
+These aliases will automatically connect with the appropriate firebase projects (i.e. database, auth, etc.). In development, you should only use **TestCalNourish** with the alias of `default` or `test`.
 
 ## Deployment
 
