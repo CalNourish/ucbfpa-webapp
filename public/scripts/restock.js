@@ -4,39 +4,6 @@ var DEFAULT_ITEM_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
 var DEFAULT_ITEM_ID_LENGTH = 5;
 
 
-function getAllUrlParams(url) {
-
-  
-}
-
-// $(document).ready( function () {
-// // get query string from url (optional) or window
-//   var url = window.location.href;
-//   var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
-
-// // we'll store the parameters here
-//   var obj = {};
-
-// // if query string exists
-//   if (queryString) {
-
-//     // stuff after # is not part of query string, so get rid of it
-//     queryString = queryString.split('#')[0];
-
-//     // split our query string into its component parts
-//     var arr = queryString.split('&');
-//     var a = arr[0].split('=');
-//     var barcode = typeof (a[1]) === 'undefined' ? true : a[1];
-//     loadItemIntoEditForm(barcode)
-
-//   }
-  
-//   // if (barcode) {
-//   //   loadItemIntoEditForm(barcode);
-//   // }
-// });
-
-
 function barcodeToID(barcode) {
   var itemID;
   firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
@@ -76,21 +43,10 @@ function updateItem() {
     getCategories().forEach(function(value, index, array) {
       var category = 'edit' + value.charAt(0).toUpperCase() + value.slice(1);
       var checkbox = document.getElementById(category);
-      // console.log(checkbox.checked);
       if (checkbox !== null && checkbox.checked) {
         categoryName[value] = value;
       }
     });
-
-    // // Write barcode to inventory 
-    // var barcodeToID = {};
-    // barcodeToID[barcode] = itemID;
-    // firebase.database()
-    //   .ref('/barcodes/')
-    //   .update(barcodeToID)
-    //   .catch(function(error) {
-    //     console.error('Error writing [' + barcode + ' : ' + itemID + '] to /barcodes/', error);
-    // });
 
     // Save this new item to inventory
     var itemInfo = {
@@ -106,20 +62,6 @@ function updateItem() {
       return;
     }
 
-    // // OLD SCHEMA
-    // return firebase.database()
-    //   .ref('/inventory/' + itemID)
-    //   .update(itemInfo)
-    //   .catch(function(error) {
-    //     console.error('Error writing item to /inventory/' + itemID, error);
-    //     toastr.error(error, "Error writing item to inventory")
-    //     })
-    //   .then( () => {
-    //     document.getElementById("edit-item-form").reset();
-    //     toastr.info("Edit Successful");
-    //   });
-
-    // NEW SCHEMA
     return firebase.database()
       .ref('/inventory/' + barcode)
       .update(itemInfo)
@@ -133,46 +75,7 @@ function updateItem() {
       });
 }
 
-// Why does this exist lol
-// function incrementOne(barcode) {
-//     return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-//         var itemID = barcodesTable.val()[barcode];
-//         firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-//           var item = inventoryTable.val();
-//           updateTo(itemID, item.itemName, item.barcode, (parseInt(item.count, 10) + 1).toString(), item.categoryName);
-//         });
-//     });
-// }
-// Get rid of this
-// function decrementOne(barcode) {
-//     return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-//         var itemID = barcodesTable.val()[barcode];
-//         firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-//           var item = inventoryTable.val();
-//           var dec = ((parseInt(item.count, 10) - 1) < 0) ? 0 : (parseInt(item.count, 10) - 1);
-//           updateTo(itemID, item.itemName, item.barcode, dec.toString(), item.categoryName);
-//         });
-//     });
-// }
-
-function decrementItem(barcode, amount) { // TO FIX
-    // // OLD SCHEMA
-    // return firebase.database()
-    //   .ref('/barcodes/')
-    //   .once('value')
-    //   .then(function(barcodesTable) {
-    //     var itemID = barcodesTable.val()[barcode];
-    //     firebase.database().
-    //       ref('/inventory/' + itemID)
-    //       .once('value')
-    //       .then(function(inventoryTable) {
-    //         var item = inventoryTable.val();
-    //         var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
-    //         updateTo(itemID, item.itemName, item.barcode, dec.toString(), item.categoryName);
-    //     });
-    // });
-
-    // NEW SCHEMA
+function decrementItem(barcode, amount) { 
     return firebase.database()
       .ref('/inventory/' + barcode)
       .once('value')
@@ -184,19 +87,6 @@ function decrementItem(barcode, amount) { // TO FIX
 }
 
 function deleteItem(barcode, itemName) { 
-  // // OLD SCHEMA
-  // firebase.database().ref('/barcodes/' + barcode).once('value').then(function(barcodeData) {
-  //   var itemID = barcodeData.val();
-  //   if (confirm("Delete " + itemName + "?")) {
-  //     firebase.database().ref('/inventory/' + itemID).remove().then(function() {
-  //       firebase.database().ref('/barcodes/' + barcode).remove().then(function() {
-  //         window.location.reload();
-  //       });
-  //     });
-  //   }
-  // }); 
-  
-  // NEW SCHEMA
   if (confirm("Delete " + itemName + "?")) {
     firebase.database().ref('/inventory/' + barcode).remove().then(function() {
       window.location.reload();
@@ -213,15 +103,6 @@ function updateTo(itemName, barcode, count, categoryName) {
       count: count,
       categoryName: categoryName,
     }
-    // // OLD SCHEMA
-    // return firebase.database()
-    //   .ref('/inventory/' + itemID)
-    //   .update(itemInfo)
-    //   .catch(function(error) {
-    //     console.error('Error writing item to /inventory/' + itemID, error);
-    //   });
-
-    // NEW SCHEMA
     return firebase.database() 
       .ref('/inventory/' + barcode)
       .update(itemInfo)
@@ -237,16 +118,6 @@ function updateTo(itemName, barcode, count, categoryName) {
 }
 
 function loadItemIntoEditForm(barcode) { 
-    // // OLD SCHEMA
-    // return firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-    //     var itemID = barcodesTable.val()[barcode];
-    //     firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-    //       var item = inventoryTable.val();
-    //       loadItemIntoEditForm2(itemID, item.itemName, item.barcode, item.count, item.categoryName);
-    //     });
-    // });
-
-    // NEW SCHEMA
     return firebase.database()
       .ref('/inventory/' + barcode)
       .once('value')
@@ -257,7 +128,6 @@ function loadItemIntoEditForm(barcode) {
 }
 
 function loadItemIntoEditForm2(itemName, barcode, count, categoryName) {
-  // document.getElementById('editItemID').value = itemID;
   document.getElementById('editItemName').value = itemName;
   document.getElementById('editBarcode').value = barcode;
   document.getElementById('editCount').value = count;
@@ -285,19 +155,13 @@ function saveItem() {
   // Generate hashmap that has list of categories for this item.
   var categoryName = {};
   getCategories().forEach(function(value, index, array) {
-    // console.log(value);
     var checkbox = document.getElementById(value);
-    // console.log(checkbox.checked);
     if (checkbox !== null && checkbox.checked) {
       categoryName[value] = value;
     }
   });
     
   //check if barcode already exists in database
-  // // OLD SCHEMA
-  // firebase.database().ref('/barcodes/').once('value').then((data) => {
-
-  // NEW SCHEMA
   firebase.database().ref('/inventory/').once('value').then((data) => {
     var barcodesFromDb = data.val();
     var barcodes = [];
@@ -314,18 +178,10 @@ function saveItem() {
         getCategories().forEach(function(value, index, array) {
           console.log(value);
           var checkbox = document.getElementById(value);
-          // console.log(checkbox.checked);
           if (checkbox !== null && checkbox.checked) {
             categoryName[value] = value;
           }
         });
-
-        // Connect the generated item ID to this barcode. TO DELETE
-        // var barcodeToID = {};
-        // barcodeToID[barcode] = '';
-        // firebase.database().ref('/barcodes/').update(barcodeToID).catch(function(error) {
-        //   console.error('Error writing [' + barcode + '] to /barcodes/', error);
-        // });
 
         // Save to inventory this new item to the generated item ID.
         var itemInfo = {
@@ -340,24 +196,6 @@ function saveItem() {
           return;
         }
 
-        // // OLD SCHEMA
-
-        // firebase.database()
-        //   .ref('/inventory/')
-        //   .push(itemInfo)
-        //   // .ref('/inventory/' + itemID)
-        //   // .update(itemInfo)
-        //   .catch(function(error) {
-        //       console.error('Error writing item to /inventory/' + itemID, error);
-        //       toastr.error(error, "Error adding new item")
-        //       })
-        //   .then(() => {
-        //     document.getElementById("add-item-form").reset();
-        //     toastr.info("New item successfully added");
-        //     }
-        //   );
-
-        // NEW SCHEMA
         firebase.database()
           .ref('/inventory/' + barcode)
           .update(itemInfo)

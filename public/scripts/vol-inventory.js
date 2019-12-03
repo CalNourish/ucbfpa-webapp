@@ -143,20 +143,20 @@ $(document).ready(function() {
 function refactorScript() {
   if (confirm("Run script to change DB schema?????")) {
     firebase.database()
-    .ref('/inventory')
+    .ref('/inventory2') // FIX BEFORE RUNNING
     .once("value", snapshot => {
       let res = snapshot.val()
       for (let item in res) {
         let currentItem = res[item]
         firebase.database()
-          .ref('/inventory/' + currentItem.barcode)
-          .update(currentItem) // write new schema version
+          .ref('/inventory2/' + currentItem.barcode) // FIX BEFORE RUNNING
+          .update(currentItem)
           .catch(function(error) {
             console.error('Error writing item to /inventory/' + currentItem.barcode, error);
             toastr.error(error, "Error writing item to inventory")
             })
           .then( () => {
-            deleteItem(currentItem.barcode); // delete the old schema version
+            // deleteItem(currentItem.barcode); // delete the old schema version. FIX BEFORE RUNNING
           });
       }
     });

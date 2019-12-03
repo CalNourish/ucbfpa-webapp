@@ -68,12 +68,6 @@ function getItemNameByBarcode(barcode) {
       .then(function(inventoryTable) {
         var item = inventoryTable.val();
         return item.itemName;
-        // var itemNames = [];
-        // inventoryTable.forEach(function(childNode) {
-        //   var item = childNode.val();
-        //   itemNames.push(item['itemName']);
-        // });
-        // return itemNames[0];
       });
   
     if (ref) {
@@ -138,6 +132,7 @@ form.addEventListener('keypress', function(e) {
       }
       groceryItem.textContent = itemName + ", Amount: " + amount.value;
       groceryList.appendChild(groceryItem);
+      updateTotal(amount.value);
       undo.style.visibility = 'visible';
       barcodeScanned.value = "";
       amount.value = "";
