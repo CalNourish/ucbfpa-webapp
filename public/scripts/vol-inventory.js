@@ -77,7 +77,6 @@ $(document).ready(function() {
 });
 
 
-<<<<<<< HEAD
 function refactorScript() {
   if (confirm("Run script to change DB schema?????")) {
     firebase.database()
@@ -100,7 +99,6 @@ function refactorScript() {
     });
   }    
 }
-=======
 
 function searchItem() {
   // Declare variables
@@ -109,7 +107,6 @@ function searchItem() {
   filter = input.value.toUpperCase();
   items = document.getElementById("table-items");
   li = items.getElementsByTagName('tr');
->>>>>>> 258d277a5ee51e1d47af0003f2d6cfed69f68131
 
   // Loop through all list items, and hide those who don't match the search query
   for (i = 0; i < li.length; i++) {
