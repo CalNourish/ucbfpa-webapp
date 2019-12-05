@@ -76,8 +76,6 @@ $(document).ready(function() {
   };
 });
 
-
-
 function searchItem() {
   // Declare variables
   var input, filter, items, li, a, i, txtValue;
@@ -131,7 +129,7 @@ function setOutOfStock(itemName, barcode) {
       var itemID = barcodesTable.val()[barcode];
       firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
         var item = inventoryTable.val();
-        updateTo(itemID, item.itemName, item.barcode, item.cost, "0", item.categoryName);
+        updateTo(item.itemName, item.barcode, item.cost, "0", item.categoryName);
       });
     });
   }
