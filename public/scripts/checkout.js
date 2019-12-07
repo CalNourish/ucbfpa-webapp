@@ -46,6 +46,7 @@ finished.addEventListener("click", (e) => {
     $('#grocery-list').empty();
     toastr.info('Checked out')
   }
+  amount.select();
 })
 
 function checkoutItem(barcodeScanned, amount) {
@@ -115,6 +116,7 @@ function updateTotal(amount) {
 * q - Amount field
 * w - Barcode field
 * Shift + Enter - checkout
+* numeric input anywhere not in a input field auto selects quantity
 */
 document.onkeydown = function(e) {
   if (e.which == 81) {
@@ -127,6 +129,11 @@ document.onkeydown = function(e) {
     // Hacky, should move checkout functionality into own function and call that from here and checkout button listener
     e.preventDefault();
     finished.click();
+  } else if (e.which >= 48 && e.which <= 57) {
+    // check we're not inside of an entry field
+    if (document.activeElement.tagName != "INPUT") {
+      amount.select();
+    }
   }
 }
 
