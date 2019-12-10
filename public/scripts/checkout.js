@@ -14,8 +14,11 @@ undo.addEventListener("click", (e) => {
 });
 undo.style.visibility = 'hidden';
 
-
 finished.addEventListener("click", (e) => {
+  finishCheckout();
+})
+
+function finishCheckout() {
   if (groceryCart.length == 0) {
     return;
   }
@@ -41,13 +44,12 @@ finished.addEventListener("click", (e) => {
   undo.style.visibility = 'hidden'
   groceryCart = [];
   totalItems.textContent = '0'
-  e.preventDefault()
   if (groceryList.childElementCount > 0) {
     $('#grocery-list').empty();
     toastr.info('Checked out')
   }
   amount.select();
-})
+}
 
 function checkoutItem(barcodeScanned, amount) {
   var amount = amount ? amount : 1;
@@ -126,9 +128,8 @@ document.onkeydown = function(e) {
     e.preventDefault();
     barcode.select();
   } else if (e.shiftKey && e.which == 13) {
-    // Hacky, should move checkout functionality into own function and call that from here and checkout button listener
     e.preventDefault();
-    finished.click();
+    finishCheckout();
   } else if (e.which >= 48 && e.which <= 57) {
     // check we're not inside of an entry field
     if (document.activeElement.tagName != "INPUT") {
@@ -136,7 +137,6 @@ document.onkeydown = function(e) {
     }
   }
 }
-
 
 form.addEventListener('keypress', function(e) {
   if (e.keyCode == 13) {
