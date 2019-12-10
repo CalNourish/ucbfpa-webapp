@@ -139,11 +139,12 @@ document.onkeydown = function(e) {
 
 
 form.addEventListener('keypress', function(e) {
+  console.log("we here")
   if (e.keyCode == 13) {
   	e.preventDefault();
     var barcodeScanned = document.getElementById('barcode');
     var amount = document.getElementById('amount');
-    if (barcodeScanned == "") {
+    if (barcodeScanned.value == "") {
       return;
     } 
     if (!amount.value) {
