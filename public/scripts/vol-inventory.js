@@ -18,7 +18,7 @@ $(document).ready(function() {
       <tr>
         <td><a href='#' onClick = "goToEditItem(\'${currentItem.barcode}\')">${currentItem.itemName}</a></td>
         <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
-        <td><button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${currentItem.itemName}\')"><i class="fa fa-trash"></i></button></td>
+        <td><button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${formatNameForHTML(currentItem.itemName)}\')"><i class="fa fa-trash"></i></button></td>
       </tr>`)
     }
     // append to dom
@@ -58,7 +58,7 @@ $(document).ready(function() {
               <tr>
                 <td><a href='#' onClick = "goToEditItem(\'${currentItem.barcode}\')">${currentItem.itemName}</a></td>
                 <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
-                <td><button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${currentItem.itemName}\')"><i class="fa fa-trash"></i></button></td>
+                <td><button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${formatNameForHTML(currentItem.itemName)}\')"><i class="fa fa-trash"></i></button></td>
               </tr>
               `)                               
             }
@@ -121,6 +121,10 @@ function standardizeName(itemName) {
     var newName = itemName.slice(0, 20) + "...";
   }
   return newName;
+}
+
+function formatNameForHTML(itemName) {
+  return itemName.replace(/'/g, "\\'")
 }
 
 function setOutOfStock(itemName, barcode) {
