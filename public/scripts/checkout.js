@@ -1,6 +1,8 @@
 'use strict';
 
 var form = document.getElementById('checkout-item-form');
+var amount = document.getElementById('amount');
+var barcode = document.getElementById('barcode');
 var groceryList = document.querySelector('ol');
 var totalItems = document.getElementById("total-items")
 var finished = document.getElementById('backToCheckout');
@@ -12,8 +14,11 @@ undo.addEventListener("click", (e) => {
 });
 undo.style.visibility = 'hidden';
 
-
 finished.addEventListener("click", (e) => {
+  finishCheckout();
+})
+
+function finishCheckout() {
   if (groceryCart.length == 0) {
     return;
   }
@@ -39,12 +44,12 @@ finished.addEventListener("click", (e) => {
   undo.style.visibility = 'hidden'
   groceryCart = [];
   totalItems.textContent = '0'
-  e.preventDefault()
   if (groceryList.childElementCount > 0) {
     $('#grocery-list').empty();
     toastr.info('Checked out')
   }
-})
+  amount.select();
+}
 
 function checkoutItem(barcodeScanned, amount) {
   var amount = amount ? amount : 1;
@@ -108,12 +113,38 @@ function updateTotal(amount) {
   totalItems.textContent = currentAmount + scannedAmount
 }
 
+/*
+* Page-wide hotkeys
+* q - Amount field
+* w - Barcode field
+* Shift + Enter - checkout
+* numeric input anywhere not in a input field auto selects quantity
+*/
+document.onkeydown = function(e) {
+  if (e.which == 81) {
+    e.preventDefault();
+    amount.select();
+  } else if (e.which == 87) {
+    e.preventDefault();
+    barcode.select();
+  } else if (e.shiftKey && e.which == 13) {
+    e.preventDefault();
+    finishCheckout();
+  } else if (e.which >= 48 && e.which <= 57) {
+    // check we're not inside of an entry field
+    if (document.activeElement.tagName != "INPUT") {
+      amount.select();
+    }
+  }
+}
+
 form.addEventListener('keypress', function(e) {
+  console.log("we here")
   if (e.keyCode == 13) {
   	e.preventDefault();
     var barcodeScanned = document.getElementById('barcode');
     var amount = document.getElementById('amount');
-    if (barcodeScanned == "") {
+    if (barcodeScanned.value == "") {
       return;
     } 
     if (!amount.value) {
