@@ -124,7 +124,6 @@ document.onkeydown = function(e) {
 }
 
 form.addEventListener('keypress', function(e) {
-  console.log("we here")
   if (e.keyCode == 13) {
   	e.preventDefault();
     var barcodeScanned = document.getElementById('barcode');
@@ -138,8 +137,9 @@ form.addEventListener('keypress', function(e) {
     
   getItemNameByBarcode(barcodeScanned.value)
     .then(function(itemName) {
-      var trashButton = document.createElement("button");
-      trashButton.type = "button";
+      var trashButton = document.createElement("i");
+      // trashButton.type = "button";
+      trashButton.classList.add("fa", "fa-trash", "fa-6");
       trashButton.setAttribute("id", + groceryCart.length);
       trashButton.addEventListener("click", function(event) {
         e.preventDefault(),
@@ -152,19 +152,16 @@ form.addEventListener('keypress', function(e) {
 
       var groceryItem = document.createElement("tr");
       groceryItem.setAttribute("id", "item" + groceryCart.length);
-      // groceryItem.textContent = itemName + ", Amount: " + amount.value;
-      trashButton.innerText = "Trash";
 
       var groceryItemChild1 = document.createElement("td");
       var groceryItemChild2 = document.createElement("td");
       var groceryItemChild3 = document.createElement("td");
 
       groceryItemChild1.textContent = itemName;
-      groceryItemChild2.textContent = "Amount: " + amount.value;
+      groceryItemChild2.textContent = amount.value;
       groceryItemChild3.appendChild(trashButton);
 
       groceryItem.appendChild(groceryItemChild1);
-      groceryItem.appendChild(document.createElement("td"));
       groceryItem.appendChild(groceryItemChild2);
       groceryItem.appendChild(groceryItemChild3);
 
