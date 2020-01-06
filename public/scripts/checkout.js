@@ -3,16 +3,10 @@
 var form = document.getElementById('checkout-item-form');
 var amount = document.getElementById('amount');
 var barcode = document.getElementById('barcode');
-var groceryList = document.querySelector('ol');
+var groceryList = document.getElementById('grocery-list');
 var totalItems = document.getElementById("total-items")
 var finished = document.getElementById('backToCheckout');
-var undo = document.getElementById('undoLastItem');
 var groceryCart  = [];
-
-undo.addEventListener("click", (e) => {
-  undoLastItem();
-});
-undo.style.visibility = 'hidden';
 
 finished.addEventListener("click", (e) => {
   finishCheckout();
@@ -23,13 +17,18 @@ function finishCheckout() {
     return;
   }
   let groceryDict = {};
+  // consolidate grocery list items so that there is only a single entry per barcode
   for (let i = 0; i < groceryCart.length; i++) {
-    let barcode = groceryCart[i][0];
-    let amount = groceryCart[i][1];
-    if (groceryDict[barcode]) {
-      groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount)
+    if (groceryCart[i] == null) {
+      continue;
     } else {
-      groceryDict[barcode] = parseInt(amount);
+      let barcode = groceryCart[i][0];
+      let amount = groceryCart[i][1];
+      if (groceryDict[barcode]) {
+        groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount)
+      } else {
+        groceryDict[barcode] = parseInt(amount);
+      }
     }
   }
   Object.entries(groceryDict).forEach(([barcode, amount]) => {
@@ -41,7 +40,6 @@ function finishCheckout() {
         toastr.error("Item checkout error")
       });
   });
-  undo.style.visibility = 'hidden'
   groceryCart = [];
   totalItems.textContent = '0'
   if (groceryList.childElementCount > 0) {
@@ -94,19 +92,6 @@ function getAmount() {
   }
 }
 
-function undoLastItem() {
-  if (groceryList.childNodes.length > 0) {
-
-    groceryList.removeChild(groceryList.childNodes[groceryList.childNodes.length-1]);
-    var lastItem = groceryCart.pop();
-    updateTotal('-' + lastItem[1])
-  }
-  if (groceryList.childNodes.length == 0) {
-    undo.style.visibility = 'hidden'
-  }
-  return;
-}
-
 function updateTotal(amount) {
   var currentAmount = parseInt(totalItems.textContent)
   var scannedAmount = parseInt(amount)
@@ -151,25 +136,52 @@ form.addEventListener('keypress', function(e) {
       amount.value = "1";
     }
     
-    groceryCart.push([barcodeScanned.value, amount.value]);
-
-    // get item name from barcode
-    getItemNameByBarcode(barcodeScanned.value)
+  getItemNameByBarcode(barcodeScanned.value)
     .then(function(itemName) {
-      var groceryItem = document.createElement("li");
+      var trashButton = document.createElement("button");
+      trashButton.type = "button";
+      trashButton.setAttribute("id", + groceryCart.length);
+      trashButton.addEventListener("click", function(event) {
+        e.preventDefault(),
+        removeListItem(this.id);
+      });
       var amount = document.getElementById('amount');
       if (!amount.value) {
         amount.value = "1";
       }
-      groceryItem.textContent = itemName + ", Amount: " + amount.value;
+
+      var groceryItem = document.createElement("tr");
+      groceryItem.setAttribute("id", "item" + groceryCart.length);
+      // groceryItem.textContent = itemName + ", Amount: " + amount.value;
+      trashButton.innerText = "Trash";
+
+      var groceryItemChild1 = document.createElement("td");
+      var groceryItemChild2 = document.createElement("td");
+      var groceryItemChild3 = document.createElement("td");
+
+      groceryItemChild1.textContent = itemName;
+      groceryItemChild2.textContent = "Amount: " + amount.value;
+      groceryItemChild3.appendChild(trashButton);
+
+      groceryItem.appendChild(groceryItemChild1);
+      groceryItem.appendChild(document.createElement("td"));
+      groceryItem.appendChild(groceryItemChild2);
+      groceryItem.appendChild(groceryItemChild3);
+
       groceryList.appendChild(groceryItem);
+      groceryCart.push([barcodeScanned.value, amount.value]);
       updateTotal(amount.value);
-      undo.style.visibility = 'visible';
       barcodeScanned.value = "";
       amount.value = "";
     }, function(err) {
       console.log(err);
     });
+  }
+
+  function removeListItem(i) {
+    groceryList.removeChild(document.getElementById("item" + i));
+    updateTotal('-' + groceryCart[i][1])
+    groceryCart[i] = null;
   }
 
     // Toast options
