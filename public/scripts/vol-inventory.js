@@ -74,6 +74,8 @@ $(document).ready(function() {
       $(".inventory-table tbody").append(fullTable);
     }
   };
+
+
 });
 
 function searchItem() {
@@ -133,7 +135,7 @@ function setOutOfStock(itemName, barcode) {
       var itemID = barcodesTable.val()[barcode];
       firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
         var item = inventoryTable.val();
-        updateTo(item.itemName, item.barcode, item.cost, "0", item.categoryName);
+        updateTo(item.itemName, item.barcode, item.cost, "0", item.categoryName, iten.packSize);
       });
     });
   }
@@ -148,6 +150,39 @@ var editItemModal = document.getElementById('editItemModal');
 var modalContent = document.getElementById('modalContent');
 var modalBtn = document.getElementById('modalBtn');
 var closeBtn = document.getElementById('closeBtn');
+var packSize = document.getElementById('pack');
+var count = document.getElementById('count');
+var unitChoice = document.getElementById('packOption');
+
+// add listeners to update helptext when selecting or modifying quantity
+for (var eventType of ['keyup', 'click']) {
+  //update the on-page hint when modifyig quantity or clicking to modify quantity
+  count.addEventListener(eventType, function() {
+    //only update the on-page hint when using packs
+    if (unitChoice.selectedOptions[0].innerText == 'Packs') {
+      var size = packSize.value;
+      var countVal = count.value;
+      // if they haven't put in a items/pack yet, use some placeholder
+      if (size == ''){
+        size = 5;
+      }
+      // if they haven't put in a number of items yet, use some placeholder
+      if (countVal == '') {
+        countVal = 3;
+      }
+      var total = size * countVal;
+      document.getElementById('helptext').innerHTML = `Enter estimate if unsure. Example: ${countVal} packs of size ${size} is ${total} items`
+    }
+  });
+}
+
+// update on-page hint when switching back to individual items
+unitChoice.addEventListener("change", function() {
+  // if using packs
+  if (unitChoice.selectedOptions[0].innerText != 'Packs') {
+    document.getElementById('helptext').innerHTML = `Enter estimate if unsure. Example: 15`
+  }
+})
 
 document.onclick = function(e){
   if(e.target.id == 'addItemModal'){
@@ -158,6 +193,8 @@ document.onclick = function(e){
     return;
   }
 };
+
+
 
 // Toast options
 toastr.options = {
