@@ -138,7 +138,6 @@ form.addEventListener('keypress', function(e) {
   getItemNameByBarcode(barcodeScanned.value)
     .then(function(itemName) {
       var trashButton = document.createElement("i");
-      // trashButton.type = "button";
       trashButton.classList.add("fa", "fa-trash", "fa-6");
       trashButton.setAttribute("id", + groceryCart.length);
       trashButton.addEventListener("click", function(event) {
@@ -153,17 +152,17 @@ form.addEventListener('keypress', function(e) {
       var groceryItem = document.createElement("tr");
       groceryItem.setAttribute("id", "item" + groceryCart.length);
 
-      var groceryItemChild1 = document.createElement("td");
-      var groceryItemChild2 = document.createElement("td");
-      var groceryItemChild3 = document.createElement("td");
+      var itemNameElement = document.createElement("td");
+      var itemAmountElement = document.createElement("td");
+      var trashButtonElement = document.createElement("td");
 
-      groceryItemChild1.textContent = itemName;
-      groceryItemChild2.textContent = amount.value;
-      groceryItemChild3.appendChild(trashButton);
+      itemNameElement.textContent = itemName;
+      itemAmountElement.textContent = amount.value;
+      trashButtonElement.appendChild(trashButton);
 
-      groceryItem.appendChild(groceryItemChild1);
-      groceryItem.appendChild(groceryItemChild2);
-      groceryItem.appendChild(groceryItemChild3);
+      groceryItem.appendChild(itemNameElement);
+      groceryItem.appendChild(itemAmountElement);
+      groceryItem.appendChild(trashButtonElement);
 
       groceryList.appendChild(groceryItem);
       groceryCart.push([barcodeScanned.value, amount.value]);
