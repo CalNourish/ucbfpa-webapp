@@ -215,6 +215,10 @@ main, #messages-card {
   margin-right: 5px;
 }
 
+.table-header {
+  cursor: pointer;
+}
+
 /*********************/
 /*********************/
 /* ADMIN PAGE STYLES */

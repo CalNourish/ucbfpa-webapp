@@ -1,29 +1,94 @@
 'use strict';
+// Global Variables
+const ALL_ITEMS = []
+const FULL_TABLE = []
+let current_table = []
+let current_items = []
+let last_sort = null;
+
+
+// Create item object
+function Item(name, barcode, count, categories) {
+  this.name = name;
+  this.barcode = barcode;
+  this.count = count;
+  this.categories = categories;
+}
+
+// Custom comparison function to pass to `.sort`
+function compareByKey(key, order="asc") {
+  if (last_sort == key) {
+    order="desc"
+    last_sort = null
+  } else {
+    last_sort = key
+  }
+  return function(a,b) {
+    // check that the object has the property
+    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+      return 0
+    }
+
+    // check if comparing strings or numbers, and standardize
+    let comparison, a_value, b_value = [0, null, null];
+    if (key == 'count') {
+      a_value = parseInt(a[key])
+      b_value = parseInt(b[key])
+      comparison = a_value - b_value
+    } else {
+      a_value = a[key].toUpperCase()
+      b_value = b[key].toUpperCase()
+      if (a_value > b_value) {
+        comparison = 1
+      } else if (a_value < b_value) {
+        comparison = -1
+      }
+    } 
+
+    // flip order if descending
+    comparison = order === 'desc' ? comparison * -1 : comparison;
+    return comparison
+  }
+}
+
+function sortTableByKey(table, key) {
+  table.empty()
+  current_table = []
+  current_items = current_items.sort(compareByKey(key))
+  current_items.forEach((item) => {
+    current_table.push(volunteer_table_row(item.name, item.count, item.barcode))
+  })
+  table.append(current_table)
+}
 
 $(document).ready(function() {
+  // Selectors
+  const TABLE_SELECTOR = $(".inventory-table tbody")
 
-  // list for appending to DOM
-
-  let fullTable = [];
   // connect inventory
   const REF = firebase.database().ref('/inventory')
 
-  // initial data 
+  // initialize data 
   REF.once("value", snapshot => {
-
     let res = snapshot.val()
     for (let item in res) {
-      let currentItem = res[item]
-      fullTable.push(`
-      <tr>
-        <td><a href='#' onClick = "goToEditItem(\'${currentItem.barcode}\')">${currentItem.itemName}</a></td>
-        <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
-        <td><button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${formatNameForHTML(currentItem.itemName)}\')"><i class="fa fa-trash"></i></button></td>
-      </tr>`)
+      let currentItem = res[item];
+      let category_dict = currentItem.categoryName
+      let categories = []
+      for (let category in category_dict) {
+        categories.push(category)
+      }
+      ALL_ITEMS.push(new Item(currentItem.itemName, currentItem.barcode, currentItem.count, categories))
     }
-    // append to dom
-    $(".inventory-table tbody").append(fullTable);
+    current_items = ALL_ITEMS
+    current_items.forEach((item) => {
+      FULL_TABLE.push(volunteer_table_row(item.name, item.count, item.barcode))
+    })
+    // Append full table to dom
+    current_table = FULL_TABLE
+    TABLE_SELECTOR.append(current_table);
   });
+
   // watch for data changes while page is open
   REF.on("child_changed", snapshot => {
     let res = snapshot.val()
@@ -34,6 +99,8 @@ $(document).ready(function() {
     }
   })
 
+  // Sort table on click
+  $(".table-header").on("click", function() { sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"))})
 
   // Clear page and select items by category
   $(".list-group-item.category-item").click(function() {
@@ -44,35 +111,26 @@ $(document).ready(function() {
   });
 
   function showCategory(selected) {
-    let items = [];
+    TABLE_SELECTOR.empty();
+    current_table = [];
+    current_items = [];
     $("#selected-category").text(selected.charAt(0).toUpperCase() + selected.slice(1))
     if (selected != 'all') {
-      REF.once("value", snapshot => {
-        let res = snapshot.val()
-        for (let item in res) {
-          let currentItem = res[item]
-          let categories = currentItem.categoryName
-          for (let category in categories) {
-            if (category == selected) {
-              items.push(`
-              <tr>
-                <td><a href='#' onClick = "goToEditItem(\'${currentItem.barcode}\')">${currentItem.itemName}</a></td>
-                <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
-                <td><button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${formatNameForHTML(currentItem.itemName)}\')"><i class="fa fa-trash"></i></button></td>
-              </tr>
-              `)                               
-            }
+      ALL_ITEMS.forEach((item) => {
+        for (let i = 0; i < item.categories.length; i++) {
+          if (item.categories[i] == selected) {
+            current_items.push(item)
+            current_table.push(volunteer_table_row(item.name, item.count, item.barcode))
+            break;
           }
         }
-        // update DOM
-        $(".inventory-table tbody").empty();
-        $(".inventory-table tbody").append(items);
       })
     } else {
-      // update DOM
-      $(".inventory-table tbody").empty();
-      $(".inventory-table tbody").append(fullTable);
+      current_items = ALL_ITEMS
+      current_table = FULL_TABLE
     }
+    // update DOM
+    TABLE_SELECTOR.append(current_table);
   };
 });
 
@@ -123,9 +181,7 @@ function standardizeName(itemName) {
   return newName;
 }
 
-function formatNameForHTML(itemName) {
-  return itemName.replace(/'/g, "\\'")
-}
+
 
 function setOutOfStock(itemName, barcode) {
   if (confirm("Set " + itemName + " to Out of Stock?")) {
