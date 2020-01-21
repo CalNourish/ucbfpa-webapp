@@ -1,0 +1,136 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Karla', sans-serif;
+    background: white;
+}
+
+/* This is the nav bar/header */
+
+header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding-left: 50px;
+    padding-top: 10px;
+    background: #003262;
+    position: fixed;
+}
+
+.link {
+    display: inline-block;
+    margin: 20px;
+    letter-spacing: 2px;
+}
+
+.link.active {
+    width: 190px;
+    height: 40px;
+    background-color: #3E5A7F;
+    border-radius: 5px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
+#nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 490px;
+}
+
+#pantrylogo {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+a {
+    font-family: 'Karla', sans-serif;
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.accounticon {
+    padding-top: 30px;
+    padding-left: 10px
+}
+
+/* This is the grey sidebar */
+
+.dashboard {
+    padding-top: 30px;
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-template-areas:
+        "sidebar content";
+}
+
+.sidebar {
+    grid-area: sidebar;
+    background-color: #F2F2F2;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    padding-top: 100px;
+    align-items: center;
+}
+
+.categories {
+    padding: 10px;
+    width: 75%;
+    color: #3F4857;
+    font-weight: 700;
+    letter-spacing: 2px;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
+.categories.title {
+    font-size: 25px;
+    color: #003262;
+}
+
+.categories.description {
+    font-weight: 400;
+    letter-spacing: 0px;
+    font-size: 14px;
+}
+
+input[type=text] {
+    font-family: 'Karla', sans-serif;
+    color: #3F4857;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    background-color: white;
+    outline: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.categories.button {
+    width: 250px;
+    height: 30px;
+    background-color: #68B51B;
+    color: white;
+    letter-spacing: 2px;
+    border-radius: 5px;
+    box-shadow: 0px 5px 5px grey;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+    margin-top: 120px;
+}
