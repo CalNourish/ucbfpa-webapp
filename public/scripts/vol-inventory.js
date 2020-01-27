@@ -17,10 +17,17 @@ function Item(name, barcode, count, categories) {
 
 // Custom comparison function to pass to `.sort`
 function compareByKey(key, order="asc") {
+  $(".sorting-icon").addClass("inactive")
+                    .removeClass("active")
+                    .css("visibility", "visible")
   if (last_sort == key) {
+    $(`.table-header[data-sort-by=${key}] .down`).removeClass("inactive").addClass("active")
+    $(`.table-header[data-sort-by=${key}] .up`).css("visibility", "hidden")
     order="desc"
     last_sort = null
   } else {
+    $(`.table-header[data-sort-by=${key}] .up`).removeClass("inactive").addClass("active")
+    $(`.table-header[data-sort-by=${key}] .down`).css("visibility", "hidden")
     last_sort = key
   }
   return function(a,b) {
@@ -100,7 +107,9 @@ $(document).ready(function() {
   })
 
   // Sort table on click
-  $(".table-header").on("click", function() { sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"))})
+  $(".table-header").on("click", function() { 
+    sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"))
+  });
 
   // Clear page and select items by category
   $(".list-group-item.category-item").click(function() {
