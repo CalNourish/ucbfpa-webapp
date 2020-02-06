@@ -4,8 +4,9 @@ const ALL_ITEMS = []
 const FULL_TABLE = []
 let current_table = []
 let current_items = []
-let last_sort = null;
 
+let sort_key = null;
+let sort_order = null;
 
 // Create item object
 function Item(name, barcode, count, categories) {
@@ -20,15 +21,17 @@ function compareByKey(key, order="asc") {
   $(".sorting-icon").addClass("inactive")
                     .removeClass("active")
                     .css("visibility", "visible")
-  if (last_sort == key) {
+  if (last_sort_key == key) {
     $(`.table-header[data-sort-by=${key}] .down`).removeClass("inactive").addClass("active")
     $(`.table-header[data-sort-by=${key}] .up`).css("visibility", "hidden")
     order="desc"
-    last_sort = null
+    sort_order="desc"
+    last_sort_key = null
   } else {
     $(`.table-header[data-sort-by=${key}] .up`).removeClass("inactive").addClass("active")
     $(`.table-header[data-sort-by=${key}] .down`).css("visibility", "hidden")
-    last_sort = key
+    sort_order="asc"
+    last_sort_key = key
   }
   return function(a,b) {
     // check that the object has the property
@@ -120,6 +123,7 @@ $(document).ready(function() {
   });
 
   function showCategory(selected) {
+
     TABLE_SELECTOR.empty();
     current_table = [];
     current_items = [];
@@ -140,6 +144,8 @@ $(document).ready(function() {
     }
     // update DOM
     TABLE_SELECTOR.append(current_table);
+    searchItem()
+    sortTableByKey(last_sort_key, sort_order)
   };
 });
 
