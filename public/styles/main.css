@@ -18,6 +18,15 @@ html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  flex: 1 0 auto;
+}
+
 #account-dropdown {
   display: none;
 }
@@ -288,6 +297,14 @@ td.day {
 
 .notification-title {
   margin-top: 0;
+}
+
+footer {
+  margin-top: 20px;
+}
+
+footer .row:first-child {
+  border-top: 1px solid #eeeeee;
 }
 
 
