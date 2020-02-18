@@ -281,12 +281,13 @@
                       <div class="form-group col-6"style="padding-left: 0;">
                         <label for="edit-count-by-interval">Add/Subtract from Quantity</label>
                         <div class="input-group">
-                            <span><button class="btn btn-sm btn-primary decrement-count" type="button" onclick="subtractFromCountByInterval()"><i class="material-icons">remove</i></button></span>
+
                             <input type="number" class="form-control" name="edit-interval" id="edit-interval" required=required>
                             <select class="form-control" id="editUnitOption">
                               <option value="unit" selected="selected">Individual Items</option>
                               <option value="unit">Packs</option>
                             </select> 
+                            <span><button class="btn btn-sm btn-primary decrement-count" type="button" onclick="subtractFromCountByInterval()"><i class="material-icons">remove</i></button></span>
                             <span><button class="btn btn-sm btn-primary increment-count" type="button" onclick="addToCountByInterval()"><i class="material-icons">add</i></button></span>
                         </div>
                       </div>
