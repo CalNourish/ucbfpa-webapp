@@ -6,8 +6,14 @@ var barcode = document.getElementById('barcode');
 var groceryList = document.getElementById('grocery-list');
 var totalItems = document.getElementById("total-items")
 var finished = document.getElementById('backToCheckout');
+// const {google} = require('googleapis');
+// const sheets = google.sheets('v4');
 var groceryCart  = [];
-
+var itemInfo = [];
+// var GoogleSpreadsheet = require('google-spreadsheet');
+// var doc = new GoogleSpreadsheet('1XIjyadGWWQ3BcHGujyJsa5E7SbrHN12PT8Y15SBrAFQ');
+// var sheetDict = {}
+let numToDay = {0:'Sunday', 1:'Monday', 2:'Tuesday', 3:'Wednesday', 4:'Thursday', 5:'Friday', 6:'Saturday'}
 finished.addEventListener("click", (e) => {
   finishCheckout();
 })
@@ -17,22 +23,50 @@ function finishCheckout() {
     return;
   }
   let groceryDict = {};
+  let sheetDict = {};
   // consolidate grocery list items so that there is only a single entry per barcode
+  let idDate = new Date();
+  let id = idDate.getTime();
   for (let i = 0; i < groceryCart.length; i++) {
+
     if (groceryCart[i] == null) {
       continue;
     } else {
       let barcode = groceryCart[i][0];
       let amount = groceryCart[i][1];
+      let name = groceryCart[i][2];
+      let invCount = groceryCart[i][3];
+      let date = new Date();
+      let numDate = String(date.getFullYear()) + '-' + String(date.getMonth()) + '-' + String(date.getDate());
+      let hr = String(date.getHours())
+      if (hr.length == 1) {
+        hr = '0' + hr
+      }
+      let min = String(date.getMinutes())
+      if (min.length == 1) {
+        min = '0' + min
+      }
+      let sec = String(date.getSeconds())
+      if (sec.length == 1) {
+        sec = '0' + sec
+      }
+      let time = hr + ':' + min + ':' + sec;
+      let day = numToDay[date.getDay()]
+      let itemDict = {'barcode' : barcode, 'amount' : parseInt(amount), 'groceryName' : name, 'inventoryCount' : invCount,
+                          'id':id, 'date':numDate, 'time':time, 'day':day};
       if (groceryDict[barcode]) {
-        groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount)
+        groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount);
+        sheetDict[barcode]['amount'] = parseInt(sheetDict[barcode]['amount']) + parseInt(amount) //may run into string vs int problems here
       } else {
         groceryDict[barcode] = parseInt(amount);
+        sheetDict[barcode] = itemDict;
       }
+
     }
   }
+
   Object.entries(groceryDict).forEach(([barcode, amount]) => {
-    checkoutItem(barcode, amount) 
+    checkoutItem(barcode, amount)
       .then(function(result) {
         console.log(result);
       }, function(err) {
@@ -40,6 +74,7 @@ function finishCheckout() {
         toastr.error("Item checkout error")
       });
   });
+
   groceryCart = [];
   totalItems.textContent = '0'
   if (groceryList.childElementCount > 0) {
@@ -62,6 +97,29 @@ function checkoutItem(barcodeScanned, amount) {
   });
 }
 
+
+function getInventoryAmountByBarcode(barcode) {
+  return new Promise(function(resolve, reject) {
+    var ref = firebase
+      .database()
+      .ref('/inventory/' + barcode)
+      .once('value')
+      .then(function(inventoryTable) {
+        var item = inventoryTable.val();
+
+        return item.count;
+      });
+
+    if (ref) {
+      resolve(ref);
+    }
+    else {
+      reject(Error("Something broke here."));
+    }
+  });
+}
+
+
 function getItemNameByBarcode(barcode) {
   return new Promise(function(resolve, reject) {
     var ref = firebase
@@ -70,9 +128,10 @@ function getItemNameByBarcode(barcode) {
       .once('value')
       .then(function(inventoryTable) {
         var item = inventoryTable.val();
+
         return item.itemName;
       });
-  
+
     if (ref) {
       resolve(ref);
     }
@@ -130,11 +189,11 @@ form.addEventListener('keypress', function(e) {
     var amount = document.getElementById('amount');
     if (barcodeScanned.value == "") {
       return;
-    } 
+    }
     if (!amount.value) {
       amount.value = "1";
     }
-    
+
   getItemNameByBarcode(barcodeScanned.value)
     .then(function(itemName) {
       var trashButton = document.createElement("i");
@@ -160,18 +219,34 @@ form.addEventListener('keypress', function(e) {
       itemAmountElement.textContent = amount.value;
       trashButtonElement.appendChild(trashButton);
 
+
+      //alert(inventoryCountElement.textContent)
       groceryItem.appendChild(itemNameElement);
       groceryItem.appendChild(itemAmountElement);
       groceryItem.appendChild(trashButtonElement);
+      itemInfo.push(barcodeScanned.value, amount.value, itemNameElement.textContent);
+      getInventoryAmountByBarcode(barcodeScanned.value)
+        .then(function(inventoryCount) {
+          var inventoryCountElement = document.createElement("td");
+          inventoryCountElement.textContent = inventoryCount;
+          itemInfo.push(inventoryCountElement.textContent);
+          groceryCart.push(itemInfo);
+          itemInfo = []
+          return
+        });
 
       groceryList.appendChild(groceryItem);
-      groceryCart.push([barcodeScanned.value, amount.value]);
       updateTotal(amount.value);
       barcodeScanned.value = "";
       amount.value = "";
     }, function(err) {
       console.log(err);
     });
+
+
+
+
+
   }
 
   function removeListItem(i) {
