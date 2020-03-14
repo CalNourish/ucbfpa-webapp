@@ -31,7 +31,7 @@ function generateItemID() {
 function getCategories() {
   return ['grains', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages'];
 }
-
+// used by the edit item modal
 function updateItem() {
     var itemID = document.getElementById('editItemID').value;
     var itemName = document.getElementById('editItemName').value;
@@ -39,6 +39,10 @@ function updateItem() {
     var count = document.getElementById('editCount').value;
     var packSize = document.getElementById('editPackSize').value;
 
+    if (isNaN(parseInt(packSize))) {
+      packSize = 0;
+    }
+    
     // Generate hashmap that has list of categories for this item.
     var categoryName = {};
     getCategories().forEach(function(value, index, array) {
@@ -50,7 +54,6 @@ function updateItem() {
     });
 
     // Save this new item to inventory
-
     if (JSON.stringify(categoryName) === '{}') {
       alert("You must check at least one category.");
       return;
@@ -132,7 +135,7 @@ function loadItemIntoEditForm2(itemName, barcode, count, categoryName, packSize)
   });
 }
 
-// Saves a new item in the inventory database.
+// Saves a new item in the inventory database. Used by the add item modal
 function saveItem() {
 
   var itemID = generateItemID();
@@ -141,6 +144,11 @@ function saveItem() {
   var count = document.getElementById('count').value;
   var packSize = document.getElementById('pack').value;
   var unitChoice = document.getElementById('packOption');
+
+  // on an empty pack size field
+  if (isNaN(parseInt(packSize))) {
+    packSize = 1;
+  }
 
   // if using packs, recalculate the count
   if (unitChoice.selectedOptions[0].innerText == 'Packs') {
@@ -241,6 +249,9 @@ function changeCountByInterval(adding) {
   // if using packs
   if (document.getElementById('editUnitOption').selectedOptions[0].innerText == 'Packs') {
     var packSize = parseInt(document.getElementById('editPackSize').value, 10);
+    if (isNaN(packSize)) {
+      packSize = 0;
+    }
     interval = interval * packSize;
   }
   console.log(document.getElementById('editCount').value);
