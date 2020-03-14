@@ -134,9 +134,15 @@ form.addEventListener('keypress', function(e) {
     if (!amount.value) {
       amount.value = "1";
     }
-    
+  
   getItemNameByBarcode(barcodeScanned.value)
     .then(function(itemName) {
+      // clear any error msgs that exist
+      if (barcodeScanned.className.includes("is-invalid")) {
+        barcodeScanned.className = barcodeScanned.className.replace(" is-invalid", "");
+        barcodeScanned.parentNode.removeChild(barcodeScanned.nextSibling);
+      }
+
       var trashButton = document.createElement("i");
       trashButton.classList.add("fa", "fa-trash", "fa-6");
       trashButton.setAttribute("id", + groceryCart.length);
@@ -170,7 +176,14 @@ form.addEventListener('keypress', function(e) {
       barcodeScanned.value = "";
       amount.value = "";
     }, function(err) {
-      console.log(err);
+      // if we can't find the item, turn the box red and append an error msg
+      if (!barcodeScanned.className.includes("is-invalid")) {
+        var errorMsg = document.createElement("div");
+        errorMsg.innerHTML = '<div class=\"col-xs-3\"><small id=\"bad-barcode\" class=\"text-danger\">We could not find this item in the inventory.</small></div>'
+        barcodeScanned.className += " is-invalid";
+        barcodeScanned.parentNode.insertBefore(errorMsg, barcodeScanned.nextSibling);
+      }
+      console.log(err); 
     });
   }
 
