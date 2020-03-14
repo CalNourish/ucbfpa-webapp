@@ -1,4 +1,6 @@
 'use strict';
+var scrollPosY = 0;
+var scrollPosX = 0;
 
 $(document).ready(function() {
 
@@ -108,12 +110,15 @@ function closeAddModal() {
 
 function openEditModal(barcode) {
   editItemModal.style.display = 'block';
+  scrollPosY = window.pageYOffset;
+  scrollPosX = window.pageXOffset;
   if (barcode) {
       loadItemIntoEditForm(barcode);
   }
 }
 
 function closeEditModal() {
+  window.scrollTo(scrollPosX, scrollPosY)
   editItemModal.style.display = 'none';
 }
 
