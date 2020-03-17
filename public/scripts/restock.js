@@ -150,7 +150,6 @@ function saveItem() {
     packSize = 1;
   }
 
->>>>>>> a9ae34a310c26e1e6d287eecec1cc9ffd6820b61
   // if using packs, recalculate the count
   if (unitChoice.selectedOptions[0].innerText == 'Packs') {
     count = packSize * count;
