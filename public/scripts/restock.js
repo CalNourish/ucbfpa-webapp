@@ -4,7 +4,7 @@ function getCategories() {
   return ['grains', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages'];
 }
 // used by the edit item modal
-function updateItem() {
+function updateExistingItem() {
     var itemName = document.getElementById('editItemName').value;
     var barcode = document.getElementById('editBarcode').value;
     var count = document.getElementById('editCount').value;
@@ -118,7 +118,7 @@ function loadItemIntoEditForm(barcode) {
 }
 
 // Saves a new item in the inventory database. Used by the add item modal
-function saveItem() {
+function saveNewItem() {
 
   // var itemID = generateItemID();
   var itemName = document.getElementById('itemName').value;
@@ -182,13 +182,13 @@ function saveItem() {
 // Triggered when the add new item form is submitted.
 function onAddItemFormSubmit(e) {
   e.preventDefault();
-  saveItem();
+  saveNewItem();
 }
 
 // Triggered when the edit item form is submitted.
 function onEditItemFormSubmit(e) {
   e.preventDefault();
-  updateItem();
+  updateExistingItem();
 }
 
 // Triggered when the add new item form is submitted.
