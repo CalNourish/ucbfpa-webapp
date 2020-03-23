@@ -1,39 +1,10 @@
 'use strict';
 
-var DEFAULT_ITEM_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
-var DEFAULT_ITEM_ID_LENGTH = 5;
-
-
-function barcodeToID(barcode) {
-  var itemID;
-  firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-    itemID = barcodesTable.val()[barcode];
-  });
-  return itemID;
-}
-
-// Gets an item in the inventory by its itemID.
-function getItemByID(itemID) {
-  firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-    const result = inventoryTable.val();
-    return result;
-  });
-}
-
-function generateItemID() {
-    var itemID = '';
-    for (var i = DEFAULT_ITEM_ID_LENGTH; i > 0; --i) {
-      itemID += DEFAULT_ITEM_ID_CHARS[Math.floor(Math.random() * DEFAULT_ITEM_ID_CHARS.length)];
-    };
-    return itemID;
-}
-
 function getCategories() {
   return ['grains', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages'];
 }
 // used by the edit item modal
 function updateItem() {
-    var itemID = document.getElementById('editItemID').value;
     var itemName = document.getElementById('editItemName').value;
     var barcode = document.getElementById('editBarcode').value;
     var count = document.getElementById('editCount').value;
@@ -80,7 +51,7 @@ function deleteItem(barcode, itemName) {
   }
 }
 
-function updateTo(itemName, barcode, count, categoryName, packSize) {
+function updateTo(itemName, barcode, count, categoryName, packSize, newItem=false) {
     if (packSize == undefined) packSize = 1; 
     // Save to inventory this new item to the generated item ID.
     var itemInfo = {
@@ -91,8 +62,8 @@ function updateTo(itemName, barcode, count, categoryName, packSize) {
       categoryName: categoryName,
       packSize: packSize
     }
-
-    return firebase.database() 
+    if (newItem) {
+      return firebase.database() 
       .ref('/inventory/' + barcode)
       .update(itemInfo)
       .catch(function(error) {
@@ -104,6 +75,19 @@ function updateTo(itemName, barcode, count, categoryName, packSize) {
         toastr.info("New item successfully added");
         }
       );
+    } 
+    return firebase.database() 
+      .ref('/inventory/' + barcode)
+      .update(itemInfo)
+      .catch(function(error) {
+          console.error('Error writing item to /inventory/' + barcode, error);
+          toastr.error(error, "Error adding new item")
+          })
+      .then(() => {
+        document.getElementById("edit-item-form").reset();
+        toastr.info("New item successfully edited");
+        }
+      );
 }
 
 function loadItemIntoEditForm(barcode) { 
@@ -112,33 +96,31 @@ function loadItemIntoEditForm(barcode) {
       .once('value')
       .then(function(inventoryTable) {
         var item = inventoryTable.val();
-        loadItemIntoEditForm2(item.itemName, item.barcode, item.count, item.categoryName, item.packSize);
+        document.getElementById('editItemName').value = item.itemName;
+        document.getElementById('editBarcode').value = item.barcode;
+        document.getElementById('editCount').value = item.count;
+        document.getElementById('editPackSize').value = item.packSize;
+      
+        getCategories().forEach(function(value) {
+          var category = value.charAt(0).toUpperCase() + value.slice(1);
+          category = 'edit' + category;
+          var checkbox = document.getElementById(category);
+      
+          if (typeof item.categoryName[value] !== "undefined" && checkbox !==null) {
+            checkbox.checked = true;
+          } else {
+            checkbox.checked = false;
+          };
+        });
+        document.getElementById("edit-item-form-barcode").reset();
+
     });
-}
-
-function loadItemIntoEditForm2(itemName, barcode, count, categoryName, packSize) {
-  document.getElementById('editItemName').value = itemName;
-  document.getElementById('editBarcode').value = barcode;
-  document.getElementById('editCount').value = count;
-  document.getElementById('editPackSize').value = packSize;
-
-  getCategories().forEach(function(value, index, array) {
-    var category = value.charAt(0).toUpperCase() + value.slice(1);
-    category = 'edit' + category;
-    var checkbox = document.getElementById(category);
-
-    if (typeof categoryName[value] !== "undefined" && checkbox !==null) {
-      checkbox.checked = true;
-    } else {
-      checkbox.checked = false;
-    };
-  });
 }
 
 // Saves a new item in the inventory database. Used by the add item modal
 function saveItem() {
 
-  var itemID = generateItemID();
+  // var itemID = generateItemID();
   var itemName = document.getElementById('itemName').value;
   var barcode = document.getElementById('barcode').value;
   var count = document.getElementById('count').value;
@@ -168,7 +150,7 @@ function saveItem() {
   firebase.database().ref('/inventory/').once('value').then((data) => {
     var barcodesFromDb = data.val();
     var barcodes = [];
-    for (const [bc, itemID] of Object.entries(barcodesFromDb)) {
+    for (const [bc] of Object.entries(barcodesFromDb)) {
       barcodes.push(bc);
     }
     var isDuplicate = (barcodes.indexOf(barcode) >= 0);
@@ -191,7 +173,7 @@ function saveItem() {
           alert("You must check at least one category.");
           return;
         }
-        var x = updateTo(itemName, barcode, count, categoryName, packSize);
+        updateTo(itemName, barcode, count, categoryName, packSize, newItem=true);
         return;
     }
   });
@@ -212,13 +194,7 @@ function onEditItemFormSubmit(e) {
 // Triggered when the add new item form is submitted.
 function onEditBarcodeItemFormSubmit(e) {
   e.preventDefault();
-  // Check that the user entered a message and is signed in.
-  if (checkSignedInWithMessage()) {
-    loadItemIntoEditForm(editItemBarcodeElement.value);
-  }
-  document.getElementById("edit-item-form-barcode").reset();
-
-
+  loadItemIntoEditForm(editItemBarcodeElement.value);
 }
 
 // focus on quantity when clicking
@@ -254,7 +230,6 @@ function changeCountByInterval(adding) {
     }
     interval = interval * packSize;
   }
-  console.log(document.getElementById('editCount').value);
   var count = document.getElementById("editCount");
   focusOnQuantity()
   if (adding) {
