@@ -77,8 +77,9 @@ $(document).ready(function() {
       current_table = FULL_TABLE
     }
     // update DOM
-    TABLE_SELECTOR.append(current_table);
-    searchItem()
+    TABLE_SELECTOR.append(current_table).hide()
+    setTimeout(() => searchItem(), 10)
+    setTimeout(() => TABLE_SELECTOR.show(), 20)
     sortTableByKey(TABLE_SELECTOR, sort_order, guest_table_row)
   };
 });
@@ -88,14 +89,11 @@ function searchItem() {
   var input, filter, items, li, a, i, txtValue;
   input = document.getElementById("searchInput");
   filter = input.value.toUpperCase();
-  console.log(filter)
   items = document.getElementById("table-items");
   li = items.getElementsByTagName('tr');
-  console.log(li)
   // Loop through all list items, and hide those who don't match the search query
   for (i = 0; i < li.length; i++) {
-    a = li[i];
-    txtValue = a.textContent || a.innerText;
+    txtValue = li[i].textContent
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
       li[i].style.display = "";
     } else {

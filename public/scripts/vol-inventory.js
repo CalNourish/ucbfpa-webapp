@@ -77,8 +77,9 @@ $(document).ready(function() {
       current_table = FULL_TABLE
     }
     // update DOM
-    TABLE_SELECTOR.append(current_table);
-    searchItem()
+    TABLE_SELECTOR.append(current_table).hide()
+    setTimeout(() => searchItem(), 10)
+    setTimeout(() => TABLE_SELECTOR.show(), 20)
     sortTableByKey(TABLE_SELECTOR, sort_order, volunteer_table_row)
   };
 });
