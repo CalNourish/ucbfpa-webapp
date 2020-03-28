@@ -56,12 +56,12 @@ function compareByKey(key, order="asc") {
   }
 }
 
-function sortTableByKey(table, key) {
+function sortTableByKey(table, key, table_row_function) {
   table.empty()
   current_table = []
   current_items = current_items.sort(compareByKey(key))
   current_items.forEach((item) => {
-    current_table.push(volunteer_table_row(item.name, item.count, item.barcode))
+    current_table.push(table_row_function(item.name, item.count, item.barcode))
   })
   table.append(current_table)
 }

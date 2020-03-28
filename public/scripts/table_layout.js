@@ -20,11 +20,11 @@ function guest_card_element() {
 }
 
 // Table layout
-function guest_table_row() {
+function guest_table_row(name="unavailable", count="0", barcode="unavailable") {
   return (`
     <tr>
-      <td>${currentItem.itemName}</td>
-      <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
+      <td>${name}</td>
+      <td data-itemid='${barcode}'>${count}</td>
     </tr>
   `)
 }

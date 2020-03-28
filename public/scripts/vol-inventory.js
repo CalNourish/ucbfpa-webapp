@@ -45,7 +45,7 @@ $(document).ready(function() {
 
   // Sort table on click
   $(".table-header").on("click", function() { 
-    sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"))
+    sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"), volunteer_table_row)
   });
 
   // Clear page and select items by category
@@ -79,7 +79,7 @@ $(document).ready(function() {
     // update DOM
     TABLE_SELECTOR.append(current_table);
     searchItem()
-    sortTableByKey(last_sort_key, sort_order)
+    sortTableByKey(TABLE_SELECTOR, sort_order, volunteer_table_row)
   };
 });
 
