@@ -6,14 +6,14 @@ var barcode = document.getElementById('barcode');
 var groceryList = document.getElementById('grocery-list');
 var totalItems = document.getElementById("total-items")
 var finished = document.getElementById('backToCheckout');
-// const {google} = require('googleapis');
-// const sheets = google.sheets('v4');
 var groceryCart  = [];
 var itemInfo = [];
-// var GoogleSpreadsheet = require('google-spreadsheet');
-// var doc = new GoogleSpreadsheet('1XIjyadGWWQ3BcHGujyJsa5E7SbrHN12PT8Y15SBrAFQ');
-// var sheetDict = {}
+var sheetDict = {};
+
+
+
 let numToDay = {0:'Sunday', 1:'Monday', 2:'Tuesday', 3:'Wednesday', 4:'Thursday', 5:'Friday', 6:'Saturday'}
+
 finished.addEventListener("click", (e) => {
   finishCheckout();
 })
@@ -23,7 +23,7 @@ function finishCheckout() {
     return;
   }
   let groceryDict = {};
-  let sheetDict = {};
+  //let sheetDict = {};
   // consolidate grocery list items so that there is only a single entry per barcode
   let idDate = new Date();
   let id = idDate.getTime();
@@ -52,18 +52,19 @@ function finishCheckout() {
       }
       let time = hr + ':' + min + ':' + sec;
       let day = numToDay[date.getDay()]
-      let itemDict = {'barcode' : barcode, 'amount' : parseInt(amount), 'groceryName' : name, 'inventoryCount' : invCount,
-                          'id':id, 'date':numDate, 'time':time, 'day':day};
+      let itemList = [barcode, parseInt(amount), name, invCount, id, numDate, time, day]
       if (groceryDict[barcode]) {
         groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount);
-        sheetDict[barcode]['amount'] = parseInt(sheetDict[barcode]['amount']) + parseInt(amount) //may run into string vs int problems here
+        sheetDict[barcode][1] = parseInt(sheetDict[barcode][1]) + parseInt(amount) //may run into string vs int problems here
       } else {
         groceryDict[barcode] = parseInt(amount);
-        sheetDict[barcode] = itemDict;
+        sheetDict[barcode] = itemList;
       }
-
+      sheetDict[barcode][3] = parseInt(sheetDict[barcode][3]) - parseInt(amount)
     }
   }
+
+
 
   Object.entries(groceryDict).forEach(([barcode, amount]) => {
     checkoutItem(barcode, amount)
@@ -117,6 +118,41 @@ function getInventoryAmountByBarcode(barcode) {
       reject(Error("Something broke here."));
     }
   });
+}
+
+function makeApiCall() {
+
+  for (const key in sheetDict) {
+    console.log(sheetDict[key]);
+
+    var params = {
+      // The ID of the spreadsheet to update.
+      spreadsheetId: '1IACSfoNqSrLImQXNUJl3j-Vf3jrhy7FOz33FlshSSX0',
+      // The A1 notation of a range to search for a logical table of data.
+      // Values will be appended after the last row of the table.
+      range: 'Sheet1!A1:H1',
+      // How the input data should be interpreted.
+      valueInputOption: 'RAW',
+      // How the input data should be inserted.
+      insertDataOption: 'INSERT_ROWS',
+    };
+    //DOES NOT WORK WITH HOTKEYS
+    var valueRangeBody = {
+      "majorDimension": "ROWS",
+      "range": "Sheet1!A1:H1",
+      "values": [sheetDict[key]]
+    };
+    var request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
+    request.then(function(response) {
+      console.log(response.result);
+      sheetDict = {};
+    }, function(reason) {
+      console.error('error: ' + reason.result.error.message);
+    });
+
+  } //end for loop
+
+
 }
 
 
@@ -244,16 +280,14 @@ form.addEventListener('keypress', function(e) {
     });
 
 
-
-
-
   }
 
-  function removeListItem(i) {
+function removeListItem(i) {
     groceryList.removeChild(document.getElementById("item" + i));
     updateTotal('-' + groceryCart[i][1])
     groceryCart[i] = null;
   }
+
 
     // Toast options
     toastr.options = {
