@@ -9,6 +9,7 @@ var finished = document.getElementById('backToCheckout');
 var groceryCart  = [];
 var itemInfo = [];
 var sheetDict = {};
+var sheetTitle = ''
 
 
 
@@ -37,8 +38,11 @@ function finishCheckout() {
       let name = groceryCart[i][2];
       let invCount = groceryCart[i][3];
       let date = new Date();
-      let numDate = String(date.getFullYear()) + '-' + String(date.getMonth()) + '-' + String(date.getDate());
+      let month = String(date.getMonth() + 1);
+      let year = String(date.getFullYear());
+      let numDate = year + '-' + month + '-' + String(date.getDate());
       let hr = String(date.getHours())
+      sheetTitle = month + '/' + year;
       if (hr.length == 1) {
         hr = '0' + hr
       }
@@ -130,7 +134,7 @@ function makeApiCall() {
       spreadsheetId: '1IACSfoNqSrLImQXNUJl3j-Vf3jrhy7FOz33FlshSSX0',
       // The A1 notation of a range to search for a logical table of data.
       // Values will be appended after the last row of the table.
-      range: 'Sheet1!A1:H1',
+      range: sheetTitle + '!A1:H1',
       // How the input data should be interpreted.
       valueInputOption: 'RAW',
       // How the input data should be inserted.
@@ -139,7 +143,7 @@ function makeApiCall() {
     //DOES NOT WORK WITH HOTKEYS
     var valueRangeBody = {
       "majorDimension": "ROWS",
-      "range": "Sheet1!A1:H1",
+      "range": sheetTitle + "!A1:H1",
       "values": [sheetDict[key]]
     };
     var request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
@@ -148,11 +152,53 @@ function makeApiCall() {
       sheetDict = {};
     }, function(reason) {
       console.error('error: ' + reason.result.error.message);
+      if (reason.result.error.message == 'Unable to parse range: ' + sheetTitle + '!A1:H1') {
+        addSheet();
+        makeApiCall();
+      }
     });
 
   } //end for loop
 
 
+}
+
+function addSheet(title) {
+  var params = {
+       // The spreadsheet to apply the updates to.
+       spreadsheetId: '1IACSfoNqSrLImQXNUJl3j-Vf3jrhy7FOz33FlshSSX0',  // TODO: Update placeholder value.
+     };
+
+  var batchUpdateSpreadsheetRequestBody = {
+     // A list of updates to apply to the spreadsheet.
+     // Requests will be applied in the order they are specified.
+     // If any request is not valid, no requests will be applied.
+  requests: [{
+      "addSheet": {
+        "properties": {
+          "title": sheetTitle,
+          "gridProperties": {
+            "rowCount": 5000,
+            "columnCount": 12
+          },
+          "tabColor": {
+            "red": 1.0,
+            "green": 0.3,
+            "blue": 0.4
+          }
+        }
+      }
+    }],
+
+   };
+
+  var request = gapi.client.sheets.spreadsheets.batchUpdate(params, batchUpdateSpreadsheetRequestBody);
+  request.then(function(response) {
+     // TODO: Change code below to process the `response` object:
+    console.log(response.result);
+  }, function(reason) {
+   console.error('error: ' + reason.result.error.message);
+  });
 }
 
 
@@ -210,7 +256,7 @@ document.onkeydown = function(e) {
   } else if (e.shiftKey && e.which == 13) {
     e.preventDefault();
     finishCheckout();
-    makeApiCall();
+    handleClientLoad();
   } else if (e.which >= 48 && e.which <= 57) {
     // check we're not inside of an entry field
     if (document.activeElement.tagName != "INPUT") {
@@ -262,12 +308,12 @@ form.addEventListener('keypress', function(e) {
       itemAmountElement.textContent = amount.value;
       trashButtonElement.appendChild(trashButton);
 
-
-      //alert(inventoryCountElement.textContent)
       groceryItem.appendChild(itemNameElement);
       groceryItem.appendChild(itemAmountElement);
       groceryItem.appendChild(trashButtonElement);
       itemInfo.push(barcodeScanned.value, amount.value, itemNameElement.textContent);
+
+      //append inventory amount to
       getInventoryAmountByBarcode(barcodeScanned.value)
         .then(function(inventoryCount) {
           var inventoryCountElement = document.createElement("td");
