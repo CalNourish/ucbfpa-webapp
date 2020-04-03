@@ -1,43 +1,19 @@
 'use strict';
 
-var DEFAULT_ITEM_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
-var DEFAULT_ITEM_ID_LENGTH = 5;
-
-
-function barcodeToID(barcode) {
-  var itemID;
-  firebase.database().ref('/barcodes/').once('value').then(function(barcodesTable) {
-    itemID = barcodesTable.val()[barcode];
-  });
-  return itemID;
-}
-
-// Gets an item in the inventory by its itemID.
-function getItemByID(itemID) {
-  firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
-    const result = inventoryTable.val();
-    return result;
-  });
-}
-
-function generateItemID() {
-    var itemID = '';
-    for (var i = DEFAULT_ITEM_ID_LENGTH; i > 0; --i) {
-      itemID += DEFAULT_ITEM_ID_CHARS[Math.floor(Math.random() * DEFAULT_ITEM_ID_CHARS.length)];
-    };
-    return itemID;
-}
-
 function getCategories() {
   return ['grains', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages'];
 }
-
-function updateItem() {
-    var itemID = document.getElementById('editItemID').value;
+// used by the edit item modal
+function updateExistingItem() {
     var itemName = document.getElementById('editItemName').value;
     var barcode = document.getElementById('editBarcode').value;
     var count = document.getElementById('editCount').value;
+    var packSize = document.getElementById('editPackSize').value;
 
+    if (isNaN(parseInt(packSize))) {
+      packSize = 0;
+    }
+    
     // Generate hashmap that has list of categories for this item.
     var categoryName = {};
     getCategories().forEach(function(value, index, array) {
@@ -49,30 +25,11 @@ function updateItem() {
     });
 
     // Save this new item to inventory
-    var itemInfo = {
-      createdBy: getUserName(),
-      itemName: itemName,
-      barcode: barcode,
-      count: count,
-      categoryName: categoryName,
-    }
-
-    if (JSON.stringify(itemInfo.categoryName) === '{}') {
+    if (JSON.stringify(categoryName) === '{}') {
       alert("You must check at least one category.");
       return;
     }
-
-    return firebase.database()
-      .ref('/inventory/' + barcode)
-      .update(itemInfo)
-      .catch(function(error) {
-        console.error('Error writing item to /inventory/' + itemID, error);
-        toastr.error(error, "Error writing item to inventory")
-        })
-      .then( () => {
-        document.getElementById("edit-item-form").reset();
-        toastr.info("Edit Successful");
-      });
+    return updateTo(itemName, barcode, count, categoryName, packSize);
 }
 
 function decrementItem(barcode, amount) { 
@@ -82,7 +39,7 @@ function decrementItem(barcode, amount) {
       .then(function(inventoryTable) {
         var item = inventoryTable.val();
         var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
-        updateTo(item.itemName, item.barcode, dec.toString(), item.categoryName);
+        updateTo(item.itemName, item.barcode, dec.toString(), item.categoryName, item.packSize);
     });
 }
 
@@ -94,7 +51,8 @@ function deleteItem(barcode, itemName) {
   }
 }
 
-function updateTo(itemName, barcode, count, categoryName) { 
+function updateTo(itemName, barcode, count, categoryName, packSize, newItem=false) {
+    if (packSize == undefined) packSize = 1; 
     // Save to inventory this new item to the generated item ID.
     var itemInfo = {
       createdBy: getUserName(),
@@ -102,8 +60,10 @@ function updateTo(itemName, barcode, count, categoryName) {
       barcode: barcode,
       count: count,
       categoryName: categoryName,
+      packSize: packSize
     }
-    return firebase.database() 
+    if (newItem) {
+      return firebase.database() 
       .ref('/inventory/' + barcode)
       .update(itemInfo)
       .catch(function(error) {
@@ -115,6 +75,19 @@ function updateTo(itemName, barcode, count, categoryName) {
         toastr.info("New item successfully added");
         }
       );
+    } 
+    return firebase.database() 
+      .ref('/inventory/' + barcode)
+      .update(itemInfo)
+      .catch(function(error) {
+          console.error('Error writing item to /inventory/' + barcode, error);
+          toastr.error(error, "Error adding new item")
+          })
+      .then(() => {
+        document.getElementById("edit-item-form").reset();
+        toastr.info("New item successfully edited");
+        }
+      );
 }
 
 function loadItemIntoEditForm(barcode) { 
@@ -123,34 +96,46 @@ function loadItemIntoEditForm(barcode) {
       .once('value')
       .then(function(inventoryTable) {
         var item = inventoryTable.val();
-        loadItemIntoEditForm2(item.itemName, item.barcode, item.count, item.categoryName);
+        document.getElementById('editItemName').value = item.itemName;
+        document.getElementById('editBarcode').value = item.barcode;
+        document.getElementById('editCount').value = item.count;
+        document.getElementById('editPackSize').value = item.packSize;
+      
+        getCategories().forEach(function(value) {
+          var category = value.charAt(0).toUpperCase() + value.slice(1);
+          category = 'edit' + category;
+          var checkbox = document.getElementById(category);
+      
+          if (typeof item.categoryName[value] !== "undefined" && checkbox !==null) {
+            checkbox.checked = true;
+          } else {
+            checkbox.checked = false;
+          };
+        });
+        document.getElementById("edit-item-form-barcode").reset();
+
     });
 }
 
-function loadItemIntoEditForm2(itemName, barcode, count, categoryName) {
-  document.getElementById('editItemName').value = itemName;
-  document.getElementById('editBarcode').value = barcode;
-  document.getElementById('editCount').value = count;
+// Saves a new item in the inventory database. Used by the add item modal
+function saveNewItem() {
 
-  getCategories().forEach(function(value, index, array) {
-    var category = value.charAt(0).toUpperCase() + value.slice(1);
-    category = 'edit' + category;
-    var checkbox = document.getElementById(category);
-
-    if (typeof categoryName[value] !== "undefined" && checkbox !==null) {
-      checkbox.checked = true;
-    } else {
-      checkbox.checked = false;
-    };
-  });
-}
-
-// Saves a new item in the inventory database.
-function saveItem() {
-  var itemID = generateItemID();
+  // var itemID = generateItemID();
   var itemName = document.getElementById('itemName').value;
   var barcode = document.getElementById('barcode').value;
   var count = document.getElementById('count').value;
+  var packSize = document.getElementById('pack').value;
+  var unitChoice = document.getElementById('packOption');
+
+  // on an empty pack size field
+  if (isNaN(parseInt(packSize))) {
+    packSize = 1;
+  }
+
+  // if using packs, recalculate the count
+  if (unitChoice.selectedOptions[0].innerText == 'Packs') {
+    count = packSize * count;
+  }
 
   // Generate hashmap that has list of categories for this item.
   var categoryName = {};
@@ -165,7 +150,7 @@ function saveItem() {
   firebase.database().ref('/inventory/').once('value').then((data) => {
     var barcodesFromDb = data.val();
     var barcodes = [];
-    for (const [bc, itemID] of Object.entries(barcodesFromDb)) {
+    for (const [bc] of Object.entries(barcodesFromDb)) {
       barcodes.push(bc);
     }
     var isDuplicate = (barcodes.indexOf(barcode) >= 0);
@@ -184,30 +169,11 @@ function saveItem() {
         });
 
         // Save to inventory this new item to the generated item ID.
-        var itemInfo = {
-          createdBy: getUserName(),
-          itemName: itemName,
-          barcode: barcode,
-          count: count,
-          categoryName: categoryName,
-        }
-        if (JSON.stringify(itemInfo.categoryName) === '{}') {
+        if (JSON.stringify(categoryName) === '{}') {
           alert("You must check at least one category.");
           return;
         }
-
-        firebase.database()
-          .ref('/inventory/' + barcode)
-          .update(itemInfo)
-          .catch(function(error) {
-              console.error('Error writing item to /inventory/' + itemID, error);
-              toastr.error(error, "Error adding new item")
-              })
-          .then(() => {
-            document.getElementById("add-item-form").reset();
-            toastr.info("New item successfully added");
-            }
-          );
+        updateTo(itemName, barcode, count, categoryName, packSize, newItem=true);
         return;
     }
   });
@@ -216,25 +182,19 @@ function saveItem() {
 // Triggered when the add new item form is submitted.
 function onAddItemFormSubmit(e) {
   e.preventDefault();
-  saveItem();
+  saveNewItem();
 }
 
 // Triggered when the edit item form is submitted.
 function onEditItemFormSubmit(e) {
   e.preventDefault();
-  updateItem();
+  updateExistingItem();
 }
 
 // Triggered when the add new item form is submitted.
 function onEditBarcodeItemFormSubmit(e) {
   e.preventDefault();
-  // Check that the user entered a message and is signed in.
-  if (checkSignedInWithMessage()) {
-    loadItemIntoEditForm(editItemBarcodeElement.value);
-  }
-  document.getElementById("edit-item-form-barcode").reset();
-
-
+  loadItemIntoEditForm(editItemBarcodeElement.value);
 }
 
 // focus on quantity when clicking
@@ -260,8 +220,16 @@ function subtractFromCountByInterval() {
 
 function changeCountByInterval(adding) {
   var newCount = 0;
-  var interval = parseInt(document.getElementById("edit-count-by-interval").value, 10);
+  var interval = parseInt(document.getElementById("edit-interval").value, 10);
   interval = interval ? interval : 0;
+  // if using packs
+  if (document.getElementById('editUnitOption').selectedOptions[0].innerText == 'Packs') {
+    var packSize = parseInt(document.getElementById('editPackSize').value, 10);
+    if (isNaN(packSize)) {
+      packSize = 0;
+    }
+    interval = interval * packSize;
+  }
   var count = document.getElementById("editCount");
   focusOnQuantity()
   if (adding) {

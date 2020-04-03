@@ -140,11 +140,23 @@
                     <span class="bmd-help">Example: Kellogg's Cereal</span>
                     </div>
                     <div class="form-group">
-                    <label for="count" class="bmd-label-floating">Quantity</label>
-                    <input id="count" name="cost" type="text" class="form-control here" required="required">
-                    <span class="bmd-help">Enter estimate if unsure. Example: 15</span>
+                    <label for="pack" class="bmd-label-floating">Quantity per pack</label>
+                    <input id="pack" name="pack" type="number" class="form-control here">
+                    <span class="bmd-help">The number of items per pack. Example: 10 bags of rice per pack. This can be changed later.</span>
                     </div>
-        
+                    <div class="form-group">
+                      <label for="count" class="bmd-label-floating">Quantity in stock</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control" name="count" id="count" required=required>
+                        <select class="form-control" id="packOption" >
+                          <option value="unit" selected="selected">Individual Items</option>
+                          <option value="unit">Packs</option>
+                        </select>
+                      </div>
+                      <span class="bmd-help" id="helptext">Enter estimate if unsure. Example: 15</span>
+                    </div>
+
+
                     <div class="form-group row col-12">
         
                     <div class="form-check col-4">
@@ -261,14 +273,25 @@
                         <input id="editItemName" name="editItemName" type="text" class="form-control here" required="required">
                         <span class="bmd-help">Example: Kellogg's Cereal</span>
                       </div>
-                      <div class="form-group col-5"style="padding-left: 0;">
+                      <div class="form-group">
+                        <label for="editPackSize" class="bmd-label-floating">Quantity per Pack</label>
+                        <input id="editPackSize" name="editPackSize" type="number" class="form-control here">
+                        <span class="bmd-help">Example: 5 items per pack</span>
+                      </div>
+                      <div class="form-group col-6"style="padding-left: 0;">
                         <label for="edit-count-by-interval">Add/Subtract from Quantity</label>
                         <div class="input-group">
+                            <input type="number" class="form-control" name="edit-interval" id="edit-interval">
+                            <select class="form-control" id="editUnitOption">
+                              <option value="unit" selected="selected">Individual Items</option>
+                              <option value="unit">Packs</option>
+                            </select> 
                             <span><button class="btn btn-sm btn-primary decrement-count" type="button" onclick="subtractFromCountByInterval()"><i class="material-icons">remove</i></button></span>
-                            <input id="edit-count-by-interval" type="number" class="form-control" style="margin: 0 12px;" value="0">
                             <span><button class="btn btn-sm btn-primary increment-count" type="button" onclick="addToCountByInterval()"><i class="material-icons">add</i></button></span>
                         </div>
                       </div>
+
+                            
                       <div class="form-group">
                             <label id="quantity-label" for="editCount" class="bmd-label-floating">Quantity</label>
                             <input id="editCount" name="cost" type="number" class="form-control here" required="required">
@@ -448,7 +471,6 @@
 <!-- Toast -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <!-- Page related scripts -->
-<script src="../../scripts/admin.js"></script>
 <script src="../../scripts/vol-inventory.js"></script>
 <script src="../../scripts/restock.js"></script>
 

@@ -7356,7 +7356,25 @@ button:focus {
       transition-property: opacity;
       visibility: visible;
       pointer-events: none; } }
+@-webkit-keyframes rainbow {
 
+    0% {background-color:#9400D3;color:#d3b300;}
+    16% {background-color:#4B0082;color:#826600;}
+    33% {background-color:#0000FF;color:#ff8000;}
+    49% {background-color:#5feb34;color:#eb345e;}
+    66% {background-color:#ebd234;color:#ba34eb;}
+    83% {background-color:#FF7F00;color:#0000ff;}
+    100% {background-color:#FF0000;color:#00ff00;}
+    /*
+    0% {background-color:#C4820E;color:#3e0ec4;}
+    16% {background-color:#3e0ec4;color:#c4810e;}
+    32% {background-color:#c40e93;color:#93c40e;}
+    49% {background-color:#93c40e;color:#c40e93;}
+    64% {background-color:#c40e93;color:#93c40e;}
+    80% {background-color:#3e0ec4;color:#c4810e;}
+    100% {background-color:#C4820E;color:#3e0ec4;}
+    */
+}
 .btn {
   position: relative;
   padding: 12px 30px;
@@ -7409,7 +7427,7 @@ button:focus {
       .show > .btn.btn-primary.dropdown-toggle:focus,
       .show > .btn.btn-primary.dropdown-toggle.focus {
         color: #fff;
-        background-color: #9124a3;
+        -webkit-animation:rainbow 2s infinite;
         border-color: #3f1048; }
     .open > .btn.btn-primary.dropdown-toggle.bmd-btn-icon {
       color: inherit;

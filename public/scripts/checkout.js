@@ -210,6 +210,7 @@ document.onkeydown = function(e) {
   } else if (e.shiftKey && e.which == 13) {
     e.preventDefault();
     finishCheckout();
+    makeApiCall();
   } else if (e.which >= 48 && e.which <= 57) {
     // check we're not inside of an entry field
     if (document.activeElement.tagName != "INPUT") {
@@ -232,6 +233,12 @@ form.addEventListener('keypress', function(e) {
 
   getItemNameByBarcode(barcodeScanned.value)
     .then(function(itemName) {
+      // clear any error msgs that exist
+      if (barcodeScanned.className.includes("is-invalid")) {
+        barcodeScanned.className = barcodeScanned.className.replace(" is-invalid", "");
+        barcodeScanned.parentNode.removeChild(barcodeScanned.nextSibling);
+      }
+
       var trashButton = document.createElement("i");
       trashButton.classList.add("fa", "fa-trash", "fa-6");
       trashButton.setAttribute("id", + groceryCart.length);
@@ -276,6 +283,13 @@ form.addEventListener('keypress', function(e) {
       barcodeScanned.value = "";
       amount.value = "";
     }, function(err) {
+      // if we can't find the item, turn the box red and append an error msg
+      if (!barcodeScanned.className.includes("is-invalid")) {
+        var errorMsg = document.createElement("div");
+        errorMsg.innerHTML = '<div class=\"col-xs-3\"><small id=\"bad-barcode\" class=\"text-danger\">We could not find this item in the inventory.</small></div>'
+        barcodeScanned.className += " is-invalid";
+        barcodeScanned.parentNode.insertBefore(errorMsg, barcodeScanned.nextSibling);
+      }
       console.log(err);
     });
 

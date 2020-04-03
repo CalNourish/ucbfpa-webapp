@@ -122,12 +122,12 @@
           <h3>Checkout Item</h3>
           <h4>Please enter the amount, then scan the item to add it to the cart. Click "Check Out" to submit the cart.</h4>
           <form id="checkout-item-form">
-            <div class="form-group">
+            <div class="form-group" id="barcode-and-amount">
               <div class="col-xs-8">
                 <label for="amount">Amount (hotkey: Q)</label>
                 <input id="amount" name="amount" cols="5" rows="5" class="form-control" placeholder="default: 1"></input>
               </div>
-              <div class="col-xs-8">
+              <div class="col-xs-7">
                 <label for="barcode" class="col-xs-4">Barcode (hotkey: W)</label>
                 <input type="string" id="barcode" name="barcode" cols="20" rows="5" class="form-control"></input>
               </div>
@@ -190,18 +190,18 @@
       });
     }
 
-    function handleClientLoad() {
-      gapi.load('client:auth2', initClient);
-    }
-
     function updateSignInStatus(isSignedIn) {
       if (isSignedIn) {
         makeApiCall();
       }
     }
+
+    function handleClientLoad() {
+      gapi.load('client:auth2', initClient);
+    }
     </script>
 
-    
+
 
 
 <!-- Import and configure the Firebase SDK -->
@@ -228,7 +228,10 @@
 <script src="../../scripts/restock.js"></script>
 
 <!--   Google API   -->
-<script async defer src="https://apis.google.com/js/api.js"></script>
+<script async defer src="https://apis.google.com/js/api.js"
+  onload="this.onload=function(){};handleClientLoad()"
+  onreadystatechange="if (this.readyState === 'complete') this.onload()">
+</script>
 
 
 </body>
