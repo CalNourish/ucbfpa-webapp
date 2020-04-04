@@ -1,5 +1,27 @@
 'use strict';
 
+// store local favorites in an array in a cookie
+function addToFavs(div) {
+  var barcode = parseInt(div.attributes['barcode'].nodeValue, 10);
+  if (document.cookie == "" || !document.cookie.includes("fav_items")) {
+    document.cookie = document.cookie + " fav_items=[" + barcode + "];";
+  } else {
+    var favs_list = getFavs();
+    var old_list = JSON.stringify(favs_list);
+    if (!favs_list.includes(barcode)) {
+      favs_list.push(barcode);
+      document.cookie = document.cookie.replace(old_list, JSON.stringify(favs_list));
+    }
+  }
+};
+
+// get iterable list of local favorite barcodes from cookie
+function getFavs() {
+  var cookie_pieces = document.cookie.split('=');
+  var favs_index = cookie_pieces.indexOf(cookie_pieces.find(s => s.includes("fav_items"))) + 1
+  return JSON.parse(cookie_pieces[favs_index]);
+}
+
 $(document).ready(function() {
 
   // list for appending to DOM
@@ -26,7 +48,7 @@ $(document).ready(function() {
     
       fullTable.push(`
         <tr>
-          <td>${currentItem.itemName}</td>
+          <td><div onclick="addToFavs(this)" barcode='${currentItem.barcode}'>${currentItem.itemName}</div></td>
           <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
         </tr>
       `)
@@ -75,16 +97,20 @@ $(document).ready(function() {
       }
     })
 
-
     function showCategory(selected, view) {
       let items = [];
       $("#selected-category").text(selected.charAt(0).toUpperCase() + selected.slice(1))
       if (selected != 'all') {
         REF.once("value", snapshot => {
           let res = snapshot.val()
+          let favs = getFavs()
           for (let item in res) {
             let currentItem = res[item]
             let categories = currentItem.categoryName
+            // if this item is a favorite, add that attribute
+            if (favs.includes(parseInt(currentItem.barcode, 10))) {
+              categories['favorites'] = 'favorites'
+            }
             for (let category in categories) {
               if (category == selected) {
                 // Card view
