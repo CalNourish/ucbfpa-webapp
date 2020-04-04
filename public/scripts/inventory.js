@@ -1,5 +1,15 @@
 'use strict';
 
+function removeFromFavs(div) {
+  var barcode = parseInt(div.attributes['data-itemid'].nodeValue, 10);
+  var favs_list = getFavs();
+  var old_list = JSON.stringify(favs_list);
+  if (favs_list.includes(barcode)) {
+    favs_list.splice(favs_list.indexOf(barcode), 1);
+    document.cookie = document.cookie.replace(old_list, JSON.stringify(favs_list));
+  }
+}
+
 // store local favorites in an array in a cookie
 function addToFavs(div) {
   var barcode = parseInt(div.attributes['barcode'].nodeValue, 10);
@@ -49,7 +59,7 @@ $(document).ready(function() {
       fullTable.push(`
         <tr>
           <td><div onclick="addToFavs(this)" barcode='${currentItem.barcode}'>${currentItem.itemName}</div></td>
-          <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
+          <td><div onclick="removeFromFavs(this)" data-itemid='${currentItem.barcode}'>${currentItem.count}</div></td>
         </tr>
       `)
     }
@@ -125,8 +135,8 @@ $(document).ready(function() {
                 } else {
                   items.push(`
                   <tr>
-                    <td>${currentItem.itemName}</td>
-                    <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
+                    <td><div onclick="addToFavs(this)" barcode='${currentItem.barcode}'>${currentItem.itemName}</div></td>
+                    <td><div onclick="removeFromFavs(this)" data-itemid='${currentItem.barcode}'>${currentItem.count}</div></td>
                   </tr>
                   `)
                 }
