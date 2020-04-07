@@ -5,7 +5,7 @@ $(document).ready(function() {
   // list for appending to DOM
   let allItems = [];
   let fullTable = [];
-  // connect inventory
+  // connect  inventory
   const REF = firebase.database().ref('/inventory')
 
   // initial data 
