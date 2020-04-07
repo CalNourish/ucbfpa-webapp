@@ -58,6 +58,7 @@ $(document).ready(function() {
     
       fullTable.push(`
         <tr>
+          <td><div><i class="fa fa-heart-o"></i></div></td>
           <td><div onclick="addToFavs(this)" barcode='${currentItem.barcode}'>${currentItem.itemName}</div></td>
           <td><div onclick="removeFromFavs(this)" data-itemid='${currentItem.barcode}'>${currentItem.count}</div></td>
         </tr>
@@ -135,6 +136,7 @@ $(document).ready(function() {
                 } else {
                   items.push(`
                   <tr>
+                    <td><div><i class="fa fa-heart-o"></i></div></td>
                     <td><div onclick="addToFavs(this)" barcode='${currentItem.barcode}'>${currentItem.itemName}</div></td>
                     <td><div onclick="removeFromFavs(this)" data-itemid='${currentItem.barcode}'>${currentItem.count}</div></td>
                   </tr>
