@@ -1,7 +1,18 @@
 'use strict';
 
+
+
+// returns a heart element with the appropriate barcode and fill state
+function getHeart(filled, barcode) {
+  var emptyHeart = '<td><div barcode=' + barcode + ' onclick="addToFavs(this)"><i class="fa fa-heart-o" style="cursor:pointer"></i></div></td>';
+  var filledHeart = '<td><div barcode=' + barcode + ' onclick="removeFromFavs(this)"><i class="fa fa-heart" style="cursor:pointer; color:red"></i></div></td>';
+  return (filled ? filledHeart : emptyHeart);
+}
+
 function removeFromFavs(div) {
-  var barcode = parseInt(div.attributes['data-itemid'].nodeValue, 10);
+  div.childNodes[0].outerHTML = '<i class="fa fa-heart-o"></i>';
+  div.setAttribute('onClick', 'addToFavs(this)');
+  var barcode = parseInt(div.attributes['barcode'].nodeValue, 10);
   var favs_list = getFavs();
   var old_list = JSON.stringify(favs_list);
   if (favs_list.includes(barcode)) {
@@ -12,6 +23,8 @@ function removeFromFavs(div) {
 
 // store local favorites in an array in a cookie
 function addToFavs(div) {
+  div.childNodes[0].outerHTML = '<i class="fa fa-heart" style="color:red"></i>';
+  div.setAttribute('onClick', 'removeFromFavs(this)');
   var barcode = parseInt(div.attributes['barcode'].nodeValue, 10);
   if (document.cookie == "" || !document.cookie.includes("fav_items")) {
     document.cookie = document.cookie + " fav_items=[" + barcode + "];";
@@ -46,6 +59,7 @@ $(document).ready(function() {
     let res = snapshot.val()
     for (let item in res) {
       let currentItem = res[item]
+      let favs = getFavs()
       allItems.push(
         `<div class='card item-card'>
           <div class='item-card card-body'>
@@ -55,12 +69,15 @@ $(document).ready(function() {
             </div>
           </div>
         </div>`)
-    
+    let heart = getHeart(false, currentItem.barcode)
+    if (favs.includes(parseInt(currentItem.barcode, 10))) {
+      heart = getHeart(true, currentItem.barcode)
+    }
       fullTable.push(`
         <tr>
-          <td><div><i class="fa fa-heart-o"></i></div></td>
-          <td><div onclick="addToFavs(this)" barcode='${currentItem.barcode}'>${currentItem.itemName}</div></td>
-          <td><div onclick="removeFromFavs(this)" data-itemid='${currentItem.barcode}'>${currentItem.count}</div></td>
+          ${heart}
+          <td>${currentItem.itemName}</td>
+          <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
         </tr>
       `)
     }
@@ -118,8 +135,10 @@ $(document).ready(function() {
           for (let item in res) {
             let currentItem = res[item]
             let categories = currentItem.categoryName
+            let isFave = false
             // if this item is a favorite, add that attribute
             if (favs.includes(parseInt(currentItem.barcode, 10))) {
+              isFave = true
               categories['favorites'] = 'favorites'
             }
             for (let category in categories) {
@@ -136,9 +155,9 @@ $(document).ready(function() {
                 } else {
                   items.push(`
                   <tr>
-                    <td><div><i class="fa fa-heart-o"></i></div></td>
-                    <td><div onclick="addToFavs(this)" barcode='${currentItem.barcode}'>${currentItem.itemName}</div></td>
-                    <td><div onclick="removeFromFavs(this)" data-itemid='${currentItem.barcode}'>${currentItem.count}</div></td>
+                    ${getHeart(isFave, currentItem.barcode)}
+                    <td>${currentItem.itemName}</td>
+                    <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
                   </tr>
                   `)
                 }
