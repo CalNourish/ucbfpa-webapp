@@ -40,9 +40,11 @@ function addToFavs(div) {
 
 // get iterable list of local favorite barcodes from cookie
 function getFavs() {
-  var cookie_pieces = document.cookie.split('=');
-  var favs_index = cookie_pieces.indexOf(cookie_pieces.find(s => s.includes("fav_items"))) + 1
-  return JSON.parse(cookie_pieces[favs_index]);
+  var sub_cookie = document.cookie.match(/fav_items=\[[\d+,{0,1}]+\]/);
+  if (sub_cookie == null) {
+    return [];
+  }
+  return JSON.parse(sub_cookie[0].split('=')[1]);
 }
 
 $(document).ready(function() {
