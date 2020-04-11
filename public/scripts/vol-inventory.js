@@ -46,6 +46,7 @@ $(document).ready(function() {
   // Sort table on click
   $(".table-header").on("click", function() { 
     sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"), volunteer_table_row)
+    searchItem()
   });
 
   // Clear page and select items by category
@@ -97,9 +98,9 @@ function searchItem() {
     a = li[i].getElementsByTagName("a")[0];
     txtValue = a.textContent || a.innerText;
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      li[i].style.display = "";
+      li[i].classList.remove("hidden")
     } else {
-      li[i].style.display = "none";
+      li[i].classList.add("hidden")
     }
   }
 }

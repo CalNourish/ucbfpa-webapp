@@ -1,4 +1,4 @@
-'user strict'
+'use strict'
 
 let last_sort_key = null;
 let sort_order = null;

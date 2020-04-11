@@ -46,6 +46,7 @@ $(document).ready(function() {
   // Sort table on click
   $(".table-header").on("click", function() { 
     sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"), guest_table_row)
+    searchItem()
   });
 
   // Clear page and select items by category
@@ -95,9 +96,9 @@ function searchItem() {
   for (i = 0; i < li.length; i++) {
     txtValue = li[i].textContent
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      li[i].style.display = "";
+      li[i].classList.remove("hidden")
     } else {
-      li[i].style.display = "none";
+      li[i].classList.add("hidden");
     }
   }
 }
