@@ -1,31 +1,40 @@
 'use strict';
 var scrollPosY = 0;
 var scrollPosX = 0;
+// Global Variables
+const ALL_ITEMS = []
+const FULL_TABLE = []
+let current_table = []
+let current_items = []
 
 $(document).ready(function() {
+  // Selectors
+  const TABLE_SELECTOR = $(".inventory-table tbody")
 
-  // list for appending to DOM
-
-  let fullTable = [];
   // connect inventory
   const REF = firebase.database().ref('/inventory')
 
-  // initial data 
+  // initialize data 
   REF.once("value", snapshot => {
-
     let res = snapshot.val()
     for (let item in res) {
-      let currentItem = res[item]
-      fullTable.push(`
-      <tr>
-        <td><a href='#' onClick = "goToEditItem(\'${currentItem.barcode}\')">${currentItem.itemName}</a></td>
-        <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
-        <td><button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${formatNameForHTML(currentItem.itemName)}\')"><i class="fa fa-trash"></i></button></td>
-      </tr>`)
+      let currentItem = res[item];
+      let category_dict = currentItem.categoryName
+      let categories = []
+      for (let category in category_dict) {
+        categories.push(category)
+      }
+      ALL_ITEMS.push(new Item(currentItem.itemName, currentItem.barcode, currentItem.count, categories))
     }
-    // append to dom
-    $(".inventory-table tbody").append(fullTable);
+    current_items = ALL_ITEMS
+    current_items.forEach((item) => {
+      FULL_TABLE.push(volunteer_table_row(item.name, item.count, item.barcode))
+    })
+    // Append full table to dom
+    current_table = FULL_TABLE
+    TABLE_SELECTOR.append(current_table);
   });
+
   // watch for data changes while page is open
   REF.on("child_changed", snapshot => {
     let res = snapshot.val()
@@ -36,6 +45,11 @@ $(document).ready(function() {
     }
   })
 
+  // Sort table on click
+  $(".table-header").on("click", function() { 
+    sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"), volunteer_table_row)
+    searchItem()
+  });
 
   // Clear page and select items by category
   $(".list-group-item.category-item").click(function() {
@@ -46,35 +60,30 @@ $(document).ready(function() {
   });
 
   function showCategory(selected) {
-    let items = [];
+
+    TABLE_SELECTOR.empty();
+    current_table = [];
+    current_items = [];
     $("#selected-category").text(selected.charAt(0).toUpperCase() + selected.slice(1))
     if (selected != 'all') {
-      REF.once("value", snapshot => {
-        let res = snapshot.val()
-        for (let item in res) {
-          let currentItem = res[item]
-          let categories = currentItem.categoryName
-          for (let category in categories) {
-            if (category == selected) {
-              items.push(`
-              <tr>
-                <td><a href='#' onClick = "goToEditItem(\'${currentItem.barcode}\')">${currentItem.itemName}</a></td>
-                <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
-                <td><button class="delete-button" type="button" onClick="deleteItem(\'${currentItem.barcode}\',\'${formatNameForHTML(currentItem.itemName)}\')"><i class="fa fa-trash"></i></button></td>
-              </tr>
-              `)                               
-            }
+      ALL_ITEMS.forEach((item) => {
+        for (let i = 0; i < item.categories.length; i++) {
+          if (item.categories[i] == selected) {
+            current_items.push(item)
+            current_table.push(volunteer_table_row(item.name, item.count, item.barcode))
+            break;
           }
         }
-        // update DOM
-        $(".inventory-table tbody").empty();
-        $(".inventory-table tbody").append(items);
       })
     } else {
-      // update DOM
-      $(".inventory-table tbody").empty();
-      $(".inventory-table tbody").append(fullTable);
+      current_items = ALL_ITEMS
+      current_table = FULL_TABLE
     }
+    // update DOM
+    TABLE_SELECTOR.append(current_table).hide()
+    setTimeout(() => searchItem(), 10)
+    setTimeout(() => TABLE_SELECTOR.show(), 20)
+    sortTableByKey(TABLE_SELECTOR, sort_order, volunteer_table_row)
   };
 
 
@@ -93,9 +102,9 @@ function searchItem() {
     a = li[i].getElementsByTagName("a")[0];
     txtValue = a.textContent || a.innerText;
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      li[i].style.display = "";
+      li[i].classList.remove("hidden")
     } else {
-      li[i].style.display = "none";
+      li[i].classList.add("hidden")
     }
   }
 }
@@ -130,9 +139,7 @@ function standardizeName(itemName) {
   return newName;
 }
 
-function formatNameForHTML(itemName) {
-  return itemName.replace(/'/g, "\\'")
-}
+
 
 function setOutOfStock(itemName, barcode) {
   if (confirm("Set " + itemName + " to Out of Stock?")) {

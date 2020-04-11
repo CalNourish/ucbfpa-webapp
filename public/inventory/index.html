@@ -100,12 +100,6 @@
       <div>
         <input id="searchInput" onkeyup="searchItem()" class="form-control ml-3 w-75" type="text" placeholder="Search for an item">
       </div>
-      <div class="view-item active" data-view="table">
-        <i class="material-icons">view_headlines</i>
-      </div>
-      <div class="view-item" data-view="cards">
-        <i class="material-icons">view_module</i>
-      </div>
     </div>
     <div class="row">
       <div id="inventory-sidebar" class="col-sm-4">
@@ -140,14 +134,20 @@
           <a class="list-group-item category-item list-group-item-action" id="list-favorites-list" data-toggle="dropdown" data-item="favorites" href="#" role="tab">Favorites</a>
       </div>
     </div>
-    <div id="inventory-items" class="col-sm-8 flex-wrap inventory-cards">
-    </div>
-    <table class="col-sm-8 table inventory-table">
+    <table class="col-sm-8 table inventory-table"">
       <thead>
         <tr>
           <th scope="col"></th>
-          <th scope="col">Item Name</th>
-          <th scope="col">Stock Amount</th>
+          <th class="table-header" data-sort-by="name" scope="col">
+            Item Name
+            <i class="material-icons sorting-icon up">arrow_drop_up</i>
+            <i class="material-icons sorting-icon down">arrow_drop_down</i>
+          </th>
+          <th class="table-header" data-sort-by="count" scope="col">
+            Stock Amount
+            <i class="material-icons sorting-icon up">arrow_drop_up</i>
+            <i class="material-icons sorting-icon down">arrow_drop_down</i>
+          </th>
         </tr>
       </thead>
       <tbody id="table-items">
@@ -188,6 +188,8 @@
 <script src="../scripts/messages.js"></script>
 
 <!-- Page related scripts -->
+<script src="../../scripts/table_layout.js"></script>
+<script src="../scripts/sorting.js"></script>
 <script src="../scripts/admin.js"></script>
 <script src="../scripts/inventory.js"></script>
 
