@@ -19,7 +19,7 @@ var current_items = []
 function removeFromFavs(div) {
   div.childNodes[0].outerHTML = '<i class="fa fa-heart-o"></i>';
   div.setAttribute('onClick', 'addToFavs(this)');
-  var barcode = parseInt(div.attributes['barcode'].nodeValue, 10);
+  var barcode = div.attributes['barcode'].nodeValue;
   var favs_list = getFavs();
   var old_list = JSON.stringify(favs_list);
   FAVORITES[barcode] = false
@@ -34,11 +34,12 @@ function removeFromFavs(div) {
 function addToFavs(div) {
   div.childNodes[0].outerHTML = '<i class="fa fa-heart" style="color:red"></i>';
   div.setAttribute('onClick', 'removeFromFavs(this)');
-  var barcode = parseInt(div.attributes['barcode'].nodeValue, 10);
+  var barcode = div.attributes['barcode'].nodeValue;
+  console.log(barcode);
   FAVORITES[barcode] = true
   console.log(FAVORITES[barcode])
   if (document.cookie == "" || !document.cookie.includes("fav_items")) {
-    document.cookie = document.cookie + " fav_items=[" + barcode + "];";
+    document.cookie = document.cookie + " fav_items=[\"" + barcode + "\"];";
   } else {
     var favs_list = getFavs();
     var old_list = JSON.stringify(favs_list);
@@ -51,7 +52,7 @@ function addToFavs(div) {
 
 // get iterable list of local favorite barcodes from cookie
 function getFavs() {
-  var sub_cookie = document.cookie.match(/fav_items=\[[\d+,{0,1}]+\]/);
+  var sub_cookie = document.cookie.match(/fav_items=\[["\d+",{0,1}]+\]/);
   if (sub_cookie == null) {
     return [];
   }
@@ -80,7 +81,7 @@ $(document).ready(function() {
       let heart = getHeart(false, currentItem.barcode)
       heart = getHeart(true, currentItem.barcode)
       let is_favorite = false
-      if (favs.includes(parseInt(currentItem.barcode, 10))) {
+      if (favs.includes(currentItem.barcode)) {
         is_favorite = true
       }
       FAVORITES[currentItem.barcode] = is_favorite
