@@ -173,7 +173,7 @@ function saveNewItem() {
           alert("You must check at least one category.");
           return;
         }
-        updateTo(itemName, barcode, count, categoryName, packSize, newItem=true);
+        updateTo(itemName, barcode, count, categoryName, packSize, true);
         return;
     }
   });
