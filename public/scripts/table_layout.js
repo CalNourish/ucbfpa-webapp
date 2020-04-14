@@ -36,8 +36,8 @@ function guest_table_row(name="unavailable", count="0", barcode="unavailable") {
   return (`
     <tr>
       ${getHeart(barcode)}
-      <td><div onclick="addToFavs(this)" barcode='${barcode}'>${name}</div></td>
-      <td><div onclick="removeFromFavs(this)" data-itemid='${barcode}'>${count}</div></td>
+      <td><div barcode='${barcode}'>${name}</div></td>
+      <td><div data-itemid='${barcode}'>${count}</div></td>
     </tr>
   `)
 }

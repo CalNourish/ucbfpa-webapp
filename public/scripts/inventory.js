@@ -10,11 +10,11 @@ var current_items = []
 
 
 // returns a heart element with the appropriate barcode and fill state
-function oldGetHeart(filled, barcode) {
-  var emptyHeart = '<td><div barcode=' + barcode + ' onclick="addToFavs(this)"><i class="fa fa-heart-o" style="cursor:pointer"></i></div></td>';
-  var filledHeart = '<td><div barcode=' + barcode + ' onclick="removeFromFavs(this)"><i class="fa fa-heart" style="cursor:pointer; color:red"></i></div></td>';
-  return (filled ? filledHeart : emptyHeart);
-}
+// function oldGetHeart(filled, barcode) {
+//   var emptyHeart = '<td><div barcode=' + barcode + ' onclick="addToFavs(this)"><i class="fa fa-heart-o" style="cursor:pointer"></i></div></td>';
+//   var filledHeart = '<td><div barcode=' + barcode + ' onclick="removeFromFavs(this)"><i class="fa fa-heart" style="cursor:pointer; color:red"></i></div></td>';
+//   return (filled ? filledHeart : emptyHeart);
+// }
 
 function removeFromFavs(div) {
   div.childNodes[0].outerHTML = '<i class="fa fa-heart-o"></i>';
@@ -23,6 +23,7 @@ function removeFromFavs(div) {
   var favs_list = getFavs();
   var old_list = JSON.stringify(favs_list);
   FAVORITES[barcode] = false
+  console.log(FAVORITES[barcode])
   if (favs_list.includes(barcode)) {
     favs_list.splice(favs_list.indexOf(barcode), 1);
     document.cookie = document.cookie.replace(old_list, JSON.stringify(favs_list));
@@ -35,6 +36,7 @@ function addToFavs(div) {
   div.setAttribute('onClick', 'removeFromFavs(this)');
   var barcode = parseInt(div.attributes['barcode'].nodeValue, 10);
   FAVORITES[barcode] = true
+  console.log(FAVORITES[barcode])
   if (document.cookie == "" || !document.cookie.includes("fav_items")) {
     document.cookie = document.cookie + " fav_items=[" + barcode + "];";
   } else {
@@ -108,23 +110,6 @@ $(document).ready(function() {
     sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"), guest_table_row)
     searchItem()
   });
-
-    // function showCategory(selected, view) {
-    //   let items = [];
-    //   $("#selected-category").text(selected.charAt(0).toUpperCase() + selected.slice(1))
-    //   if (selected != 'all') {
-    //     REF.once("value", snapshot => {
-    //       let res = snapshot.val()
-    //       let favs = getFavs()
-    //       for (let item in res) {
-    //         let currentItem = res[item]
-    //         let categories = currentItem.categoryName
-    //         let isFave = false
-    //         // if this item is a favorite, add that attribute
-    //         if (favs.includes(parseInt(currentItem.barcode, 10))) {
-    //           isFave = true
-    //           categories['favorites'] = 'favorites'
-    //         }
 
   // Clear page and select items by category
   $(".list-group-item.category-item").click(function() {
