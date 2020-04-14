@@ -185,6 +185,7 @@
         'scope': SCOPE,
         'discoveryDocs': ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
       }).then(function() {
+
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
         updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
       });
@@ -193,6 +194,10 @@
     function updateSignInStatus(isSignedIn) {
       if (isSignedIn) {
         makeApiCall();
+      }
+      else {
+        console.log('User not logged-in to a Google account, please log in on the pop-up page')
+        gapi.auth2.getAuthInstance().signIn();
       }
     }
 
