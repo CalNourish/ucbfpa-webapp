@@ -11,8 +11,6 @@ var itemInfo = [];
 var sheetDict = {};
 var sheetTitle = ''
 
-
-
 let numToDay = {0:'Sunday', 1:'Monday', 2:'Tuesday', 3:'Wednesday', 4:'Thursday', 5:'Friday', 6:'Saturday'}
 
 finished.addEventListener("click", (e) => {
@@ -24,7 +22,6 @@ function finishCheckout() {
     return;
   }
   let groceryDict = {};
-  //let sheetDict = {};
   // consolidate grocery list items so that there is only a single entry per barcode
   let idDate = new Date();
   let id = idDate.getTime();
@@ -59,7 +56,7 @@ function finishCheckout() {
       let itemList = [barcode, parseInt(amount), name, invCount, id, numDate, time, day]
       if (groceryDict[barcode]) {
         groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount);
-        sheetDict[barcode][1] = parseInt(sheetDict[barcode][1]) + parseInt(amount) //may run into string vs int problems here
+        sheetDict[barcode][1] = parseInt(sheetDict[barcode][1]) + parseInt(amount)
       } else {
         groceryDict[barcode] = parseInt(amount);
         sheetDict[barcode] = itemList;
@@ -132,7 +129,7 @@ function makeApiCall() {
     var params = {
       // The ID of the spreadsheet to update.
       spreadsheetId: '1IACSfoNqSrLImQXNUJl3j-Vf3jrhy7FOz33FlshSSX0',
-      // The A1 notation of a range to search for a logical table of data.
+      // The A1 notation
       // Values will be appended after the last row of the table.
       range: sheetTitle + '!A1:H1',
       // How the input data should be interpreted.
@@ -140,7 +137,7 @@ function makeApiCall() {
       // How the input data should be inserted.
       insertDataOption: 'INSERT_ROWS',
     };
-    //DOES NOT WORK WITH HOTKEYS
+
     var valueRangeBody = {
       "majorDimension": "ROWS",
       "range": sheetTitle + "!A1:H1",
@@ -158,20 +155,18 @@ function makeApiCall() {
       }
     });
 
-  } //end for loop
-
+  }
 
 }
 
 function addSheet(title) {
   var params = {
        // The spreadsheet to apply the updates to.
-       spreadsheetId: '1IACSfoNqSrLImQXNUJl3j-Vf3jrhy7FOz33FlshSSX0',  // TODO: Update placeholder value.
+       spreadsheetId: '1IACSfoNqSrLImQXNUJl3j-Vf3jrhy7FOz33FlshSSX0',
      };
 
   var batchUpdateSpreadsheetRequestBody = {
      // A list of updates to apply to the spreadsheet.
-     // Requests will be applied in the order they are specified.
      // If any request is not valid, no requests will be applied.
   requests: [{
       "addSheet": {
@@ -194,7 +189,6 @@ function addSheet(title) {
 
   var request = gapi.client.sheets.spreadsheets.batchUpdate(params, batchUpdateSpreadsheetRequestBody);
   request.then(function(response) {
-     // TODO: Change code below to process the `response` object:
     console.log(response.result);
   }, function(reason) {
    console.error('error: ' + reason.result.error.message);
