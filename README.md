@@ -33,13 +33,11 @@ These aliases will automatically connect with the appropriate firebase projects 
 
 ## Deployment
 
-**Make sure to make note of which firebase alias you are using when deploying!**
+**Test Deployment**: Feel free to deploy with **TestCalNourish** whenever to make sure things are stable. Do this by pushing to `origin/dev` (resolving any conflicts with other people's changes) and then merging with `origin/test` which will autodeploy to Firebase.
 
-To deploy the webapp: ```firebase deploy --except functions```
-
-**Test Deployment**: Feel free to deploy with **TestCalNourish** whenever to make sure things are stable
-
-**Prod Deployment**: When ready to deploy to prod, ```git tag <version name>``` the most recent commit to master and deploy from the prod alias.
+**Prod Deployment**: Any deployments to prod should be merged onto `master` from `origin/test` and then deployed using the Firebase CLI:
+```firebase deploy --except functions```. Make sure to use the `production` alias:
+```firebase use production```.
 
 ## Configuring Notifications with AWS Cognito and Lambda
 

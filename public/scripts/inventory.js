@@ -59,6 +59,53 @@ function getFavs() {
   return JSON.parse(sub_cookie[0].split('=')[1]);
 }
 
+
+
+// returns a heart element with the appropriate barcode and fill state
+function getHeart(filled, barcode) {
+  var emptyHeart = '<td><div barcode=' + barcode + ' onclick="addToFavs(this)"><i class="fa fa-heart-o" style="cursor:pointer"></i></div></td>';
+  var filledHeart = '<td><div barcode=' + barcode + ' onclick="removeFromFavs(this)"><i class="fa fa-heart" style="cursor:pointer; color:red"></i></div></td>';
+  return (filled ? filledHeart : emptyHeart);
+}
+
+function removeFromFavs(div) {
+  div.childNodes[0].outerHTML = '<i class="fa fa-heart-o"></i>';
+  div.setAttribute('onClick', 'addToFavs(this)');
+  var barcode = parseInt(div.attributes['barcode'].nodeValue, 10);
+  var favs_list = getFavs();
+  var old_list = JSON.stringify(favs_list);
+  if (favs_list.includes(barcode)) {
+    favs_list.splice(favs_list.indexOf(barcode), 1);
+    document.cookie = document.cookie.replace(old_list, JSON.stringify(favs_list));
+  }
+}
+
+// store local favorites in an array in a cookie
+function addToFavs(div) {
+  div.childNodes[0].outerHTML = '<i class="fa fa-heart" style="color:red"></i>';
+  div.setAttribute('onClick', 'removeFromFavs(this)');
+  var barcode = parseInt(div.attributes['barcode'].nodeValue, 10);
+  if (document.cookie == "" || !document.cookie.includes("fav_items")) {
+    document.cookie = document.cookie + " fav_items=[" + barcode + "];";
+  } else {
+    var favs_list = getFavs();
+    var old_list = JSON.stringify(favs_list);
+    if (!favs_list.includes(barcode)) {
+      favs_list.push(barcode);
+      document.cookie = document.cookie.replace(old_list, JSON.stringify(favs_list));
+    }
+  }
+};
+
+// get iterable list of local favorite barcodes from cookie
+function getFavs() {
+  var sub_cookie = document.cookie.match(/fav_items=\[[\d+,{0,1}]+\]/);
+  if (sub_cookie == null) {
+    return [];
+  }
+  return JSON.parse(sub_cookie[0].split('=')[1]);
+}
+
 $(document).ready(function() {
   // Table Selector
   const TABLE_SELECTOR = $(".inventory-table tbody")
@@ -66,7 +113,7 @@ $(document).ready(function() {
   // connect inventory
   const REF = firebase.database().ref('/inventory')
 
-  // initialize data 
+  // initialize data
   REF.once("value", snapshot => {
     let res = snapshot.val()
     for (let item in res) {
@@ -76,7 +123,7 @@ $(document).ready(function() {
       for (let category in category_dict) {
         categories.push(category)
       }
-      // Set favorite 
+      // Set favorite
       let favs = getFavs()
       let heart = getHeart(false, currentItem.barcode)
       heart = getHeart(true, currentItem.barcode)
@@ -107,7 +154,7 @@ $(document).ready(function() {
   })
 
   // Sort table on click
-  $(".table-header").on("click", function() { 
+  $(".table-header").on("click", function() {
     sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"), guest_table_row)
     searchItem()
   });

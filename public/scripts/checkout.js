@@ -7,6 +7,11 @@ var groceryList = document.getElementById('grocery-list');
 var totalItems = document.getElementById("total-items")
 var finished = document.getElementById('backToCheckout');
 var groceryCart  = [];
+var itemInfo = [];
+var sheetDict = {};
+var sheetTitle = ''
+
+let numToDay = {0:'Sunday', 1:'Monday', 2:'Tuesday', 3:'Wednesday', 4:'Thursday', 5:'Friday', 6:'Saturday'}
 
 finished.addEventListener("click", (e) => {
   finishCheckout();
@@ -18,21 +23,52 @@ function finishCheckout() {
   }
   let groceryDict = {};
   // consolidate grocery list items so that there is only a single entry per barcode
+  let idDate = new Date();
+  let id = idDate.getTime();
   for (let i = 0; i < groceryCart.length; i++) {
+
     if (groceryCart[i] == null) {
       continue;
     } else {
       let barcode = groceryCart[i][0];
       let amount = groceryCart[i][1];
+      let name = groceryCart[i][2];
+      let invCount = groceryCart[i][3];
+      let date = new Date();
+      let month = String(date.getMonth() + 1);
+      let year = String(date.getFullYear());
+      let numDate = year + '-' + month + '-' + String(date.getDate());
+      let hr = String(date.getHours())
+      sheetTitle = month + '/' + year;
+      if (hr.length == 1) {
+        hr = '0' + hr
+      }
+      let min = String(date.getMinutes())
+      if (min.length == 1) {
+        min = '0' + min
+      }
+      let sec = String(date.getSeconds())
+      if (sec.length == 1) {
+        sec = '0' + sec
+      }
+      let time = hr + ':' + min + ':' + sec;
+      let day = numToDay[date.getDay()]
+      let itemList = [barcode, parseInt(amount), name, invCount, id, numDate, time, day]
       if (groceryDict[barcode]) {
-        groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount)
+        groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount);
+        sheetDict[barcode][1] = parseInt(sheetDict[barcode][1]) + parseInt(amount)
       } else {
         groceryDict[barcode] = parseInt(amount);
+        sheetDict[barcode] = itemList;
       }
+      sheetDict[barcode][3] = parseInt(sheetDict[barcode][3]) - parseInt(amount)
     }
   }
+
+
+
   Object.entries(groceryDict).forEach(([barcode, amount]) => {
-    checkoutItem(barcode, amount) 
+    checkoutItem(barcode, amount)
       .then(function(result) {
         console.log(result);
       }, function(err) {
@@ -40,6 +76,7 @@ function finishCheckout() {
         toastr.error("Item checkout error")
       });
   });
+
   groceryCart = [];
   totalItems.textContent = '0'
   if (groceryList.childElementCount > 0) {
@@ -62,6 +99,103 @@ function checkoutItem(barcodeScanned, amount) {
   });
 }
 
+
+function getInventoryAmountByBarcode(barcode) {
+  return new Promise(function(resolve, reject) {
+    var ref = firebase
+      .database()
+      .ref('/inventory/' + barcode)
+      .once('value')
+      .then(function(inventoryTable) {
+        var item = inventoryTable.val();
+
+        return item.count;
+      });
+
+    if (ref) {
+      resolve(ref);
+    }
+    else {
+      reject(Error("Something broke here."));
+    }
+  });
+}
+
+function makeApiCall() {
+
+  for (const key in sheetDict) {
+    console.log(sheetDict[key]);
+
+    var params = {
+      // The ID of the spreadsheet to update.
+      spreadsheetId: '1IACSfoNqSrLImQXNUJl3j-Vf3jrhy7FOz33FlshSSX0',
+      // The A1 notation
+      // Values will be appended after the last row of the table.
+      range: sheetTitle + '!A1:H1',
+      // How the input data should be interpreted.
+      valueInputOption: 'RAW',
+      // How the input data should be inserted.
+      insertDataOption: 'INSERT_ROWS',
+    };
+
+    var valueRangeBody = {
+      "majorDimension": "ROWS",
+      "range": sheetTitle + "!A1:H1",
+      "values": [sheetDict[key]]
+    };
+    var request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
+    request.then(function(response) {
+      console.log(response.result);
+      sheetDict = {};
+    }, function(reason) {
+      console.error('error: ' + reason.result.error.message);
+      if (reason.result.error.message == 'Unable to parse range: ' + sheetTitle + '!A1:H1') {
+        addSheet();
+        makeApiCall();
+      }
+    });
+
+  }
+
+}
+
+function addSheet(title) {
+  var params = {
+       // The spreadsheet to apply the updates to.
+       spreadsheetId: '1IACSfoNqSrLImQXNUJl3j-Vf3jrhy7FOz33FlshSSX0',
+     };
+
+  var batchUpdateSpreadsheetRequestBody = {
+     // A list of updates to apply to the spreadsheet.
+     // If any request is not valid, no requests will be applied.
+  requests: [{
+      "addSheet": {
+        "properties": {
+          "title": sheetTitle,
+          "gridProperties": {
+            "rowCount": 5000,
+            "columnCount": 12
+          },
+          "tabColor": {
+            "red": 1.0,
+            "green": 0.3,
+            "blue": 0.4
+          }
+        }
+      }
+    }],
+
+   };
+
+  var request = gapi.client.sheets.spreadsheets.batchUpdate(params, batchUpdateSpreadsheetRequestBody);
+  request.then(function(response) {
+    console.log(response.result);
+  }, function(reason) {
+   console.error('error: ' + reason.result.error.message);
+  });
+}
+
+
 function getItemNameByBarcode(barcode) {
   return new Promise(function(resolve, reject) {
     var ref = firebase
@@ -70,9 +204,10 @@ function getItemNameByBarcode(barcode) {
       .once('value')
       .then(function(inventoryTable) {
         var item = inventoryTable.val();
+
         return item.itemName;
       });
-  
+
     if (ref) {
       resolve(ref);
     }
@@ -115,6 +250,7 @@ document.onkeydown = function(e) {
   } else if (e.shiftKey && e.which == 13) {
     e.preventDefault();
     finishCheckout();
+    handleClientLoad();
   } else if (e.which >= 48 && e.which <= 57) {
     // check we're not inside of an entry field
     if (document.activeElement.tagName != "INPUT") {
@@ -130,11 +266,11 @@ form.addEventListener('keypress', function(e) {
     var amount = document.getElementById('amount');
     if (barcodeScanned.value == "") {
       return;
-    } 
+    }
     if (!amount.value) {
       amount.value = "1";
     }
-  
+
   getItemNameByBarcode(barcodeScanned.value)
     .then(function(itemName) {
       // clear any error msgs that exist
@@ -169,9 +305,20 @@ form.addEventListener('keypress', function(e) {
       groceryItem.appendChild(itemNameElement);
       groceryItem.appendChild(itemAmountElement);
       groceryItem.appendChild(trashButtonElement);
+      itemInfo.push(barcodeScanned.value, amount.value, itemNameElement.textContent);
+
+      //append inventory amount to
+      getInventoryAmountByBarcode(barcodeScanned.value)
+        .then(function(inventoryCount) {
+          var inventoryCountElement = document.createElement("td");
+          inventoryCountElement.textContent = inventoryCount;
+          itemInfo.push(inventoryCountElement.textContent);
+          groceryCart.push(itemInfo);
+          itemInfo = []
+          return
+        });
 
       groceryList.appendChild(groceryItem);
-      groceryCart.push([barcodeScanned.value, amount.value]);
       updateTotal(amount.value);
       barcodeScanned.value = "";
       amount.value = "";
@@ -183,15 +330,18 @@ form.addEventListener('keypress', function(e) {
         barcodeScanned.className += " is-invalid";
         barcodeScanned.parentNode.insertBefore(errorMsg, barcodeScanned.nextSibling);
       }
-      console.log(err); 
+      console.log(err);
     });
+
+
   }
 
-  function removeListItem(i) {
+function removeListItem(i) {
     groceryList.removeChild(document.getElementById("item" + i));
     updateTotal('-' + groceryCart[i][1])
     groceryCart[i] = null;
   }
+
 
     // Toast options
     toastr.options = {
