@@ -102,8 +102,8 @@ function loadItemIntoEditForm(barcode) {
         document.getElementById('editPackSize').value = item.packSize;
       
         getCategories().forEach(function(value) {
-          var category = value.charAt(0).toUpperCase() + value.slice(1);
-          category = 'edit' + category;
+          // var category = value.charAt(0).toUpperCase() + value.slice(1);
+          let category = 'edit' + value;
           var checkbox = document.getElementById(category);
       
           if (typeof item.categoryName[value] !== "undefined" && checkbox !==null) {
@@ -173,7 +173,7 @@ function saveNewItem() {
           alert("You must check at least one category.");
           return;
         }
-        updateTo(itemName, barcode, count, categoryName, packSize, newItem=true);
+        updateTo(itemName, barcode, count, categoryName, packSize, true);
         return;
     }
   });

@@ -5,6 +5,20 @@ $(document).ready(function() {
   // list for appending to DOM
   let allItems = [];
   let fullTable = [];
+  let sidebar = [];
+  let dropdown = [];
+
+  // TODO connect to get categories
+  const categories = ['grains', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages']
+
+  categories.forEach((category) => {
+    sidebar.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="list" data-item="${category}" href="#" role="tab">${category}</a>`)
+    dropdown.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="dropdown" data-item="${category}" href="#" role="tab">${category}</a>`)
+  }) 
+  
+  $(".list-group").append(sidebar);
+  $(".dropdown-menu").append(dropdown);
+
   // connect inventory
   const REF = firebase.database().ref('/inventory')
 

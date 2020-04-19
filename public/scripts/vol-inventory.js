@@ -4,10 +4,53 @@ var scrollPosX = 0;
 
 $(document).ready(function() {
 
-  // list for appending to DOM
+  // lists for appending to DOM
 
   let fullTable = [];
+  let sidebar = [];
+  let dropdown = [];
+  let editItemCheckboxes = [];
+  let addItemCheckboxes = [];
+
+  const categories = ['grains', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages']
+
+  // generate sidebar, dropdown menu, and checkboxes from category list 
+
+  categories.forEach((category) => {
+    let upperCaseCategory = category.charAt(0).toUpperCase() + category.slice(1)
+    sidebar.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="list" data-item="${category}" href="#" role="tab">${upperCaseCategory}</a>`)
+    dropdown.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="dropdown" data-item="${category}" href="#" role="tab">${upperCaseCategory}</a>`)
+    addItemCheckboxes.push(`
+      <div class="form-check col-4">
+        <label class="form-check-label">
+          <input id="${category}" class="form-check-input" type="checkbox" value="">${upperCaseCategory}
+          <span class="form-check-sign">
+            <span class="check"></span>
+          </span>
+         </label>
+        </div>
+    `)
+    editItemCheckboxes.push(`
+    <div class="form-check col-4">
+      <label class="form-check-label">
+        <input id="edit${category}" class="form-check-input" type="checkbox" value="">${upperCaseCategory}
+        <span class="form-check-sign">
+          <span class="check"></span>
+        </span>
+       </label>
+      </div>
+  `)
+  });
+  
+  // append to dom 
+
+  $(".list-group").append(sidebar);
+  $(".dropdown-menu").append(dropdown);
+  $("#add-item-checkboxes").append(addItemCheckboxes);
+  $("#edit-item-checkboxes").append(editItemCheckboxes);
+
   // connect inventory
+
   const REF = firebase.database().ref('/inventory')
 
   // initial data 
@@ -38,12 +81,14 @@ $(document).ready(function() {
 
 
   // Clear page and select items by category
-  $(".list-group-item.category-item").click(function() {
-    let selected = $(this).data("item")
-    $(".list-group-item.category-item").removeClass("active")
-    $(`[data-item=${selected}`).addClass("active")
+  $(".list-group-item.category-item").click(selectItemsOnCategoryClick);
+
+  function selectItemsOnCategoryClick() {
+    let selected = $(this).data('item')
+    $('.list-group-item.category-item').removeClass('active')
+    $(`[data-item=${selected}`).addClass('active')
     showCategory(selected);
-  });
+  }
 
   function showCategory(selected) {
     let items = [];
