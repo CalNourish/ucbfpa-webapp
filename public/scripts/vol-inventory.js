@@ -1,6 +1,7 @@
 'use strict';
 var scrollPosY = 0;
 var scrollPosX = 0;
+// var categories = []
 
 $(document).ready(function() {
 
@@ -16,6 +17,13 @@ $(document).ready(function() {
 
   // generate sidebar, dropdown menu, and checkboxes from category list 
 
+  // const categoryRef = firebase.database().ref('/category')
+  // categoryRef.once("value", snapshot => {
+  //   let res = snapshot.val();
+  //   categories = Object.keys(res);
+  // })
+
+  console.log(categories);
   categories.forEach((category) => {
     let upperCaseCategory = category.charAt(0).toUpperCase() + category.slice(1)
     sidebar.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="list" data-item="${category}" href="#" role="tab">${upperCaseCategory}</a>`)

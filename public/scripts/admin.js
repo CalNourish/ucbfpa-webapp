@@ -2,11 +2,11 @@
 $(document).ready(function() {
 
 let defaultHoursForm = document.getElementById("default-hours-form")
-// REAL DATA
-const REF = firebase.database().ref('/info/')
-
-// TEST DATA - test the hours functionality 
-// const REF = firebase.database().ref('/testInfo/')
+let addCategoryButton = document.getElementById("add-category")
+let submitCategoriesButton = document.getElementById("submit-categories")
+const INFO_REF = firebase.database().ref('/info/')
+const CATEGORIES_REF = firebase.database().ref('/category/')
+var currentCategories = [];
 
 // Format of days in the database.... it is this way for some reason........
 const DAYS_TIMES = {
@@ -59,12 +59,24 @@ let splitAndConvertTime = time => {
 // Get all info 
 let info = async () => {
     // Get all times for the days 
-    return await REF.once("value").then(snapshot => snapshot.val());
+    return await INFO_REF.once("value").then(snapshot => snapshot.val());
+}
+
+// Get categories
+let categories = async () => {
+    return await CATEGORIES_REF.once("value").then(snapshot => snapshot.val());
 }
 
 function adminPageSetup() {
     // Uncomment below to make days rotate with the current day on top
     // var day = new Date();
+
+    categories().then(value => {
+        Object.keys(value).forEach((category) => {
+            addCategory(category)
+       });
+    });
+
     info().then(value => {
         for (let key in DAYS_TIMES) {
             if (key in value) {
@@ -126,6 +138,62 @@ function adminPageSetup() {
     });
 }
 
+function addCategory(category) {
+    let categoryList = document.getElementById("category-list");
+
+    currentCategories.push(category);
+
+    let listItem = document.createElement("li");
+    listItem.className = "item"
+    
+    let categoryCard = document.createElement("div");
+    categoryCard.textContent = category;
+    listItem.appendChild(categoryCard);
+
+    var span = document.createElement("span");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "close";
+    span.id = category;
+    span.onclick = function(category) {
+        if (!confirm()) {
+            return;
+        }
+        var div = this.parentElement;
+        div.style.display = "none";
+        let toRemove = currentCategories.indexOf(this.id);
+        if (toRemove > -1) {
+            currentCategories.splice(toRemove, 1);
+        }
+        firebase.database().ref('/category/' + this.id).remove();
+        console.log(currentCategories);
+    }
+    span.appendChild(txt);
+    listItem.appendChild(span);
+
+    categoryList.appendChild(listItem);
+}
+
+function addNewCategory(e) {
+    // look at what's in the text input
+    e.preventDefault()
+    let newCategory = document.getElementById("category-input").value;
+    if (!confirm()) {
+        return;
+    }
+    // add html and add to array 
+    addCategory(newCategory);
+    
+    // TODO create json object - loop through 
+    let toWrite = {};
+    currentCategories.forEach((category) => {
+        toWrite[category] = category.charAt(0).toUpperCase() + category.slice(1)
+    })
+    console.log(toWrite)
+    // TODO write to firebase 
+    firebase.database().ref('/category').update(toWrite).then(() => {
+        document.getElementById("category-input").value = ''
+    })
+}
 
 $('.timepicker').timepicker({
     'noneOption': [
@@ -265,7 +333,7 @@ function changeDefaultHours(e) {
     }
     if (inputChanged) {
         if (validHours) {
-            REF.update(DAYS_TIMES)
+            INFO_REF.update(DAYS_TIMES)
             .then(function() {
                 toastr.info('Hours and restock indicators set')
             })
@@ -298,6 +366,7 @@ $("td > input").on("change", (input) => {
 
 
 defaultHoursForm.addEventListener('submit', changeDefaultHours);    
+addCategoryButton.addEventListener('click', addNewCategory);
 
 adminPageSetup()
 

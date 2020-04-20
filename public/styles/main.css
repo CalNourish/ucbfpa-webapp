@@ -230,6 +230,26 @@ main, #messages-card {
 /*********************/
 /*********************/
 
+.category-list {
+  list-style-type: none;
+}
+
+.category-list .item {
+  margin: 6px;
+  width: 300px;
+  height: 30px;
+  background-color: #eeeeee;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px; 
+  display: flex
+}
+
+.close {
+  text-align: end;
+}
+
+
 .hours-error {
   color: red;
   display: none;
