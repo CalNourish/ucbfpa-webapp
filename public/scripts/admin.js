@@ -150,12 +150,12 @@ function addCategory(category) {
     categoryCard.textContent = category;
     listItem.appendChild(categoryCard);
 
-    var span = document.createElement("span");
+    var deleteCategory = document.createElement("span");
     var txt = document.createTextNode("\u00D7");
-    span.className = "close";
-    span.id = category;
-    span.onclick = function(category) {
-        if (!confirm()) {
+    deleteCategory.className = "close";
+    deleteCategory.id = category;
+    deleteCategory.onclick = function() {
+        if (!confirm('Delete category called ' + this.id + '?')) {
             return;
         }
         var div = this.parentElement;
@@ -165,31 +165,24 @@ function addCategory(category) {
             currentCategories.splice(toRemove, 1);
         }
         firebase.database().ref('/category/' + this.id).remove();
-        console.log(currentCategories);
     }
-    span.appendChild(txt);
-    listItem.appendChild(span);
+    deleteCategory.appendChild(txt);
+    listItem.appendChild(deleteCategory);
 
     categoryList.appendChild(listItem);
 }
 
 function addNewCategory(e) {
-    // look at what's in the text input
     e.preventDefault()
     let newCategory = document.getElementById("category-input").value;
-    if (!confirm()) {
+    if (!confirm('Add new category called ' + newCategory + '?')) {
         return;
     }
-    // add html and add to array 
     addCategory(newCategory);
-    
-    // TODO create json object - loop through 
     let toWrite = {};
     currentCategories.forEach((category) => {
-        toWrite[category] = category.charAt(0).toUpperCase() + category.slice(1)
+        toWrite[category] = category;
     })
-    console.log(toWrite)
-    // TODO write to firebase 
     firebase.database().ref('/category').update(toWrite).then(() => {
         document.getElementById("category-input").value = ''
     })
@@ -390,19 +383,3 @@ toastr.options = {
 
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

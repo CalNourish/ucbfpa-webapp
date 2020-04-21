@@ -1,7 +1,6 @@
 'use strict';
 var scrollPosY = 0;
 var scrollPosX = 0;
-// var categories = []
 
 $(document).ready(function() {
 
@@ -13,49 +12,45 @@ $(document).ready(function() {
   let editItemCheckboxes = [];
   let addItemCheckboxes = [];
 
-  const categories = ['grains', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages']
+  // Generates sidebar, dropdown menu, and checkboxes from category list 
 
-  // generate sidebar, dropdown menu, and checkboxes from category list 
+  const categoryRef = firebase.database().ref('/category')
+  categoryRef.once("value", snapshot => {
+    let res = snapshot.val();
 
-  // const categoryRef = firebase.database().ref('/category')
-  // categoryRef.once("value", snapshot => {
-  //   let res = snapshot.val();
-  //   categories = Object.keys(res);
-  // })
-
-  console.log(categories);
-  categories.forEach((category) => {
-    let upperCaseCategory = category.charAt(0).toUpperCase() + category.slice(1)
-    sidebar.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="list" data-item="${category}" href="#" role="tab">${upperCaseCategory}</a>`)
-    dropdown.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="dropdown" data-item="${category}" href="#" role="tab">${upperCaseCategory}</a>`)
-    addItemCheckboxes.push(`
+    Object.keys(res).forEach((category) => {
+      let upperCaseCategory = category.charAt(0).toUpperCase() + category.slice(1)
+      sidebar.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="list" data-item="${category}" href="#" role="tab">${upperCaseCategory}</a>`)
+      dropdown.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="dropdown" data-item="${category}" href="#" role="tab">${upperCaseCategory}</a>`)
+      addItemCheckboxes.push(`
+        <div class="form-check col-4">
+          <label class="form-check-label">
+            <input id="${category}" class="form-check-input" type="checkbox" value="">${upperCaseCategory}
+            <span class="form-check-sign">
+              <span class="check"></span>
+            </span>
+           </label>
+          </div>
+      `)
+      editItemCheckboxes.push(`
       <div class="form-check col-4">
         <label class="form-check-label">
-          <input id="${category}" class="form-check-input" type="checkbox" value="">${upperCaseCategory}
+          <input id="edit${category}" class="form-check-input" type="checkbox" value="">${upperCaseCategory}
           <span class="form-check-sign">
             <span class="check"></span>
           </span>
          </label>
         </div>
     `)
-    editItemCheckboxes.push(`
-    <div class="form-check col-4">
-      <label class="form-check-label">
-        <input id="edit${category}" class="form-check-input" type="checkbox" value="">${upperCaseCategory}
-        <span class="form-check-sign">
-          <span class="check"></span>
-        </span>
-       </label>
-      </div>
-  `)
-  });
+    });
+    
+    // append to dom 
   
-  // append to dom 
-
-  $(".list-group").append(sidebar);
-  $(".dropdown-menu").append(dropdown);
-  $("#add-item-checkboxes").append(addItemCheckboxes);
-  $("#edit-item-checkboxes").append(editItemCheckboxes);
+    $(".list-group").append(sidebar);
+    $(".dropdown-menu").append(dropdown);
+    $("#add-item-checkboxes").append(addItemCheckboxes);
+    $("#edit-item-checkboxes").append(editItemCheckboxes);
+  })
 
   // connect inventory
 
@@ -89,7 +84,7 @@ $(document).ready(function() {
 
 
   // Clear page and select items by category
-  $(".list-group-item.category-item").click(selectItemsOnCategoryClick);
+  $(".list-group").on('click', ".list-group-item", selectItemsOnCategoryClick);
 
   function selectItemsOnCategoryClick() {
     let selected = $(this).data('item')
