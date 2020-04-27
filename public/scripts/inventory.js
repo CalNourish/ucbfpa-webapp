@@ -6,16 +6,6 @@ const FULL_TABLE = [] // Save the full table to reference when "all" is selected
 var current_table = [] // For the current version of the table based on category
 var current_items = []
 
-
-
-
-// returns a heart element with the appropriate barcode and fill state
-// function oldGetHeart(filled, barcode) {
-//   var emptyHeart = '<td><div barcode=' + barcode + ' onclick="addToFavs(this)"><i class="fa fa-heart-o" style="cursor:pointer"></i></div></td>';
-//   var filledHeart = '<td><div barcode=' + barcode + ' onclick="removeFromFavs(this)"><i class="fa fa-heart" style="cursor:pointer; color:red"></i></div></td>';
-//   return (filled ? filledHeart : emptyHeart);
-// }
-
 function removeFromFavs(div) {
   div.childNodes[0].outerHTML = '<i class="fa fa-heart-o"></i>';
   div.setAttribute('onClick', 'addToFavs(this)');
@@ -35,9 +25,8 @@ function addToFavs(div) {
   div.childNodes[0].outerHTML = '<i class="fa fa-heart" style="color:red"></i>';
   div.setAttribute('onClick', 'removeFromFavs(this)');
   var barcode = div.attributes['barcode'].nodeValue;
-  console.log(barcode);
+
   FAVORITES[barcode] = true
-  console.log(FAVORITES[barcode])
   if (document.cookie == "" || !document.cookie.includes("fav_items")) {
     document.cookie = document.cookie + " fav_items=[\"" + barcode + "\"];";
   } else {
@@ -60,14 +49,6 @@ function getFavs() {
 }
 
 
-
-// returns a heart element with the appropriate barcode and fill state
-function getHeart(filled, barcode) {
-  var emptyHeart = '<td><div barcode=' + barcode + ' onclick="addToFavs(this)"><i class="fa fa-heart-o" style="cursor:pointer"></i></div></td>';
-  var filledHeart = '<td><div barcode=' + barcode + ' onclick="removeFromFavs(this)"><i class="fa fa-heart" style="cursor:pointer; color:red"></i></div></td>';
-  return (filled ? filledHeart : emptyHeart);
-}
-
 function removeFromFavs(div) {
   div.childNodes[0].outerHTML = '<i class="fa fa-heart-o"></i>';
   div.setAttribute('onClick', 'addToFavs(this)');
@@ -80,31 +61,6 @@ function removeFromFavs(div) {
   }
 }
 
-// store local favorites in an array in a cookie
-function addToFavs(div) {
-  div.childNodes[0].outerHTML = '<i class="fa fa-heart" style="color:red"></i>';
-  div.setAttribute('onClick', 'removeFromFavs(this)');
-  var barcode = parseInt(div.attributes['barcode'].nodeValue, 10);
-  if (document.cookie == "" || !document.cookie.includes("fav_items")) {
-    document.cookie = document.cookie + " fav_items=[" + barcode + "];";
-  } else {
-    var favs_list = getFavs();
-    var old_list = JSON.stringify(favs_list);
-    if (!favs_list.includes(barcode)) {
-      favs_list.push(barcode);
-      document.cookie = document.cookie.replace(old_list, JSON.stringify(favs_list));
-    }
-  }
-};
-
-// get iterable list of local favorite barcodes from cookie
-function getFavs() {
-  var sub_cookie = document.cookie.match(/fav_items=\[[\d+,{0,1}]+\]/);
-  if (sub_cookie == null) {
-    return [];
-  }
-  return JSON.parse(sub_cookie[0].split('=')[1]);
-}
 
 $(document).ready(function() {
   // Table Selector
@@ -125,12 +81,8 @@ $(document).ready(function() {
       }
       // Set favorite
       let favs = getFavs()
-      let heart = getHeart(false, currentItem.barcode)
-      heart = getHeart(true, currentItem.barcode)
-      let is_favorite = false
-      if (favs.includes(currentItem.barcode)) {
-        is_favorite = true
-      }
+      let is_favorite = favs.includes(currentItem.barcode)
+
       FAVORITES[currentItem.barcode] = is_favorite
       ALL_ITEMS.push(new Item(currentItem.itemName, currentItem.barcode, currentItem.count, categories, is_favorite))
     }
