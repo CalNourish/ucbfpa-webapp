@@ -79,7 +79,7 @@
                       <a href="/pantry-volunteers/vol-inventory" class="nav-link">
                           <i class="material-icons">view_headline</i> Inventory
                       </a>
-                  </li> 
+                  </li>
                   <li class="nav-item logged-in">
                       <a href="/pantry-volunteers/checkout" class="nav-link">
                           <i class="material-icons">shopping_cart</i> Checkout
@@ -157,7 +157,7 @@
 
 
                     <div class="form-group row col-12">
-        
+
                     <div class="form-check col-4">
                         <label class="form-check-label">
                         <input id="grains" class="form-check-input" type="checkbox" value=""> Grains
@@ -166,7 +166,7 @@
                         </span>
                         </label>
                     </div>
-        
+
                     <div class="form-check col-4">
                         <label class="form-check-label">
                         <input id="canned" class="form-check-input" type="checkbox" value=""> Canned
@@ -175,7 +175,7 @@
                         </span>
                         </label>
                     </div>
-        
+
                     <div class="form-check col-4">
                         <label class="form-check-label">
                         <input id="protein" class="form-check-input" type="checkbox" value=""> Protein
@@ -184,7 +184,7 @@
                         </span>
                         </label>
                     </div>
-        
+
                     <div class="form-check col-4">
                         <label class="form-check-label">
                         <input id="frozen" class="form-check-input" type="checkbox" value=""> Frozen
@@ -193,7 +193,7 @@
                         </span>
                         </label>
                     </div>
-        
+
                     <div class="form-check col-4">
                         <label class="form-check-label">
                         <input id="snacks" class="form-check-input" type="checkbox" value=""> Snacks
@@ -202,7 +202,7 @@
                         </span>
                         </label>
                     </div>
-        
+
                     <div class="form-check col-4">
                         <label class="form-check-label">
                         <input id="sauces" class="form-check-input" type="checkbox" value=""> Sauces
@@ -211,7 +211,7 @@
                         </span>
                         </label>
                     </div>
-        
+
                     <div class="form-check col-4">
                         <label class="form-check-label">
                         <input id="spices" class="form-check-input" type="checkbox" value=""> Spices
@@ -220,7 +220,7 @@
                         </span>
                         </label>
                     </div>
-        
+
                     <div class="form-check col-4">
                         <label class="form-check-label">
                         <input id="beverages" class="form-check-input" type="checkbox" value=""> Beverages
@@ -230,7 +230,13 @@
                         </label>
                     </div>
                   </div>
-        
+
+                    <div class="form-group">
+                    <label for="lowStock" class="bmd-label-floating">Low Stock Threshold</label>
+                    <input id="lowStock" name="lowStock" type="text" class="form-control here">
+                    <span class="bmd-help">The amount at which admin should be notified to restock this item (default is no notification)</span>
+                    </div>
+
                     <div class="form-group">
                     <label for="barcode" class="bmd-label-floating">Barcode</label>
                     <input id="barcode" name="barcode" type="text" class="form-control here" required="required">
@@ -238,7 +244,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Submit</button>
-        
+
                 </form>
             </div>
 
@@ -256,7 +262,7 @@
                     <h3>Edit Item</h3>
                     <h4>Scan a barcode to load an item into the form below, or manually fill out the fields for the item.</h4>
                     <form id="edit-item-form-barcode">
-          
+
                       <div class="form-group">
                         <label for="editItemBarcode" class="bmd-label-floating">Barcode</label>
                         <input id="editItemBarcode" name="editItemBarcode" type="text" class="form-control here" required="required" autofocus>
@@ -264,7 +270,7 @@
                       </div>
                         <button id="editItemBarcodeSubmit" type="submit" class="btn btn-primary">Submit</button>
                     </form>
-          
+
                       <form id="edit-item-form">
                       <span id="editItemID" value=""></span>
                       <div class="form-group">
@@ -284,21 +290,21 @@
                             <select class="form-control" id="editUnitOption">
                               <option value="unit" selected="selected">Individual Items</option>
                               <option value="unit">Packs</option>
-                            </select> 
+                            </select>
                             <span><button class="btn btn-sm btn-primary decrement-count" type="button" onclick="subtractFromCountByInterval()"><i class="material-icons">remove</i></button></span>
                             <span><button class="btn btn-sm btn-primary increment-count" type="button" onclick="addToCountByInterval()"><i class="material-icons">add</i></button></span>
                         </div>
                       </div>
 
-                            
+
                       <div class="form-group">
                             <label id="quantity-label" for="editCount" class="bmd-label-floating">Quantity</label>
                             <input id="editCount" name="cost" type="number" class="form-control here" required="required">
                             <span class="bmd-help">Enter estimate if unsure. Example: 15</span>
                       </div>
-          
+
                       <div class="form-group row col-12">
-          
+
                         <div class="form-check col-4">
                           <label class="form-check-label">
                             <input id="editGrains" class="form-check-input" type="checkbox" value=""> Grains
@@ -307,7 +313,7 @@
                             </span>
                           </label>
                         </div>
-          
+
                         <div class="form-check col-4">
                           <label class="form-check-label">
                             <input id="editCanned" class="form-check-input" type="checkbox" value=""> Canned
@@ -316,7 +322,7 @@
                             </span>
                           </label>
                         </div>
-          
+
                         <div class="form-check col-4">
                           <label class="form-check-label">
                             <input id="editProtein" class="form-check-input" type="checkbox" value=""> Protein
@@ -325,7 +331,7 @@
                             </span>
                           </label>
                         </div>
-          
+
                         <div class="form-check col-4">
                           <label class="form-check-label">
                             <input id="editFrozen" class="form-check-input" type="checkbox" value=""> Frozen
@@ -334,7 +340,7 @@
                             </span>
                           </label>
                         </div>
-          
+
                         <div class="form-check col-4">
                           <label class="form-check-label">
                             <input id="editSnacks" class="form-check-input" type="checkbox" value=""> Snacks
@@ -343,7 +349,7 @@
                             </span>
                           </label>
                         </div>
-          
+
                         <div class="form-check col-4">
                           <label class="form-check-label">
                             <input id="editSauces" class="form-check-input" type="checkbox" value=""> Sauces
@@ -352,7 +358,7 @@
                             </span>
                           </label>
                         </div>
-          
+
                         <div class="form-check col-4">
                           <label class="form-check-label">
                             <input id="editSpices" class="form-check-input" type="checkbox" value=""> Spices
@@ -361,7 +367,7 @@
                             </span>
                           </label>
                         </div>
-          
+
                         <div class="form-check col-4">
                           <label class="form-check-label">
                             <input id="editBeverages" class="form-check-input" type="checkbox" value=""> Beverages
@@ -371,6 +377,12 @@
                           </label>
                         </div>
                       </div>
+
+                    <div class="form-group">
+                            <label for="editLowStock" class="bmd-label-floating">Low Stock Threshold</label>
+                            <input id="editLowStock" name="editLowStock" type="number" class="form-control here">
+                            <span class="bmd-help">The amount at which admin should be notified to restock this item (default is no notification)</span>
+                    </div>
                     <div class="form-group">
                             <label for="editBarcode" class="bmd-label-floating">Barcode</label>
                             <input id="editBarcode" name="editBarcode" type="text" class="form-control here" required="required">
@@ -379,15 +391,15 @@
 
                     <button type="submit" class="btn btn-primary">Submit</button>
 
-          
+
                     </form>
 
                   </div>
             <!-- END EDIT ITEM -->
-    
+
             </div>
         </div>
-    
+
      <!-- end add item modal -->
 
     <div class="row">
@@ -490,7 +502,3 @@
 <script src="https://cdn.jsdelivr.net/npm/timepicker@1.11.15/jquery.timepicker.js"></script>
 </body>
 </html>
-
-
-
-

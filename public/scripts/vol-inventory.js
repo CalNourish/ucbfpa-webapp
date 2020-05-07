@@ -14,7 +14,7 @@ $(document).ready(function() {
   // connect inventory
   const REF = firebase.database().ref('/inventory')
 
-  // initialize data 
+  // initialize data
   REF.once("value", snapshot => {
     let res = snapshot.val()
     for (let item in res) {
@@ -46,7 +46,7 @@ $(document).ready(function() {
   })
 
   // Sort table on click
-  $(".table-header").on("click", function() { 
+  $(".table-header").on("click", function() {
     sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"), volunteer_table_row)
     searchItem()
   });
@@ -147,7 +147,7 @@ function setOutOfStock(itemName, barcode) {
       var itemID = barcodesTable.val()[barcode];
       firebase.database().ref('/inventory/' + itemID).once('value').then(function(inventoryTable) {
         var item = inventoryTable.val();
-        updateTo(item.itemName, item.barcode, item.cost, "0", item.categoryName, iten.packSize);
+        updateTo(item.itemName, item.barcode, item.cost, "0", item.categoryName, item.packSize, item.lowStock);
       });
     });
   }
@@ -163,6 +163,7 @@ var modalContent = document.getElementById('modalContent');
 var modalBtn = document.getElementById('modalBtn');
 var closeBtn = document.getElementById('closeBtn');
 var packSize = document.getElementById('pack');
+var lowStock = document.getElementById('lowStock')
 var count = document.getElementById('count');
 var unitChoice = document.getElementById('packOption');
 
@@ -225,4 +226,3 @@ toastr.options = {
   "showMethod": "fadeIn",
   "hideMethod": "fadeOut"
 }
-
