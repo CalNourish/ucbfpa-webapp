@@ -32,6 +32,7 @@ function finishCheckout() {
     } else {
       let barcode = groceryCart[i][0];
       let amount = groceryCart[i][1];
+
       let name = groceryCart[i][2];
       let invCount = groceryCart[i][3];
       let date = new Date();
@@ -40,17 +41,11 @@ function finishCheckout() {
       let numDate = year + '-' + month + '-' + String(date.getDate());
       let hr = String(date.getHours())
       sheetTitle = month + '/' + year;
-      if (hr.length == 1) {
-        hr = '0' + hr
-      }
+      if (hr.length == 1) {  hr = '0' + hr }
       let min = String(date.getMinutes())
-      if (min.length == 1) {
-        min = '0' + min
-      }
+      if (min.length == 1) { min = '0' + min }
       let sec = String(date.getSeconds())
-      if (sec.length == 1) {
-        sec = '0' + sec
-      }
+      if (sec.length == 1) { sec = '0' + sec }
       let time = hr + ':' + min + ':' + sec;
       let day = numToDay[date.getDay()]
       let itemList = [barcode, parseInt(amount), name, invCount, id, numDate, time, day]
@@ -76,7 +71,6 @@ function finishCheckout() {
         toastr.error("Item checkout error")
       });
   });
-
   groceryCart = [];
   totalItems.textContent = '0'
   if (groceryList.childElementCount > 0) {
@@ -99,7 +93,7 @@ function checkoutItem(barcodeScanned, amount) {
   });
 }
 
-
+//consolidate these three functions
 function getInventoryAmountByBarcode(barcode) {
   return new Promise(function(resolve, reject) {
     var ref = firebase
@@ -119,6 +113,60 @@ function getInventoryAmountByBarcode(barcode) {
       reject(Error("Something broke here."));
     }
   });
+}
+
+function getLowStockByBarcode(barcode) {
+  return new Promise(function(resolve, reject) {
+    var ref = firebase
+      .database()
+      .ref('/inventory/' + barcode)
+      .once('value')
+      .then(function(inventoryTable) {
+        var item = inventoryTable.val();
+
+        return item.lowStock;
+      });
+
+    if (ref) {
+      resolve(ref);
+    }
+    else {
+      reject(Error("Something broke here."));
+    }
+  });
+}
+
+function getItemNameByBarcode(barcode) {
+  return new Promise(function(resolve, reject) {
+    var ref = firebase
+      .database()
+      .ref('/inventory/' + barcode)
+      .once('value')
+      .then(function(inventoryTable) {
+        var item = inventoryTable.val();
+
+        return item.itemName;
+      });
+
+    if (ref) {
+      resolve(ref);
+    }
+    else {
+      reject(Error("Something broke here."));
+    }
+  });
+}
+
+function checkLowStock() {
+  for (const key in sheetDict) {
+    console.log(sheetDict[key]);
+    let lowStockNum = getLowStockByBarcode(sheetDict[key][0])
+    let inventoryAmount = getInventoryAmountByBarcode(sheetDict[key][0])
+    if (lowStockNum >= inventoryAmount) {
+        
+
+    }
+  }
 }
 
 function makeApiCall() {
@@ -195,27 +243,6 @@ function addSheet(title) {
   });
 }
 
-
-function getItemNameByBarcode(barcode) {
-  return new Promise(function(resolve, reject) {
-    var ref = firebase
-      .database()
-      .ref('/inventory/' + barcode)
-      .once('value')
-      .then(function(inventoryTable) {
-        var item = inventoryTable.val();
-
-        return item.itemName;
-      });
-
-    if (ref) {
-      resolve(ref);
-    }
-    else {
-      reject(Error("Something broke here."));
-    }
-  });
-}
 
 function getAmount() {
   var amount = document.getElementById('amount');

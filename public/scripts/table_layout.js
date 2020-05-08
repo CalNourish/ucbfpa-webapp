@@ -9,7 +9,7 @@ function getHeart(barcode) {
   var emptyHeart = '<td><div barcode=' + barcode + ' onclick="addToFavs(this)"><i class="fa fa-heart-o" style="cursor:pointer"></i></div></td>';
   var filledHeart = '<td><div barcode=' + barcode + ' onclick="removeFromFavs(this)"><i class="fa fa-heart" style="cursor:pointer; color:red"></i></div></td>';
   try {
-    return FAVORITES[barcode] ? filledHeart : emptyHeart  
+    return FAVORITES[barcode] ? filledHeart : emptyHeart
   } catch {
     return emptyHeart
   }
@@ -56,3 +56,16 @@ function volunteer_table_row(name="unavailable", count="0", barcode="unavailable
     </tr>
   `)
 }
+
+/*****************************************
+ ***** Pantry Admin Low Stock Layout *****
+ ****************************************/
+
+ function low_stock_table_row(name="unavailable", count="0", barcode="unavailable") {
+   return (`
+     <tr>
+       <td>${name}</a></td>
+       <td data-itemid='${barcode}'>${count}</td>
+     </tr>
+   `)
+ }

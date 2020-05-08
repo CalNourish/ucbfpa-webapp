@@ -80,7 +80,7 @@
                       <a href="/pantry-volunteers/vol-inventory" class="nav-link">
                           <i class="material-icons">view_headline</i> Inventory
                       </a>
-                  </li> 
+                  </li>
                   <li class="nav-item logged-in">
                       <a href="/pantry-volunteers/checkout" class="nav-link"s>
                           <i class="material-icons">shopping_cart</i> Checkout
@@ -125,9 +125,9 @@
       <table id="pantry-hours-table" class="table">
         <thead>
           <tr>
-            <th scope="col"><!--Day of the Week--></th> 
-            <th scope="col"><!--Open--></th> 
-            <th scope="col"><!--Close--></th> 
+            <th scope="col"><!--Day of the Week--></th>
+            <th scope="col"><!--Open--></th>
+            <th scope="col"><!--Close--></th>
             <!-- <th scope="col"></th> -->
             <th scope="col">Bread</th>
             <th scope="col">Eggs</th>
@@ -145,7 +145,7 @@
             </td>
             <td class="pantry-closed">
               <input type="text" class="timepicker" name="day-0-close"/>
-            </td> 
+            </td>
           </tr>
           <tr id = "day1">
             <td class="day"></td>
@@ -154,7 +154,7 @@
             </td>
             <td class="pantry-closed">
               <input type="text" class="timepicker" name="day-1-close"/>
-            </td>       
+            </td>
           </tr>
           <tr id = "day2">
             <td class="day"></td>
@@ -163,7 +163,7 @@
             </td>
             <td class="pantry-closed">
               <input type="text" class="timepicker" name="day-2-close"/>
-            </td>       
+            </td>
           </tr>
           <tr id = "day3">
             <td class="day"></td>
@@ -172,7 +172,7 @@
             </td>
             <td class="pantry-closed">
               <input type="text" class="timepicker" name="day-3-close"/>
-            </td>       
+            </td>
           </tr>
           <tr id = "day4">
             <td class="day"></td>
@@ -181,7 +181,7 @@
             </td>
             <td class="pantry-closed">
               <input type="text" class="timepicker" name="day-4-close"/>
-            </td>       
+            </td>
           </tr>
           <tr id = "day5">
             <td class="day"></td>
@@ -190,7 +190,7 @@
             </td>
             <td class="pantry-closed">
               <input type="text" class="timepicker" name="day-5-close"/>
-            </td>       
+            </td>
           </tr>
           <tr id = "day6">
             <td class="day"></td>
@@ -199,17 +199,41 @@
             </td>
             <td class="pantry-closed">
               <input type="text" class="timepicker" name="day-6-close"/>
-            </td>       
+            </td>
           </tr>
         </tbody>
       </table>
       <div class="hours-error"></div>
-      <button type="submit" on="submitHours" class="btn btn-primary change-default-hours">
-        submit
-      </button>
+      <button type="submit" on="submitHours" class="btn btn-primary change-default-hours">submit</button>
     </form>
+
+    <div class="low-stock">
+      <h2>Low Stock Items</h2>
+      <h4>A list of items that are low on stock. Items will be removed from the list when they have either been restocked or deleted from the list.</h4>
+      <table id="low-stock-table" class="col-sm-8 table low-stock-table">
+        <thead>
+          <tr>
+            <th class="table-header" data-sort-by="name" scope="col">
+              Item Name
+              <i class="material-icons sorting-icon up">arrow_drop_up</i>
+              <i class="material-icons sorting-icon down">arrow_drop_down</i>
+            </th>
+            <th class="table-header" data-sort-by="count" scope="col">
+              Stock Amount
+              <i class="material-icons sorting-icon up">arrow_drop_up</i>
+              <i class="material-icons sorting-icon down">arrow_drop_down</i>
+            </th>
+          </tr>
+        </thead>
+        <tbody id = "table-items">
+        </tbody>
+      </table>
+    </div>
+
   </div>
   </div>
+
+
   <footer class="page-footer font-small">
     <div class="container text-center text-md-left">
       <div class="row">
@@ -246,6 +270,12 @@
 
 <!-- Page related scripts -->
 <script src="../../scripts/admin.js"></script>
+<script src="../../scripts/table_layout.js"></script>
+<script src="../../scripts/checkout.js"></script>
+<script src="../../scripts/restock.js"></script>
+<script src="../../scripts/sorting.js"></script>
+
+
 
 <!-- Timepicker CDN -->
 <script src="https://cdn.jsdelivr.net/npm/timepicker@1.11.15/jquery.timepicker.js"></script>
