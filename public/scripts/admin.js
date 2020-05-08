@@ -77,12 +77,7 @@ REF_LS.once("value", snapshot => {
   for (let item in res) {
     let currentItem = res[item];
     let category_dict = currentItem.categoryName
-    console.log(currentItem.itemName)
-    console.log(currentItem.count + "     " + currentItem.lowStock)
-    console.log(currentItem.count <= currentItem.lowStock)
     if (currentItem.count <= currentItem.lowStock) {
-
-      console.log('in if statement')
       let categories = []
       for (let category in category_dict) {
         categories.push(category)

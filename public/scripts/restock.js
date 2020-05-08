@@ -30,7 +30,6 @@ function updateExistingItem() {
       alert("You must check at least one category.");
       return;
     }
-    console.log('updateExistingItem     ' + toString(lowStock))
     return updateTo(itemName, barcode, count, categoryName, packSize, lowStock);
 }
 
@@ -41,7 +40,6 @@ function decrementItem(barcode, amount) {
       .then(function(inventoryTable) {
         var item = inventoryTable.val();
         var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
-        console.log('decrementItem      ' + toString(item.lowStock))
         updateTo(item.itemName, item.barcode, dec.toString(), item.categoryName, item.packSize, item.lowStock);
     });
 }
@@ -57,14 +55,11 @@ function deleteItem(barcode, itemName) {
 function updateTo(itemName, barcode, count, categoryName, packSize, lowStock, newItem=false) {
     if (packSize == undefined){
        packSize = 1;
-       console.log('packSize if statement')
      }
      if (isNaN(parseInt(lowStock))) {
        lowStock = -1;
      }
 
-    console.log('updateTo     ' + toString(packSize))
-    console.log('updateTo lowStock type = ' + toString(typeof lowStock))
     // Save to inventory this new item to the generated item ID.
     var itemInfo = {
       createdBy: getUserName(),
@@ -178,7 +173,6 @@ function saveNewItem() {
         // Generate hashmap that has list of categories for this item.
         var categoryName = {};
         getCategories().forEach(function(value, index, array) {
-          console.log(value);
           var checkbox = document.getElementById(value);
           if (checkbox !== null && checkbox.checked) {
             categoryName[value] = value;
@@ -190,7 +184,6 @@ function saveNewItem() {
           alert("You must check at least one category.");
           return;
         }
-        console.log('saveNewItem    ' + toString(lowStock))
         updateTo(itemName, barcode, count, categoryName, packSize, lowStock, true);
         return;
     }

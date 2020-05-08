@@ -115,26 +115,6 @@ function getInventoryAmountByBarcode(barcode) {
   });
 }
 
-function getLowStockByBarcode(barcode) {
-  return new Promise(function(resolve, reject) {
-    var ref = firebase
-      .database()
-      .ref('/inventory/' + barcode)
-      .once('value')
-      .then(function(inventoryTable) {
-        var item = inventoryTable.val();
-
-        return item.lowStock;
-      });
-
-    if (ref) {
-      resolve(ref);
-    }
-    else {
-      reject(Error("Something broke here."));
-    }
-  });
-}
 
 function getItemNameByBarcode(barcode) {
   return new Promise(function(resolve, reject) {
@@ -157,22 +137,10 @@ function getItemNameByBarcode(barcode) {
   });
 }
 
-function checkLowStock() {
-  for (const key in sheetDict) {
-    console.log(sheetDict[key]);
-    let lowStockNum = getLowStockByBarcode(sheetDict[key][0])
-    let inventoryAmount = getInventoryAmountByBarcode(sheetDict[key][0])
-    if (lowStockNum >= inventoryAmount) {
-        
-
-    }
-  }
-}
 
 function makeApiCall() {
 
   for (const key in sheetDict) {
-    console.log(sheetDict[key]);
 
     var params = {
       // The ID of the spreadsheet to update.
