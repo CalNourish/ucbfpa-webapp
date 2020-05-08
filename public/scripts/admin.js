@@ -87,13 +87,13 @@ REF_LS.once("value", snapshot => {
       for (let category in category_dict) {
         categories.push(category)
       }
-      ALL_ITEMS_LS.push([currentItem.itemName, currentItem.barcode, currentItem.count, categories])
+      ALL_ITEMS_LS.push([currentItem.itemName, currentItem.barcode, currentItem.count, categories, currentItem.lowStock])
     }
   }
 
   current_items_LS = ALL_ITEMS_LS
   current_items_LS.forEach((item) => {
-    FULL_TABLE_LS.push(low_stock_table_row(item[0], item[2], item[1]))
+    FULL_TABLE_LS.push(low_stock_table_row(item[0], item[2], item[1], item[4]))
   })
   // Append full table to dom
   current_table_LS = FULL_TABLE_LS

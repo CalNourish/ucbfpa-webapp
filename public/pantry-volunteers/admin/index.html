@@ -206,22 +206,21 @@
       <div class="hours-error"></div>
       <button type="submit" on="submitHours" class="btn btn-primary change-default-hours">submit</button>
     </form>
-
+    <br>
     <div class="low-stock">
       <h2>Low Stock Items</h2>
-      <h4>A list of items that are low on stock. Items will be removed from the list when they have either been restocked or deleted from the list.</h4>
+      <h4>A list of items that are low on stock. An item will be removed from the list when it has either been restocked or its low stock threshold has been changed on the Inventory page.</h4>
       <table id="low-stock-table" class="col-sm-8 table low-stock-table">
         <thead>
           <tr>
             <th class="table-header" data-sort-by="name" scope="col">
               Item Name
-              <i class="material-icons sorting-icon up">arrow_drop_up</i>
-              <i class="material-icons sorting-icon down">arrow_drop_down</i>
             </th>
             <th class="table-header" data-sort-by="count" scope="col">
               Stock Amount
-              <i class="material-icons sorting-icon up">arrow_drop_up</i>
-              <i class="material-icons sorting-icon down">arrow_drop_down</i>
+            </th>
+            <th class="table-header" data-sort-by="count" scope="col">
+              Low Stock Threshold
             </th>
           </tr>
         </thead>

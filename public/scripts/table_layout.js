@@ -61,11 +61,12 @@ function volunteer_table_row(name="unavailable", count="0", barcode="unavailable
  ***** Pantry Admin Low Stock Layout *****
  ****************************************/
 
- function low_stock_table_row(name="unavailable", count="0", barcode="unavailable") {
+ function low_stock_table_row(name="unavailable", count="0", barcode="unavailable", threshold='-1') {
    return (`
      <tr>
        <td>${name}</a></td>
        <td data-itemid='${barcode}'>${count}</td>
+       <td data-itemid='${barcode}'>${threshold}</td>
      </tr>
    `)
  }

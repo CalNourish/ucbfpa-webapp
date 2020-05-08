@@ -49,7 +49,7 @@ function compareByKey(key, order="asc") {
       } else if (a_value < b_value) {
         comparison = -1
       }
-    } 
+    }
 
     // flip order if descending
     comparison = order === 'desc' ? comparison * -1 : comparison;
