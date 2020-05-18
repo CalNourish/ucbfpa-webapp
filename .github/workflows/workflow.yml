@@ -12,7 +12,7 @@ jobs:
     - name: Deploy to Firebase
       uses: w9jds/firebase-action@master
       with:
-        args: deploy --except functions:test -m "${{ github.event.head_commit.message }}"
+        args: deploy -m "${{ github.event.head_commit.message }}" --except functions:test 
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         PROJECT_ID: test
