@@ -39,6 +39,8 @@ These aliases will automatically connect with the appropriate firebase projects 
 ```firebase deploy --except functions```. Make sure to use the `production` alias:
 ```firebase use production```.
 
+Our autodeploy actions use [this Action](https://github.com/marketplace/actions/github-action-for-firebase).
+
 ## Configuring Notifications with AWS Cognito and Lambda
 
 Our sendNotification logic resides in AWS Lambda, and we use AWS Cognito to authenticate. The following guide will walk you step-by-step in recreating the installation instructions. For security, the credentials reside in the database. This guide was adapted from [Setting up Amazon Cognito and the Amazon SDK for Javascript](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/getting-started-browser.html).
