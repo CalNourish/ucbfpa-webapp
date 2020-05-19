@@ -77,6 +77,8 @@ REF_LS.once("value", snapshot => {
   for (let item in res) {
     let currentItem = res[item];
     let category_dict = currentItem.categoryName
+    console.log(currentItem)
+    console.log(currentItem.count <= currentItem.lowStock)
     if (currentItem.count <= currentItem.lowStock) {
       let categories = []
       for (let category in category_dict) {
@@ -95,7 +97,7 @@ REF_LS.once("value", snapshot => {
   TABLE_SELECTOR_LS.append(current_table_LS);
 
   // Sort table on click
-  $(".table-header").on("click", function() {
+  $(".table-header-ls").on("click", function() {
     sortTableByKey(TABLE_SELECTOR_LS, $(this).data("sort-by"), low_stock_table_row)
     searchItem()
   });
