@@ -9,11 +9,12 @@ function updateExistingItem() {
     var barcode = document.getElementById('editBarcode').value;
     var count = document.getElementById('editCount').value;
     var packSize = document.getElementById('editPackSize').value;
+    var lowStock = document.getElementById('editLowStock').value;
 
     if (isNaN(parseInt(packSize))) {
       packSize = 0;
     }
-    
+
     // Generate hashmap that has list of categories for this item.
     var categoryName = {};
     getCategories().forEach(function(value, index, array) {
@@ -29,21 +30,21 @@ function updateExistingItem() {
       alert("You must check at least one category.");
       return;
     }
-    return updateTo(itemName, barcode, count, categoryName, packSize);
+    return updateTo(itemName, barcode, count, categoryName, packSize, lowStock);
 }
 
-function decrementItem(barcode, amount) { 
+function decrementItem(barcode, amount) {
     return firebase.database()
       .ref('/inventory/' + barcode)
       .once('value')
       .then(function(inventoryTable) {
         var item = inventoryTable.val();
         var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
-        updateTo(item.itemName, item.barcode, dec.toString(), item.categoryName, item.packSize);
+        updateTo(item.itemName, item.barcode, dec.toString(), item.categoryName, item.packSize, item.lowStock);
     });
 }
 
-function deleteItem(barcode, itemName) { 
+function deleteItem(barcode, itemName) {
   if (confirm("Delete " + itemName + "?")) {
     firebase.database().ref('/inventory/' + barcode).remove().then(function() {
       window.location.reload();
@@ -51,8 +52,14 @@ function deleteItem(barcode, itemName) {
   }
 }
 
-function updateTo(itemName, barcode, count, categoryName, packSize, newItem=false) {
-    if (packSize == undefined) packSize = 1; 
+function updateTo(itemName, barcode, count, categoryName, packSize, lowStock, newItem=false) {
+    if (packSize == undefined){
+       packSize = 1;
+     }
+     if (isNaN(parseInt(lowStock))) {
+       lowStock = -1;
+     }
+
     // Save to inventory this new item to the generated item ID.
     var itemInfo = {
       createdBy: getUserName(),
@@ -60,10 +67,11 @@ function updateTo(itemName, barcode, count, categoryName, packSize, newItem=fals
       barcode: barcode,
       count: count,
       categoryName: categoryName,
-      packSize: packSize
+      packSize: packSize,
+      lowStock: lowStock
     }
     if (newItem) {
-      return firebase.database() 
+      return firebase.database()
       .ref('/inventory/' + barcode)
       .update(itemInfo)
       .catch(function(error) {
@@ -75,8 +83,8 @@ function updateTo(itemName, barcode, count, categoryName, packSize, newItem=fals
         toastr.info("New item successfully added");
         }
       );
-    } 
-    return firebase.database() 
+    }
+    return firebase.database()
       .ref('/inventory/' + barcode)
       .update(itemInfo)
       .catch(function(error) {
@@ -90,7 +98,7 @@ function updateTo(itemName, barcode, count, categoryName, packSize, newItem=fals
       );
 }
 
-function loadItemIntoEditForm(barcode) { 
+function loadItemIntoEditForm(barcode) {
     return firebase.database()
       .ref('/inventory/' + barcode)
       .once('value')
@@ -100,12 +108,13 @@ function loadItemIntoEditForm(barcode) {
         document.getElementById('editBarcode').value = item.barcode;
         document.getElementById('editCount').value = item.count;
         document.getElementById('editPackSize').value = item.packSize;
-      
+        document.getElementById('editLowStock').value = item.lowStock;
+
         getCategories().forEach(function(value) {
           var category = value.charAt(0).toUpperCase() + value.slice(1);
           category = 'edit' + category;
           var checkbox = document.getElementById(category);
-      
+
           if (typeof item.categoryName[value] !== "undefined" && checkbox !==null) {
             checkbox.checked = true;
           } else {
@@ -126,11 +135,14 @@ function saveNewItem() {
   var count = document.getElementById('count').value;
   var packSize = document.getElementById('pack').value;
   var unitChoice = document.getElementById('packOption');
+  var lowStock = document.getElementById('lowStock').value;
 
   // on an empty pack size field
   if (isNaN(parseInt(packSize))) {
     packSize = 1;
   }
+
+
 
   // if using packs, recalculate the count
   if (unitChoice.selectedOptions[0].innerText == 'Packs') {
@@ -145,7 +157,7 @@ function saveNewItem() {
       categoryName[value] = value;
     }
   });
-    
+
   //check if barcode already exists in database
   firebase.database().ref('/inventory/').once('value').then((data) => {
     var barcodesFromDb = data.val();
@@ -161,7 +173,6 @@ function saveNewItem() {
         // Generate hashmap that has list of categories for this item.
         var categoryName = {};
         getCategories().forEach(function(value, index, array) {
-          console.log(value);
           var checkbox = document.getElementById(value);
           if (checkbox !== null && checkbox.checked) {
             categoryName[value] = value;
@@ -173,7 +184,7 @@ function saveNewItem() {
           alert("You must check at least one category.");
           return;
         }
-        updateTo(itemName, barcode, count, categoryName, packSize, true);
+        updateTo(itemName, barcode, count, categoryName, packSize, lowStock, true);
         return;
     }
   });
