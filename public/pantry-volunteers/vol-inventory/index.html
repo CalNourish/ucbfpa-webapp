@@ -44,7 +44,6 @@
   <!-- Material Design Lite -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
-  <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 
   <!-- App Styling -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
@@ -80,7 +79,7 @@
                       <a href="/pantry-volunteers/vol-inventory" class="nav-link">
                           <i class="material-icons">view_headline</i> Inventory
                       </a>
-                  </li> 
+                  </li>
                   <li class="nav-item logged-in">
                       <a href="/pantry-volunteers/checkout" class="nav-link">
                           <i class="material-icons">shopping_cart</i> Checkout
@@ -157,7 +156,13 @@
                     </div>
                     <div id="add-item-checkboxes" class="form-group row col-12">
                   </div>
-        
+
+                    <div class="form-group">
+                    <label for="lowStock" class="bmd-label-floating">Low Stock Threshold</label>
+                    <input id="lowStock" name="lowStock" type="number" class="form-control here">
+                    <span class="bmd-help">The amount at which admin should be notified to restock this item (default is no notification)</span>
+                    </div>
+
                     <div class="form-group">
                     <label for="barcode" class="bmd-label-floating">Barcode</label>
                     <input id="barcode" name="barcode" type="text" class="form-control here" required="required">
@@ -165,7 +170,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Submit</button>
-        
+
                 </form>
             </div>
 
@@ -183,7 +188,7 @@
                     <h3>Edit Item</h3>
                     <h4>Scan a barcode to load an item into the form below, or manually fill out the fields for the item.</h4>
                     <form id="edit-item-form-barcode">
-          
+
                       <div class="form-group">
                         <label for="editItemBarcode" class="bmd-label-floating">Barcode</label>
                         <input id="editItemBarcode" name="editItemBarcode" type="text" class="form-control here" required="required" autofocus>
@@ -191,7 +196,7 @@
                       </div>
                         <button id="editItemBarcodeSubmit" type="submit" class="btn btn-primary">Submit</button>
                     </form>
-          
+
                       <form id="edit-item-form">
                       <span id="editItemID" value=""></span>
                       <div class="form-group">
@@ -211,13 +216,13 @@
                             <select class="form-control" id="editUnitOption">
                               <option value="unit" selected="selected">Individual Items</option>
                               <option value="unit">Packs</option>
-                            </select> 
+                            </select>
                             <span><button class="btn btn-sm btn-primary decrement-count" type="button" onclick="subtractFromCountByInterval()"><i class="material-icons">remove</i></button></span>
                             <span><button class="btn btn-sm btn-primary increment-count" type="button" onclick="addToCountByInterval()"><i class="material-icons">add</i></button></span>
                         </div>
                       </div>
 
-                            
+
                       <div class="form-group">
                             <label id="quantity-label" for="editCount" class="bmd-label-floating">Quantity</label>
                             <input id="editCount" name="cost" type="number" class="form-control here" required="required">
@@ -226,23 +231,29 @@
           
                       <div id="edit-item-checkboxes" class="form-group row col-12">
                       </div>
+
+                    <div class="form-group">
+                            <label for="editLowStock" class="bmd-label-floating">Low Stock Threshold</label>
+                            <input id="editLowStock" name="editLowStock" type="number" class="form-control here">
+                            <span class="bmd-help">The amount at which admin should be notified to restock this item (default is no notification)</span>
+                    </div>
                     <div class="form-group">
                             <label for="editBarcode" class="bmd-label-floating">Barcode</label>
-                            <input id="editBarcode" name="editBarcode" type="text" class="form-control here" required="required">
-                            <span class="bmd-help">Example: 3490W80E95334I</span>
+                            <input id="editBarcode" name="editBarcode" type="text" class="form-control here" required="required" readonly>
+                            <!--<span class="bmd-help">Example: 3490W80E95334I</span> -->
                     </div>
 
                     <button type="submit" class="btn btn-primary">Submit</button>
 
-          
+
                     </form>
 
                   </div>
             <!-- END EDIT ITEM -->
-    
+
             </div>
         </div>
-    
+
      <!-- end add item modal -->
 
     <div class="row">
@@ -263,11 +274,19 @@
             <a class="list-group-item category-item list-group-item-action active" id="list-all-list" data-toggle="list" data-item="all" href="#" role="tab">All</a>
           </div>
         </div>
-      <table class="col-sm-8 table inventory-table">
+      <table id="inventory-table" class="col-sm-8 table inventory-table">
         <thead>
           <tr>
-            <th scope="col">Item Name</th>
-            <th scope="col">Stock Amount</th>
+            <th class="table-header" data-sort-by="name" scope="col">
+              Item Name
+              <i class="material-icons sorting-icon up">arrow_drop_up</i>
+              <i class="material-icons sorting-icon down">arrow_drop_down</i>
+            </th>
+            <th class="table-header" data-sort-by="count" scope="col">
+              Stock Amount
+              <i class="material-icons sorting-icon up">arrow_drop_up</i>
+              <i class="material-icons sorting-icon down">arrow_drop_down</i>
+            </th>
           </tr>
         </thead>
         <tbody id = "table-items">
@@ -306,9 +325,13 @@
 
 <!-- Material Kit Core initialisations of plugins and Bootstrap Material Design Library -->
 <script src="../../scripts/material-kit.js?v=2.0.3"></script>
+<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 <!-- Toast -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <!-- Page related scripts -->
+<script src="../../scripts/sorting.js"></script>
+<script src="../../scripts/table_layout.js"></script>
+<script src="../../scripts/admin.js"></script>
 <script src="../../scripts/vol-inventory.js"></script>
 <script src="../../scripts/restock.js"></script>
 
@@ -317,7 +340,3 @@
 <script src="https://cdn.jsdelivr.net/npm/timepicker@1.11.15/jquery.timepicker.js"></script>
 </body>
 </html>
-
-
-
-

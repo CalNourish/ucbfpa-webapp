@@ -1,4 +1,9 @@
 'use strict';
+const ALL_ITEMS_LS = []
+const FULL_TABLE_LS = []
+let current_table_LS = []
+let current_items_LS = []
+
 $(document).ready(function() {
 
 let defaultHoursForm = document.getElementById("default-hours-form")
@@ -7,12 +12,22 @@ let submitCategoriesButton = document.getElementById("submit-categories")
 const INFO_REF = firebase.database().ref('/info/')
 const CATEGORIES_REF = firebase.database().ref('/category/')
 var currentCategories = [];
+let lowStockTable = document.getElementById("low-stock-table")
+
+// REAL DATA
+const TABLE_SELECTOR_LS = $(".low-stock-table tbody")
+const REF_LS = firebase.database().ref('/inventory')
+
+const REF = firebase.database().ref('/info/')
+
+// TEST DATA - test the hours functionality
+// const REF = firebase.database().ref('/testInfo/')
 
 // Format of days in the database.... it is this way for some reason........
 const DAYS_TIMES = {
     '-sunday': '',
     '-monday': '',
-    '-tuesday': '', 
+    '-tuesday': '',
     '-wednesday': '',
     '-thursday': '',
     '-friday': '',
@@ -23,7 +38,7 @@ const DAYS_TIMES = {
 const RESTOCK_INDICATORS = {
     '-sunday': {},
     '-monday': {},
-    '-tuesday': {}, 
+    '-tuesday': {},
     '-wednesday': {},
     '-thursday': {},
     '-friday': {},
@@ -46,7 +61,7 @@ let convertTime = time => {
         return [splitAndConvertTime(start), splitAndConvertTime(end)]
     }
     return ['Closed', null]
-} 
+}
 
 let splitAndConvertTime = time => {
     let [hr, mn] = time.split(':');
@@ -56,7 +71,7 @@ let splitAndConvertTime = time => {
 }
 
 
-// Get all info 
+// Get all info
 let info = async () => {
     // Get all times for the days 
     return await INFO_REF.once("value").then(snapshot => snapshot.val());
@@ -66,6 +81,40 @@ let info = async () => {
 let categories = async () => {
     return await CATEGORIES_REF.once("value").then(snapshot => snapshot.val());
 }
+
+REF_LS.once("value", snapshot => {
+  let res = snapshot.val()
+  for (let item in res) {
+    let currentItem = res[item];
+    let category_dict = currentItem.categoryName
+    console.log(currentItem)
+    console.log(currentItem.count <= currentItem.lowStock)
+    if (currentItem.count <= currentItem.lowStock) {
+      let categories = []
+      for (let category in category_dict) {
+        categories.push(category)
+      }
+      ALL_ITEMS_LS.push([currentItem.itemName, currentItem.barcode, currentItem.count, categories, currentItem.lowStock])
+    }
+  }
+
+  current_items_LS = ALL_ITEMS_LS
+  current_items_LS.forEach((item) => {
+    FULL_TABLE_LS.push(low_stock_table_row(item[0], item[2], item[1], item[4]))
+  })
+  // Append full table to dom
+  current_table_LS = FULL_TABLE_LS
+  TABLE_SELECTOR_LS.append(current_table_LS);
+
+  // Sort table on click
+  $(".table-header-ls").on("click", function() {
+    sortTableByKey(TABLE_SELECTOR_LS, $(this).data("sort-by"), low_stock_table_row)
+    searchItem()
+  });
+});
+
+
+
 
 function adminPageSetup() {
     // Uncomment below to make days rotate with the current day on top
@@ -100,7 +149,7 @@ function adminPageSetup() {
 
             currentRow[0].textContent = currentDay
             let open = currentRow[1].children
-            let closed = currentRow[2].children            
+            let closed = currentRow[2].children
             if (time[0] == "Closed") {
                 open[0].value = time[0]
                 closed[0].value = ''
@@ -116,7 +165,7 @@ function adminPageSetup() {
             // Make checkboxes for the number of restock indicators in the database. Skip displaying the "None" category.
             for (let j = 1; j < Object.keys(restock_today).length; j++) {
                 // Ensure each checkbox element has a unique id (day + _ + position).
-                let id_string = 'id = ' + i + '_' + j; 
+                let id_string = 'id = ' + i + '_' + j;
                 var checkbox = $(
                     '<td>\
                         <div class="form-check col-4"> \
@@ -131,7 +180,7 @@ function adminPageSetup() {
                 checkbox.appendTo('#day' + i);
                 if (restock_today[Object.keys(restock_today)[j]] == 1) {
                     let toCheck = document.getElementById(i + "_" + j);
-                    toCheck.checked = true; 
+                    toCheck.checked = true;
                 }
             }
         }
@@ -222,6 +271,8 @@ function addNewCategory(e) {
     })
 }
 
+
+
 $('.timepicker').timepicker({
     'noneOption': [
         {'label': 'Closed',
@@ -241,24 +292,24 @@ $('.timepicker').timepicker({
 
 const convertTime12to24 = (time12h) => {
     const [time, modifier] = time12h.split(' ');
-  
+
     let [hours, minutes] = time.split(':');
-  
+
     if (hours === '12') {
       hours = '00';
     }
-  
+
     if (modifier === 'PM') {
       hours = parseInt(hours) + 12;
     }
-  
+
     return `${hours}:${minutes}`;
   }
 
 const validateHours = (open, closed) => {
     let [openHours, openMinutes] = open.split(':')
     let [closedHours, closedMinutes] = closed.split(':')
-    
+
     // Check that open is before close
     if (parseInt(openHours) < parseInt(closedHours)) {
         return true;
@@ -302,7 +353,7 @@ function changeDefaultHours(e) {
         let close24 = '';
         let restock_today = RESTOCK_INDICATORS["-" + currentDay.toLowerCase()]['restock']
 
-        // Update restock indicators table with the checked boxes 
+        // Update restock indicators table with the checked boxes
         let boxes_checked = 0;
         for (let j = 1; j < Object.keys(restock_today).length; j++) {
             if (document.getElementById(i + '_' + j).checked) {
@@ -382,7 +433,7 @@ let inputChanged = false;
 $("td > input").on("change", (input) => {
     inputChanged = true;
 
-    // Remove error background color if present 
+    // Remove error background color if present
     let row = $(input)[0].target.parentNode.parentNode.children
     let open = row[1]
     let closed = row[2]

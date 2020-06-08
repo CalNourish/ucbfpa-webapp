@@ -1,7 +1,72 @@
 'use strict';
+// Global Variables
+const ALL_ITEMS = []
+const FAVORITES = {} // Store all items in-memory
+const FULL_TABLE = [] // Save the full table to reference when "all" is selected
+var current_table = [] // For the current version of the table based on category
+var current_items = []
+
+function removeFromFavs(div) {
+  div.childNodes[0].outerHTML = '<i class="fa fa-heart-o"></i>';
+  div.setAttribute('onClick', 'addToFavs(this)');
+  var barcode = div.attributes['barcode'].nodeValue;
+  var favs_list = getFavs();
+  var old_list = JSON.stringify(favs_list);
+  FAVORITES[barcode] = false
+  console.log(FAVORITES[barcode])
+  if (favs_list.includes(barcode)) {
+    favs_list.splice(favs_list.indexOf(barcode), 1);
+    document.cookie = document.cookie.replace(old_list, JSON.stringify(favs_list));
+  }
+}
+
+// store local favorites in an array in a cookie
+function addToFavs(div) {
+  div.childNodes[0].outerHTML = '<i class="fa fa-heart" style="color:red"></i>';
+  div.setAttribute('onClick', 'removeFromFavs(this)');
+  var barcode = div.attributes['barcode'].nodeValue;
+
+  FAVORITES[barcode] = true
+  if (document.cookie == "" || !document.cookie.includes("fav_items")) {
+    document.cookie = document.cookie + " fav_items=[\"" + barcode + "\"];";
+  } else {
+    var favs_list = getFavs();
+    var old_list = JSON.stringify(favs_list);
+    if (!favs_list.includes(barcode)) {
+      favs_list.push(barcode);
+      document.cookie = document.cookie.replace(old_list, JSON.stringify(favs_list));
+    }
+  }
+};
+
+// get iterable list of local favorite barcodes from cookie
+function getFavs() {
+  var sub_cookie = document.cookie.match(/fav_items=\[["\d+",{0,1}]+\]/);
+  if (sub_cookie == null) {
+    return [];
+  }
+  return JSON.parse(sub_cookie[0].split('=')[1]);
+}
+
+
+function removeFromFavs(div) {
+  div.childNodes[0].outerHTML = '<i class="fa fa-heart-o"></i>';
+  div.setAttribute('onClick', 'addToFavs(this)');
+  var barcode = parseInt(div.attributes['barcode'].nodeValue, 10);
+  var favs_list = getFavs();
+  var old_list = JSON.stringify(favs_list);
+  if (favs_list.includes(barcode)) {
+    favs_list.splice(favs_list.indexOf(barcode), 1);
+    document.cookie = document.cookie.replace(old_list, JSON.stringify(favs_list));
+  }
+}
+
 
 $(document).ready(function() {
+  // Table Selector
+  const TABLE_SELECTOR = $(".inventory-table tbody")
 
+<<<<<<< HEAD
   // list for appending to DOM
   let allItems = [];
   let fullTable = [];
@@ -19,164 +84,117 @@ $(document).ready(function() {
   $(".list-group").append(sidebar);
   $(".dropdown-menu").append(dropdown);
 
+=======
+>>>>>>> 1bcf33ebfcdc0636bfb67fccaa24b95660a8fbf8
   // connect inventory
   const REF = firebase.database().ref('/inventory')
 
-  // initial data 
+  // initialize data
   REF.once("value", snapshot => {
-
     let res = snapshot.val()
     for (let item in res) {
       let currentItem = res[item]
-      allItems.push(
-        `<div class='card item-card'>
-          <div class='item-card card-body'>
-            <h4 class='item-name'>${currentItem.itemName}</h4>
-            <div class='count-wrapper'>
-              <p class='card-text item-count public-item' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
-            </div>
-          </div>
-        </div>`)
-    
-      fullTable.push(`
-        <tr>
-          <td>${currentItem.itemName}</td>
-          <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
-        </tr>
-      `)
+      let category_dict = currentItem.categoryName
+      let categories = []
+      for (let category in category_dict) {
+        categories.push(category)
+      }
+      // Set favorite
+      let favs = getFavs()
+      let is_favorite = favs.includes(currentItem.barcode)
+
+      FAVORITES[currentItem.barcode] = is_favorite
+      ALL_ITEMS.push(new Item(currentItem.itemName, currentItem.barcode, currentItem.count, categories, is_favorite))
     }
-    // append to dom
-    $(".inventory-table tbody").append(fullTable)
-  })
-
-    // watch for data changes while page is open
-    REF.on("child_changed", snapshot => {
-      let res = snapshot.val()
-      let item = document.querySelectorAll(`[data-itemid='${res.barcode}']`)
-      // If item is currently rendered
-      if (item) {
-        item.textContent = res.count;
-      }
+    current_items = ALL_ITEMS
+    current_items.forEach((item) => {
+      FULL_TABLE.push(guest_table_row(item.name, item.count, item.barcode))
     })
-
-    // Clear page and select items by category
-    $(".list-group-item.category-item").click(function() {
-      let selected = $(this).data("item")
-      $(".list-group-item.category-item").removeClass("active")
-      $(`[data-item=${selected}`).addClass("active")
-      let view = $(".view-item.active").data("view")
-      showCategory(selected, view);
-    });
-
-    // Change view style
-    $(".view-item").on("click", (el) => {
-      if (!el.currentTarget.classList.contains("active")) {
-        $(".view-item.active").removeClass("active")
-        el.currentTarget.classList.add("active")
-        let activateView = el.currentTarget.dataset.view
-        let selected = $(".list-group-item.active.category-item")[0].textContent.toLowerCase()
-        if (activateView == "table") {
-          $("#inventory-items").empty()
-          $("#inventory-items").css("display", "none").removeClass("d-flex")
-          $(".inventory-table").show()
-          showCategory(selected, "table")
-        } else {
-          $(".inventory-table tbody").empty()
-          $(".inventory-table").hide()
-          $("#inventory-items").show().addClass("d-flex")
-          showCategory(selected, "cards")
-        }
-      }
-    })
-
-
-    function showCategory(selected, view) {
-      let items = [];
-      $("#selected-category").text(selected.charAt(0).toUpperCase() + selected.slice(1))
-      if (selected != 'all') {
-        REF.once("value", snapshot => {
-          let res = snapshot.val()
-          for (let item in res) {
-            let currentItem = res[item]
-            let categories = currentItem.categoryName
-            for (let category in categories) {
-              if (category == selected) {
-                // Card view
-                if (view == "cards") {
-                  items.push(`
-                  <div class='card item-card'>
-                    <div class='item-card card-body'>
-                      <h4 class='item-name'>${currentItem.itemName}</h4>
-                      <p class='card-text item-count public-item' data-itemid='${currentItem.barcode}'>${currentItem.count}</p>
-                    </div>
-                  </div>`)
-                } else {
-                  items.push(`
-                  <tr>
-                    <td>${currentItem.itemName}</td>
-                    <td data-itemid='${currentItem.barcode}'>${currentItem.count}</td>
-                  </tr>
-                  `)
-                }
-
-              }
-            }
-          }
-          // update DOM
-          if (view == "cards") {
-            $('#inventory-items').empty();
-            $("#inventory-items").append(items)
-          } else {
-            $(".inventory-table tbody").empty();
-            $(".inventory-table tbody").append(items);
-          }
-        })
-      } else {
-          // update DOM
-          if (view == "cards") {
-            $('#inventory-items').empty();
-            $("#inventory-items").append(allItems)
-          } else {
-            $(".inventory-table tbody").empty();
-            $(".inventory-table tbody").append(fullTable);
-          }
-
-      }
-    }
+    // Append full table to dom
+    current_table = FULL_TABLE
+    TABLE_SELECTOR.append(current_table);
   });
 
-  function searchItem() {
-    // Declare variables
-    var input, filter, items, li, a, i, txtValue, cards, name;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    if ($("[data-view='table']").hasClass("active")) {
-      items = document.getElementById("table-items");
-      li = items.getElementsByTagName('tr');
-      // Loop through all list items, and hide those who don't match the search query
-      for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("td")[0];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          li[i].style.display = "";
-        } else {
-          li[i].style.display = "none";
-        }
-      }
-    } else {
-      items = document.getElementById("inventory-items");
-      cards = document.querySelectorAll(".card.item-card")
-      // Loop through all list items, and hide those who don't match the search query
-      for (i = 0; i < cards.length; i++) {
-        name = cards[i].querySelector(".item-name")
-        txtValue = name.textContent || name.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          cards[i].style.display = "";
-        } else {
-          cards[i].style.display = "none";
-        }
-      }
+  // watch for data changes while page is open
+  REF.on("child_changed", snapshot => {
+    let res = snapshot.val()
+    let item = document.querySelector(`[data-itemid='${res.barcode}']`)
+    // If item is currently rendered
+    if (item) {
+      item.textContent = res.count;
     }
-  
+  })
 
+  // Sort table on click
+  $(".table-header").on("click", function() {
+    sortTableByKey(TABLE_SELECTOR, $(this).data("sort-by"), guest_table_row)
+    searchItem()
+  });
+
+  // Clear page and select items by category
+  $(".list-group-item.category-item").click(function() {
+    let selected = $(this).data("item")
+    $(".list-group-item.category-item").removeClass("active")
+    $(`[data-item=${selected}`).addClass("active")
+    showCategory(selected);
+  });
+
+  function showCategory(selected) {
+    TABLE_SELECTOR.empty();
+    current_table = [];
+    current_items = [];
+    $("#selected-category").text(selected.charAt(0).toUpperCase() + selected.slice(1))
+    if (selected == "favorites") {
+      ALL_ITEMS.forEach((item) => {
+        if (FAVORITES[item.barcode]) {
+          current_items.push(item)
+          current_table.push(guest_table_row(item.name, item.count, item.barcode))
+        }
+      })
+    } else if (selected != 'all') {
+      ALL_ITEMS.forEach((item) => {
+        for (let i = 0; i < item.categories.length; i++) {
+          if (item.categories[i] == selected) {
+            current_items.push(item)
+            current_table.push(guest_table_row(item.name, item.count, item.barcode))
+            break;
+          }
+        }
+      })
+    } else {
+      current_items = ALL_ITEMS
+      current_table = FULL_TABLE
+    }
+    // update DOM
+    TABLE_SELECTOR.append(current_table).hide()
+    setTimeout(() => searchItem(), 5)
+    setTimeout(() => TABLE_SELECTOR.show(), 10)
+    sortTableByKey(TABLE_SELECTOR, sort_order, guest_table_row)
+  };
+});
+
+function searchItem() {
+  // Declare variables
+  var input, filter, items, li, a, i, txtValue;
+  input = document.getElementById("searchInput");
+  filter = input.value.toUpperCase();
+  items = document.getElementById("table-items");
+  li = items.getElementsByTagName('tr');
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    txtValue = li[i].textContent
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].classList.remove("hidden")
+    } else {
+      li[i].classList.add("hidden");
+    }
   }
+}
+
+function standardizeName(itemName) {
+  var newName = itemName;
+  if (itemName.length > 20) {
+    var newName = itemName.slice(0, 20) + "...";
+  }
+  return newName;
+}
