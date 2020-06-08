@@ -1,8 +1,5 @@
 'use strict';
 
-function getCategories() {
-  return ['grains', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages'];
-}
 // used by the edit item modal
 function updateExistingItem() {
     var itemName = document.getElementById('editItemName').value;
@@ -15,21 +12,26 @@ function updateExistingItem() {
     }
     
     // Generate hashmap that has list of categories for this item.
-    var categoryName = {};
-    getCategories().forEach(function(value, index, array) {
-      var category = 'edit' + value.charAt(0).toUpperCase() + value.slice(1);
-      var checkbox = document.getElementById(category);
-      if (checkbox !== null && checkbox.checked) {
-        categoryName[value] = value;
-      }
-    });
 
-    // Save this new item to inventory
-    if (JSON.stringify(categoryName) === '{}') {
-      alert("You must check at least one category.");
-      return;
-    }
-    return updateTo(itemName, barcode, count, categoryName, packSize);
+    const categoryRef = firebase.database().ref('/category')
+    categoryRef.once("value", snapshot => {
+      let res = snapshot.val();
+      var categoryName = {};
+
+      Object.keys(res).forEach((category) => {
+        var checkbox = document.getElementById('edit' + category);
+        if (checkbox !== null && checkbox.checked) {
+          categoryName[category] = category;
+        }
+      });
+      if (JSON.stringify(categoryName) === '{}') {
+        alert("You must check at least one category.");
+        return;
+      }
+      console.log(categoryName);    
+      return updateTo(itemName, barcode, count, categoryName, packSize);
+
+    });
 }
 
 function decrementItem(barcode, amount) { 
@@ -75,19 +77,20 @@ function updateTo(itemName, barcode, count, categoryName, packSize, newItem=fals
         toastr.info("New item successfully added");
         }
       );
-    } 
-    return firebase.database() 
-      .ref('/inventory/' + barcode)
-      .update(itemInfo)
-      .catch(function(error) {
-          console.error('Error writing item to /inventory/' + barcode, error);
-          toastr.error(error, "Error adding new item")
-          })
-      .then(() => {
-        document.getElementById("edit-item-form").reset();
-        toastr.info("New item successfully edited");
-        }
-      );
+    } else {
+      return firebase.database() 
+        .ref('/inventory/' + barcode)
+        .update(itemInfo)
+        .catch(function(error) {
+            console.error('Error writing item to /inventory/' + barcode, error);
+            toastr.error(error, "Error adding new item")
+            })
+        .then(() => {
+          document.getElementById("edit-item-form").reset();
+          toastr.info("Item successfully edited");
+          }
+        );
+    }
 }
 
 function loadItemIntoEditForm(barcode) { 
@@ -101,24 +104,24 @@ function loadItemIntoEditForm(barcode) {
         document.getElementById('editCount').value = item.count;
         document.getElementById('editPackSize').value = item.packSize;
       
-        getCategories().forEach(function(value) {
-          // var category = value.charAt(0).toUpperCase() + value.slice(1);
-          let category = 'edit' + value;
-          var checkbox = document.getElementById(category);
-      
-          if (typeof item.categoryName[value] !== "undefined" && checkbox !==null) {
-            checkbox.checked = true;
-          } else {
-            checkbox.checked = false;
-          };
+        const categoryRef = firebase.database().ref('/category')
+        categoryRef.once("value", snapshot => {
+          let res = snapshot.val();
+          Object.keys(res).forEach((category) => {
+            var checkbox = document.getElementById('edit' + category);
+            if (typeof item.categoryName[category] !== "undefined" && checkbox !==null) {
+              checkbox.checked = true;
+            } else {
+              checkbox.checked = false;
+            };
+          });
+          document.getElementById("edit-item-form-barcode").reset();
         });
-        document.getElementById("edit-item-form-barcode").reset();
-
     });
 }
 
 // Saves a new item in the inventory database. Used by the add item modal
-function saveNewItem() {
+async function saveNewItem() {  // make this async and await firebase call
 
   // var itemID = generateItemID();
   var itemName = document.getElementById('itemName').value;
@@ -139,11 +142,15 @@ function saveNewItem() {
 
   // Generate hashmap that has list of categories for this item.
   var categoryName = {};
-  getCategories().forEach(function(value, index, array) {
-    var checkbox = document.getElementById(value);
-    if (checkbox !== null && checkbox.checked) {
-      categoryName[value] = value;
-    }
+  const categoryRef = firebase.database().ref('/category')
+  categoryRef.once("value", snapshot => {
+    let res = snapshot.val();
+    Object.keys(res).forEach((category) => {
+      var checkbox = document.getElementById(category);
+      if (checkbox !== null && checkbox.checked) {
+        categoryName[category] = category;
+      }
+    });
   });
     
   //check if barcode already exists in database
@@ -160,19 +167,19 @@ function saveNewItem() {
     } else {
         // Generate hashmap that has list of categories for this item.
         var categoryName = {};
-        getCategories().forEach(function(value, index, array) {
-          console.log(value);
-          var checkbox = document.getElementById(value);
-          if (checkbox !== null && checkbox.checked) {
-            categoryName[value] = value;
+        categoryRef.once("value", snapshot => {
+          let res = snapshot.val();
+          Object.keys(res).forEach((category) => {
+            var checkbox = document.getElementById(category);
+            if (checkbox !== null && checkbox.checked) {
+              categoryName[category] = category;
+            }
+          });
+          if (JSON.stringify(categoryName) === '{}') {
+            alert("You must check at least one category.");
+            return;
           }
         });
-
-        // Save to inventory this new item to the generated item ID.
-        if (JSON.stringify(categoryName) === '{}') {
-          alert("You must check at least one category.");
-          return;
-        }
         updateTo(itemName, barcode, count, categoryName, packSize, true);
         return;
     }

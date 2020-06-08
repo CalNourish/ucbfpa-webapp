@@ -150,26 +150,57 @@ function addCategory(category) {
     categoryCard.textContent = category;
     listItem.appendChild(categoryCard);
 
-    var deleteCategory = document.createElement("span");
+    var deleteCategoryElement = document.createElement("span");
     var txt = document.createTextNode("\u00D7");
-    deleteCategory.className = "close";
-    deleteCategory.id = category;
-    deleteCategory.onclick = function() {
-        if (!confirm('Delete category called ' + this.id + '?')) {
+    deleteCategoryElement.className = "close";
+    deleteCategoryElement.id = category;
+    deleteCategoryElement.onclick = async function() {
+        const category = this.id;
+        if (!confirm('Delete category called ' + category + '?')) {
             return;
         }
         var div = this.parentElement;
         div.style.display = "none";
-        let toRemove = currentCategories.indexOf(this.id);
+        let toRemove = currentCategories.indexOf(category);
         if (toRemove > -1) {
             currentCategories.splice(toRemove, 1);
         }
-        firebase.database().ref('/category/' + this.id).remove();
+        await firebase.database()
+            .ref('/inventory')
+            .once("value")
+            .then(async function(inventory) {
+                var inventoryTable = await inventory.val();
+                deleteCategory(inventoryTable, category)
+
+                return firebase.database() 
+                .ref('/inventory')
+                .update(inventoryTable)
+                .catch(function(error) {
+                    console.error('Error writing item to /inventory/', error);
+                    toastr.error(error, "Error updating categories")
+                    })
+                .then(() => {
+                  toastr.info("Categories successfully updated");
+                  }
+                );
+            });
+        await firebase.database()
+            .ref('/category/' + category)
+            .remove();
     }
-    deleteCategory.appendChild(txt);
-    listItem.appendChild(deleteCategory);
+    deleteCategoryElement.appendChild(txt);
+    listItem.appendChild(deleteCategoryElement);
 
     categoryList.appendChild(listItem);
+}
+
+function deleteCategory(table, category) {
+    Object.values(table).forEach(value => {
+        let categoryList = value.categoryName;
+        if (Object.keys(categoryList).includes(category)) {
+            delete categoryList[category];
+        }
+    })
 }
 
 function addNewCategory(e) {
@@ -183,8 +214,11 @@ function addNewCategory(e) {
     currentCategories.forEach((category) => {
         toWrite[category] = category;
     })
-    firebase.database().ref('/category').update(toWrite).then(() => {
-        document.getElementById("category-input").value = ''
+    firebase.database().ref('/category')
+        .update(toWrite)
+        .then(() => {
+            document.getElementById("category-input").value = ''
+            toastr.info("Categories successfully updated");
     })
 }
 
