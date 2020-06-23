@@ -241,7 +241,7 @@ main, #messages-card {
 .category-list .item {
   margin: 6px;
   height: 30px;
-  width: fit-content;
+  width: 150px;
   background-color: #eeeeee;
   justify-content: left;
   justify-content: center;
@@ -252,7 +252,6 @@ main, #messages-card {
 }
 
 .close {
-  align-self: flex-end;
 }
 
 
