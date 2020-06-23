@@ -240,17 +240,19 @@ main, #messages-card {
 
 .category-list .item {
   margin: 6px;
-  width: 300px;
   height: 30px;
+  width: fit-content;
   background-color: #eeeeee;
-  text-align: center;
-  vertical-align: middle;
+  justify-content: left;
+  justify-content: center;
   line-height: 30px; 
-  display: flex
+  display: flex;
+  padding: 6px;
+  border-radius: 4px;
 }
 
 .close {
-  text-align: end;
+  align-self: flex-end;
 }
 
 

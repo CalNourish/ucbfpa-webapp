@@ -66,26 +66,38 @@ $(document).ready(function() {
   // Table Selector
   const TABLE_SELECTOR = $(".inventory-table tbody")
 
-<<<<<<< HEAD
   // list for appending to DOM
-  let allItems = [];
-  let fullTable = [];
   let sidebar = [];
   let dropdown = [];
 
-  // TODO connect to get categories
-  const categories = ['grains', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages']
+  // // TODO connect to get categories
+  // const categories = ['grains', 'canned', 'protein', 'frozen', 'snacks', 'sauces', 'spices', 'beverages']
 
-  categories.forEach((category) => {
-    sidebar.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="list" data-item="${category}" href="#" role="tab">${category}</a>`)
-    dropdown.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="dropdown" data-item="${category}" href="#" role="tab">${category}</a>`)
-  }) 
+  // categories.forEach((category) => {
+  //   sidebar.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="list" data-item="${category}" href="#" role="tab">${category}</a>`)
+  //   dropdown.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="dropdown" data-item="${category}" href="#" role="tab">${category}</a>`)
+  // }) 
   
-  $(".list-group").append(sidebar);
-  $(".dropdown-menu").append(dropdown);
+  // $(".list-group").append(sidebar);
+  // $(".dropdown-menu").append(dropdown);
 
-=======
->>>>>>> 1bcf33ebfcdc0636bfb67fccaa24b95660a8fbf8
+  const categoryRef = firebase.database().ref('/category')
+  categoryRef.once("value", snapshot => {
+    let res = snapshot.val();
+
+    Object.keys(res).forEach((category) => {
+      let upperCaseCategory = category.charAt(0).toUpperCase() + category.slice(1)
+      sidebar.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="list" data-item="${category}" href="#" role="tab">${upperCaseCategory}</a>`)
+      dropdown.push(`<a class="list-group-item category-item list-group-item-action" id="list-${category}-list" data-toggle="dropdown" data-item="${category}" href="#" role="tab">${upperCaseCategory}</a>`)
+    });
+    
+    // append to dom 
+  
+    $(".list-group").append(sidebar);
+    $(".dropdown-menu").append(dropdown);
+  })
+  
+
   // connect inventory
   const REF = firebase.database().ref('/inventory')
 
@@ -132,12 +144,14 @@ $(document).ready(function() {
   });
 
   // Clear page and select items by category
-  $(".list-group-item.category-item").click(function() {
-    let selected = $(this).data("item")
-    $(".list-group-item.category-item").removeClass("active")
-    $(`[data-item=${selected}`).addClass("active")
+  $(".list-group").on('click', ".list-group-item", selectItemsOnCategoryClick);
+
+  function selectItemsOnCategoryClick() {
+    let selected = $(this).data('item')
+    $('.list-group-item.category-item').removeClass('active')
+    $(`[data-item=${selected}`).addClass('active')
     showCategory(selected);
-  });
+  }
 
   function showCategory(selected) {
     TABLE_SELECTOR.empty();

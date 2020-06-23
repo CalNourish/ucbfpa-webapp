@@ -8,7 +8,6 @@ $(document).ready(function() {
 
 let defaultHoursForm = document.getElementById("default-hours-form")
 let addCategoryButton = document.getElementById("add-category")
-let submitCategoriesButton = document.getElementById("submit-categories")
 const INFO_REF = firebase.database().ref('/info/')
 const CATEGORIES_REF = firebase.database().ref('/category/')
 var currentCategories = [];
@@ -17,8 +16,6 @@ let lowStockTable = document.getElementById("low-stock-table")
 // REAL DATA
 const TABLE_SELECTOR_LS = $(".low-stock-table tbody")
 const REF_LS = firebase.database().ref('/inventory')
-
-const REF = firebase.database().ref('/info/')
 
 // TEST DATA - test the hours functionality
 // const REF = firebase.database().ref('/testInfo/')
@@ -87,8 +84,6 @@ REF_LS.once("value", snapshot => {
   for (let item in res) {
     let currentItem = res[item];
     let category_dict = currentItem.categoryName
-    console.log(currentItem)
-    console.log(currentItem.count <= currentItem.lowStock)
     if (currentItem.count <= currentItem.lowStock) {
       let categories = []
       for (let category in category_dict) {
@@ -196,7 +191,7 @@ function addCategory(category) {
     listItem.className = "item"
     
     let categoryCard = document.createElement("div");
-    categoryCard.textContent = category;
+    categoryCard.textContent = category.charAt(0).toUpperCase() + category.slice(1);
     listItem.appendChild(categoryCard);
 
     var deleteCategoryElement = document.createElement("span");
