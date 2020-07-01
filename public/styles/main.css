@@ -234,25 +234,15 @@ main, #messages-card {
 /*********************/
 /*********************/
 
-.category-list {
-  list-style-type: none;
+#category-list-table td {
+  font-size: 14px !important;
+  text-align: flex-start;
 }
 
-.category-list .item {
-  margin: 6px;
-  height: 30px;
-  width: 150px;
-  background-color: #eeeeee;
-  justify-content: left;
-  justify-content: center;
-  line-height: 30px; 
-  display: flex;
-  padding: 6px;
-  border-radius: 4px;
-}
-
-.close {
-}
+#category-list-table {
+  max-width: 40%;
+  border: none;
+ }
 
 
 .hours-error {

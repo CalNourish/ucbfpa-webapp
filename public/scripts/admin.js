@@ -182,21 +182,20 @@ function adminPageSetup() {
     });
 }
 
+
+// Set up categories 
 function addCategory(category) {
-    let categoryList = document.getElementById("category-list");
+    let categoryListTable = document.getElementById("category-list-table");
 
     currentCategories.push(category);
 
-    let listItem = document.createElement("li");
-    listItem.className = "item"
-    
-    let categoryCard = document.createElement("div");
-    categoryCard.textContent = category.charAt(0).toUpperCase() + category.slice(1);
-    listItem.appendChild(categoryCard);
+    let tableItem = document.createElement("tr");
+    let categoryElement = document.createElement("td");
+    categoryElement.textContent = category.charAt(0).toUpperCase() + category.slice(1); 
 
-    var deleteCategoryElement = document.createElement("span");
-    var txt = document.createTextNode("\u00D7");
-    deleteCategoryElement.className = "close";
+    var deleteCategoryElement = document.createElement("td");
+    var deleteIcon = document.createElement("i");
+    deleteIcon.classList.add("fa", "fa-trash-o", "fa-6");
     deleteCategoryElement.id = category;
     deleteCategoryElement.onclick = async function() {
         const category = this.id;
@@ -232,10 +231,12 @@ function addCategory(category) {
             .ref('/category/' + category)
             .remove();
     }
-    deleteCategoryElement.appendChild(txt);
-    listItem.appendChild(deleteCategoryElement);
+    deleteCategoryElement.appendChild(deleteIcon);
 
-    categoryList.appendChild(listItem);
+    tableItem.appendChild(categoryElement);
+    tableItem.appendChild(deleteCategoryElement)
+
+    categoryListTable.appendChild(tableItem);
 }
 
 function deleteCategory(table, category) {
