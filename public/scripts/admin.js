@@ -7,13 +7,15 @@ let current_items_LS = []
 $(document).ready(function() {
 
 let defaultHoursForm = document.getElementById("default-hours-form")
+let addCategoryButton = document.getElementById("add-category")
+const INFO_REF = firebase.database().ref('/info/')
+const CATEGORIES_REF = firebase.database().ref('/category/')
+var currentCategories = [];
 let lowStockTable = document.getElementById("low-stock-table")
 
 // REAL DATA
 const TABLE_SELECTOR_LS = $(".low-stock-table tbody")
 const REF_LS = firebase.database().ref('/inventory')
-
-const REF = firebase.database().ref('/info/')
 
 // TEST DATA - test the hours functionality
 // const REF = firebase.database().ref('/testInfo/')
@@ -68,8 +70,13 @@ let splitAndConvertTime = time => {
 
 // Get all info
 let info = async () => {
-    // Get all times for the days
-    return await REF.once("value").then(snapshot => snapshot.val());
+    // Get all times for the days 
+    return await INFO_REF.once("value").then(snapshot => snapshot.val());
+}
+
+// Get categories
+let categories = async () => {
+    return await CATEGORIES_REF.once("value").then(snapshot => snapshot.val());
 }
 
 REF_LS.once("value", snapshot => {
@@ -77,8 +84,6 @@ REF_LS.once("value", snapshot => {
   for (let item in res) {
     let currentItem = res[item];
     let category_dict = currentItem.categoryName
-    console.log(currentItem)
-    console.log(currentItem.count <= currentItem.lowStock)
     if (currentItem.count <= currentItem.lowStock) {
       let categories = []
       for (let category in category_dict) {
@@ -109,6 +114,13 @@ REF_LS.once("value", snapshot => {
 function adminPageSetup() {
     // Uncomment below to make days rotate with the current day on top
     // var day = new Date();
+
+    categories().then(value => {
+        Object.keys(value).forEach((category) => {
+            addCategory(category)
+       });
+    });
+
     info().then(value => {
         for (let key in DAYS_TIMES) {
             if (key in value) {
@@ -170,6 +182,90 @@ function adminPageSetup() {
     });
 }
 
+
+// Set up categories 
+function addCategory(category) {
+    let categoryListTable = document.getElementById("category-list-table");
+
+    currentCategories.push(category);
+
+    let tableItem = document.createElement("tr");
+    let categoryElement = document.createElement("td");
+    categoryElement.textContent = category.charAt(0).toUpperCase() + category.slice(1); 
+
+    var deleteCategoryElement = document.createElement("td");
+    var deleteIcon = document.createElement("i");
+    deleteIcon.classList.add("fa", "fa-trash-o", "fa-6");
+    deleteCategoryElement.id = category;
+    deleteCategoryElement.onclick = async function() {
+        const category = this.id;
+        if (!confirm('Delete category called ' + category + '?')) {
+            return;
+        }
+        var div = this.parentElement;
+        div.style.display = "none";
+        let toRemove = currentCategories.indexOf(category);
+        if (toRemove > -1) {
+            currentCategories.splice(toRemove, 1);
+        }
+        await firebase.database()
+            .ref('/inventory')
+            .once("value")
+            .then(async function(inventory) {
+                var inventoryTable = await inventory.val();
+                deleteCategory(inventoryTable, category)
+
+                return firebase.database() 
+                .ref('/inventory')
+                .update(inventoryTable)
+                .catch(function(error) {
+                    console.error('Error writing item to /inventory/', error);
+                    toastr.error(error, "Error updating categories")
+                    })
+                .then(() => {
+                  toastr.info("Categories successfully updated");
+                  }
+                );
+            });
+        await firebase.database()
+            .ref('/category/' + category)
+            .remove();
+    }
+    deleteCategoryElement.appendChild(deleteIcon);
+
+    tableItem.appendChild(categoryElement);
+    tableItem.appendChild(deleteCategoryElement)
+
+    categoryListTable.appendChild(tableItem);
+}
+
+function deleteCategory(table, category) {
+    Object.values(table).forEach(value => {
+        let categoryList = value.categoryName;
+        if (Object.keys(categoryList).includes(category)) {
+            delete categoryList[category];
+        }
+    })
+}
+
+function addNewCategory(e) {
+    e.preventDefault()
+    let newCategory = document.getElementById("category-input").value;
+    if (!confirm('Add new category called ' + newCategory + '?')) {
+        return;
+    }
+    addCategory(newCategory);
+    let toWrite = {};
+    currentCategories.forEach((category) => {
+        toWrite[category] = category;
+    })
+    firebase.database().ref('/category')
+        .update(toWrite)
+        .then(() => {
+            document.getElementById("category-input").value = ''
+            toastr.info("Categories successfully updated");
+    })
+}
 
 
 
@@ -311,7 +407,7 @@ function changeDefaultHours(e) {
     }
     if (inputChanged) {
         if (validHours) {
-            REF.update(DAYS_TIMES)
+            INFO_REF.update(DAYS_TIMES)
             .then(function() {
                 toastr.info('Hours and restock indicators set')
             })
@@ -343,7 +439,8 @@ $("td > input").on("change", (input) => {
 
 
 
-defaultHoursForm.addEventListener('submit', changeDefaultHours);
+defaultHoursForm.addEventListener('submit', changeDefaultHours);    
+addCategoryButton.addEventListener('click', addNewCategory);
 
 adminPageSetup()
 

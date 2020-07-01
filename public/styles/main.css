@@ -234,6 +234,17 @@ main, #messages-card {
 /*********************/
 /*********************/
 
+#category-list-table td {
+  font-size: 14px !important;
+  text-align: flex-start;
+}
+
+#category-list-table {
+  max-width: 40%;
+  border: none;
+ }
+
+
 .hours-error {
   color: red;
   display: none;

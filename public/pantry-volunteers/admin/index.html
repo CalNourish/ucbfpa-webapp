@@ -119,6 +119,23 @@
 </nav>
   <!--        end primary navbar -->
   <div class="container" id="main-content">
+    <h2>Manage Categories</h2>
+    <div class="d-flex  justify-content-start">
+        <div>
+            <input type="text" id="category-input" class="form-control ml-3 w-75" placeholder="New Category">
+          </div>
+          <div>
+              <button id="add-category" class="btn btn-primary">ADD</button>
+          </div>
+    </div>
+  </br>
+    <div class="d-flex view-group justify-content-start">
+      <table id="categories-table" class="category-list-table col-sm-3 table ">
+        <tbody id = "category-list-table">
+        </tbody>
+      </table>
+    </div>
+
     <h2>Pantry Hours</h2>
     <h4>Change the regular pantry hours and indicate when items are restocked. Click Submit to save changes.</h4>
     <form id="default-hours-form">
