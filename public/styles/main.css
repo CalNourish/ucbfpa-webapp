@@ -224,11 +224,26 @@ main, #messages-card {
   margin-right: 5px;
 }
 
+.table-header {
+  cursor: pointer;
+}
+
 /*********************/
 /*********************/
 /* ADMIN PAGE STYLES */
 /*********************/
 /*********************/
+
+#category-list-table td {
+  font-size: 14px !important;
+  text-align: flex-start;
+}
+
+#category-list-table {
+  max-width: 40%;
+  border: none;
+ }
+
 
 .hours-error {
   color: red;
