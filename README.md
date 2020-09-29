@@ -31,6 +31,9 @@ To switch between projects, run ```firebase use <alias>```.
 
 These aliases will automatically connect with the appropriate firebase projects (i.e. database, auth, etc.). In development, you should only use **TestCalNourish** with the alias of `default` or `test`.
 
+## Styling
+Make style changes in `assets/styles` and run `npm start` so changes to that file can be compiled to `public/styles` files.
+
 ## Deployment
 
 **Test Deployment**: Feel free to deploy with **TestCalNourish** whenever to make sure things are stable. Do this by pushing to `origin/dev` (resolving any conflicts with other people's changes) and then merging with `origin/test` which will autodeploy to Firebase.
