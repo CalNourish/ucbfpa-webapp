@@ -12,8 +12,7 @@ function removeFromFavs(div) {
   var barcode = div.attributes['barcode'].nodeValue;
   var favs_list = getFavs();
   var old_list = JSON.stringify(favs_list);
-  FAVORITES[barcode] = false
-  console.log(FAVORITES[barcode])
+  FAVORITES[barcode] = false;
   if (favs_list.includes(barcode)) {
     favs_list.splice(favs_list.indexOf(barcode), 1);
     document.cookie = document.cookie.replace(old_list, JSON.stringify(favs_list));

@@ -57,6 +57,14 @@ function volunteer_table_row(name="unavailable", count="0", barcode="unavailable
   `)
 }
 
+function deleteItem(barcode, itemName) {
+  if (confirm("Delete " + itemName + "?")) {
+    firebase.database().ref('/inventory/' + barcode).remove().then(function() {
+      window.location.reload();
+    });
+  }
+}
+
 /*****************************************
  ***** Pantry Admin Low Stock Layout *****
  ****************************************/
