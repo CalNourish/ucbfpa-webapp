@@ -13,6 +13,6 @@
 * weekday is a string
 */
 function checkoutForS3(checkoutID, checkoutAmts, barcodes, inventoryAmts, names, time, weekday) {
-  return JSON.stringify({checkout_id: checkoutID, checkout_amounds: checkoutAmts, barcodes: barcodes, 
+  return JSON.stringify({checkout_id: checkoutID, checkout_amounts: checkoutAmts, barcodes: barcodes, 
           inventory_amounts: inventoryAmts, names: names, time: time, day_of_week: weekday}); 
 }
