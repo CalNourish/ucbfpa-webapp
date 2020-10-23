@@ -80,6 +80,17 @@ function finishCheckout() {
   amount.select();
 }
 
+function decrementItem(barcode, amount) {
+  return firebase.database()
+    .ref('/inventory/' + barcode)
+    .once('value')
+    .then(function(inventoryTable) {
+      var item = inventoryTable.val();
+      var dec = ((parseInt(item.count, 10) - amount) < 0) ? 0 : (parseInt(item.count, 10) - amount);
+      updateTo(item.itemName, item.barcode, dec.toString(), item.categoryName, item.packSize, item.lowStock);
+  });
+}
+
 function checkoutItem(barcodeScanned, amount) {
   var amount = amount ? amount : 1;
   return new Promise(function(resolve, reject) {
