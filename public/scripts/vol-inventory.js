@@ -281,20 +281,7 @@ async function saveNewItem() {  // make this async and await firebase call
     count = packSize * count;
   }
 
-  // Generate hashmap that has list of categories for this item.
-  var categoryName = {};
   const categoryRef = firebase.database().ref('/category')
-  categoryRef.once("value", snapshot => {
-    let res = snapshot.val();
-    Object.keys(res).forEach((category) => {
-      var checkbox = document.getElementById(category);
-      if (checkbox !== null && checkbox.checked) {
-        categoryName[category] = category;
-      }
-    });
-  });
-
-
   //check if barcode already exists in database
   firebase.database().ref('/inventory/').once('value').then((data) => {
     var barcodesFromDb = data.val();
@@ -319,10 +306,10 @@ async function saveNewItem() {  // make this async and await firebase call
           });
           if (JSON.stringify(categoryName) === '{}') {
             alert("You must check at least one category.");
-            return;
+          } else {
+            updateTo(itemName, barcode, count, categoryName, packSize, lowStock , true);
           }
         });
-        updateTo(itemName, barcode, count, categoryName, packSize, true);
         return;
     }
   });
