@@ -16,3 +16,10 @@ function checkoutForS3(checkoutID, checkoutAmts, barcodes, inventoryAmts, names,
   return JSON.stringify({checkout_id: checkoutID, checkout_amounts: checkoutAmts, barcodes: barcodes, 
           inventory_amounts: inventoryAmts, names: names, time: time, day_of_week: weekday}); 
 }
+
+function categoryForFirebase(displayName) {
+  return {
+    displayName: displayName, 
+    iconName: "help", 
+  }; 
+}
