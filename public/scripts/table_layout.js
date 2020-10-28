@@ -15,6 +15,14 @@ function getHeart(barcode) {
   }
 }
 
+function deleteItem(barcode, itemName) {
+  if (confirm("Delete " + itemName + "?")) {
+    firebase.database().ref('/inventory/' + barcode).remove().then(function() {
+      window.location.reload();
+    });
+  }
+}
+
 /**********************************
  ***** Guest Volunteer Layout *****
  **********************************/
