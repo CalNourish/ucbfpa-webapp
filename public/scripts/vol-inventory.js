@@ -344,7 +344,6 @@ function updateExistingItem() {
       alert("You must check at least one category.");
       return;
     }
-    console.log(categoryName);    
     return updateTo(itemName, barcode, count, categoryName, packSize);
 
   });

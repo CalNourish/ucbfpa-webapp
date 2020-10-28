@@ -255,8 +255,7 @@ function addNewCategory(e) {
         return;
     }
     addCategory(newCategory);
-    let toWrite = {};
-    toWrite["displayName"] = newCategory; 
+    let toWrite = categoryForFirebase(newCategory);
     firebase.database().ref('/category/' + newCategory)
         .update(toWrite)
         .then(() => {
