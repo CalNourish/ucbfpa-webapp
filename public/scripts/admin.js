@@ -255,11 +255,8 @@ function addNewCategory(e) {
         return;
     }
     addCategory(newCategory);
-    let toWrite = {};
-    currentCategories.forEach((category) => {
-        toWrite[category] = category;
-    })
-    firebase.database().ref('/category')
+    let toWrite = categoryForFirebase(newCategory);
+    firebase.database().ref('/category/' + newCategory)
         .update(toWrite)
         .then(() => {
             document.getElementById("category-input").value = ''
