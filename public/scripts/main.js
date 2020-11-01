@@ -155,3 +155,54 @@ checkSetup();
 // Initialize auth
 initFirebaseAuth();
 
+
+// Initialize Google API
+
+function include(file) { 
+  
+  var script  = document.createElement('script'); 
+  script.src  = file; 
+  script.type = 'text/javascript'; 
+  script.defer = true; 
+  
+  document.getElementsByTagName('head').item(0).appendChild(script); 
+  
+} 
+include("https://apis.google.com/js/api.js");
+
+function initClient() {
+  firebase
+  .database()
+  .ref('googleAPI')
+  .once('value')
+  .then((creds) => {
+    var API_KEY = creds.val().API_KEY;
+    var CLIENT_ID = creds.val().CLIENT_ID;
+    var SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
+
+    gapi.client.init({
+      'apiKey': API_KEY,
+      'clientId': CLIENT_ID,
+      'scope': SCOPE,
+      'discoveryDocs': ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+    }).then(function() {
+
+      gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
+      updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    });
+  })
+}
+
+function updateSignInStatus(isSignedIn) {
+  if (isSignedIn) {
+    makeApiCall();
+  }
+  else {
+    console.log('User not logged-in to a Google account, please log in on the pop-up page')
+    gapi.auth2.getAuthInstance().signIn();
+  }
+}
+
+function handleClientLoad() {
+  gapi.load('client:auth2', initClient);
+}
