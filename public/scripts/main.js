@@ -15,6 +15,12 @@
  */
 'use strict';
 
+/*******************
+*
+*   Firebase
+*
+********************/
+
 // Signs-in UC Berkeley Food Pantry.
 function signIn() {
   // Sign into Firebase using popup auth & Google as the identity provider.
@@ -156,8 +162,13 @@ checkSetup();
 initFirebaseAuth();
 
 
-// Initialize Google API
 
+
+/*******************
+*
+*   Google API
+*
+********************/
 function include(file) { 
   
   var script  = document.createElement('script'); 

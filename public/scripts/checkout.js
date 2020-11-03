@@ -1,5 +1,6 @@
 'use strict';
 
+
 var form = document.getElementById('checkout-item-form');
 var amount = document.getElementById('amount');
 var barcode = document.getElementById('barcode');
@@ -25,6 +26,20 @@ function finishCheckout() {
   // consolidate grocery list items so that there is only a single entry per barcode
   let idDate = new Date();
   let id = idDate.getTime();
+  let date = new Date();
+  let month = String(date.getMonth() + 1);
+  let year = String(date.getFullYear());
+  let numDate = year + '-' + month + '-' + String(date.getDate());
+  let hr = String(date.getHours())
+  sheetTitle = month + '/' + year;
+  if (hr.length == 1) {  hr = '0' + hr }
+  let min = String(date.getMinutes())
+  if (min.length == 1) { min = '0' + min }
+  let sec = String(date.getSeconds())
+  if (sec.length == 1) { sec = '0' + sec }
+  let time = hr + ':' + min + ':' + sec;
+  let day = numToDay[date.getDay()]
+
   for (let i = 0; i < groceryCart.length; i++) {
 
     if (groceryCart[i] == null) {
@@ -35,19 +50,6 @@ function finishCheckout() {
 
       let name = groceryCart[i][2];
       let invCount = groceryCart[i][3];
-      let date = new Date();
-      let month = String(date.getMonth() + 1);
-      let year = String(date.getFullYear());
-      let numDate = year + '-' + month + '-' + String(date.getDate());
-      let hr = String(date.getHours())
-      sheetTitle = month + '/' + year;
-      if (hr.length == 1) {  hr = '0' + hr }
-      let min = String(date.getMinutes())
-      if (min.length == 1) { min = '0' + min }
-      let sec = String(date.getSeconds())
-      if (sec.length == 1) { sec = '0' + sec }
-      let time = hr + ':' + min + ':' + sec;
-      let day = numToDay[date.getDay()]
       let itemList = [barcode, parseInt(amount), name, invCount, id, numDate, time, day]
       if (groceryDict[barcode]) {
         groceryDict[barcode] = parseInt(groceryDict[barcode]) + parseInt(amount);
@@ -78,6 +80,49 @@ function finishCheckout() {
     toastr.info('Checked out')
   }
   amount.select();
+
+  // log to S3
+  logCheckoutToS3(sheetDict, year, month, String(date.getDate()), time, day);
+}
+
+function logCheckoutToS3(checkoutData, year, month, dayNum, time, weekday) {
+  var invAmts = [];
+  var checkoutAmts = [];
+  var barcodes = [];
+  var names = [];
+  var checkoutID = Math.floor(Math.random() * 10000000000000000).toString();
+  Object.entries(checkoutData).forEach(([barcode, item]) => {
+    barcodes.push(barcode);
+    invAmts.push(item[3]);
+    checkoutAmts.push(item[1]);
+    names.push(item[2]);
+  })
+
+  // get the JSON string
+  var s3Checkout = checkoutForS3(checkoutID, checkoutAmts, barcodes, invAmts, names, time, weekday);
+  
+  // write to the appropriate S3 bucket by checking where we're executing
+  firebase.database()
+  .ref("environment")
+  .once('value')
+  .then(env => {
+    let bucketName = "";
+    if (env.val() === "test") {
+      bucketName = "test-pantry-checkout-data"
+    } else {
+      bucketName = "pantry-checkout-data"
+    }
+    // upload to S3
+    var s3 = new AWS.S3();
+    var params = {
+      Body: s3Checkout,
+      Bucket: bucketName,
+      Key: "year=2020/month=8/day=12/hellofromjs.json"
+    }
+    s3.putObject(params, (err, _) => {
+      if (err) console.log(err, err.stack);
+    });
+  });
 }
 
 function decrementItem(barcode, amount) {
@@ -367,3 +412,5 @@ function removeListItem(i) {
       "hideMethod": "fadeOut"
     }
 });
+
+

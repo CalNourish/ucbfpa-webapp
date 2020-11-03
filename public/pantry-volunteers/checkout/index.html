@@ -186,9 +186,27 @@
 <script src="../../scripts/bootstrap-material-design.js"></script>
 <!-- Toast -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<!--   AWS SDK   -->
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.521.0.min.js"></script>
 <!-- Material Kit Core initialisations of plugins and Bootstrap Material Design Library -->
 <script src="../../scripts/material-kit.js?v=2.0.3"></script>
+<script src="../../scripts/schema.js"></script>
 <script src="../../scripts/main.js"></script>
+
+<!--  Initializing AWS SDK  -->
+<script>
+  firebase
+  .database()
+  .ref('lambdaAuthorization')
+  .once('value')
+  .then((data) => {
+    AWS.config.region = data.val()['AWS_COGNITO_REGION'];
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: data.val()['AWS_COGNITO_IDENTITY_POOL'],
+    });
+  });
+</script>
+
 <script src="../../scripts/checkout.js"></script>
 <script src="../../scripts/vol-inventory.js"></script>
 
@@ -197,6 +215,8 @@
   onload="this.onload=function(){};handleClientLoad()"
   onreadystatechange="if (this.readyState === 'complete') this.onload()">
 </script>
+
+
 
 </body>
 </html>

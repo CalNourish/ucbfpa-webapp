@@ -2,7 +2,6 @@
 * Schema functions for all database writes.
 */
 
-
 /** returns a JSON string to write to S3 as a single file representing a checkout event
 * checkoutID is a string that uniquely identifies this checkout
 * checkoutAmts is an ordered array of integers indicating how many of each item were taken
